@@ -29,8 +29,9 @@ It is a software development process relying on software requirements being conv
 
 
 * **Save project costs in the long run** - first thought is that its a bullshit because test take time. Yes and no. It cost but reduce chances of future bugs and issues during development software.
-  But if they occure, will be found pretty fast, which also will save money and maybe prevent some more costable bugs.
-  This approach is called "Shift-left testing" and its allows to find and prevent defects early in the software delivery process
+  But if they occure, will be found pretty fast, which also will save money and maybe prevent some
+  more costable bugs.
+  This approach is called **"Shift-left testing"** and its allows to find and prevent defects early in the software delivery process
 
 ![img](../assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/shif-left-testing.jpg)
 
