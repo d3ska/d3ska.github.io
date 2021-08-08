@@ -6,7 +6,6 @@ tags:
   - Test
   - Test Driven Development
   - TDD
-link: https://github.com/d3ska
 ---
 
 Do i really need tests? Isn't it a waste of time? And other questions like this that you might asked once or still asking yourself. Its not true and let me explain why.
