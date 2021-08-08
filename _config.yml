@@ -27,7 +27,7 @@ search: true
 # Build settings
 markdown: kramdown
 
-repository: d3ska/matthewonsoftware.github.io
+repository: d3ska/matthewonsoftware-github.io
 
 
 remote_theme: mmistakes/minimal-mistakes
