@@ -5,9 +5,13 @@ SOLID: The First 5 Principles of Object Oriented Design
 It stands for:
 
 **S** - Single-responsiblity Principle
+
 **O** - Open-closed Principle
+
 **L** - Liskov Substitution Principle
+
 **I** - Interface Segregation Principle
+
 **D** - Dependency Inversion Principle
 
 * **Single-Responsibility Principle**
@@ -34,7 +38,7 @@ It is a example but wheater its a logging, validating, email or anything else, w
 Simple as that. Don't worry about the fact that you will have more classes. Now its easier to read, refactor and maintain. Trust me you wouldn't like to work with classes with few thousands lines.
 
 
-* **Open-closed Principle** *
+* **Open-closed Principle** 
 
   Open-closed Principle (OCP) states:
   Objects or entities should be open for extension but closed for modification.
@@ -58,7 +62,7 @@ Simple as that. Don't worry about the fact that you will have more classes. Now 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/OCP3.jpg)
 
 
-* **The Liskov Subtition Princilpe** *
+* **The Liskov Subtition Princilpe** 
 
 Robert C. Martin summarizes it:
 Subtypes must be substitutable for their base types.
@@ -82,9 +86,9 @@ Ostrich is a bird, but it can't fly, Ostrich class is a subtype of class Bird, b
 
 
 
-* **Interfacae segregation principle** *
+* **Interfacae segregation principle** 
 
-The next principle is interface segregation. The interface segregation principle (ISP) states that no client should be forced to depend on methods it does not use.
+The next principle is interface segregation. The interface segregation erfaceprinciple (ISP) states that no client should be forced to depend on methods it does not use.
 Imagine an interface with many methods in our codebase and that many of our classes implement this interface, although only some of its methods are implemented.
 In our case, the Athlete interface is an interface with some actions of an athlete:
 
@@ -114,11 +118,9 @@ And therefore John Doe will not have to implement actions that he is not capable
 
 
 
-* **Dependency Inversion Principle** *
+* **Dependency Inversion Principle** 
 
 Suppose that John Doe is a swimming athlete. By implementing the Athlete interface, we have to implement methods like highJump and longJump, which JohnDoe will never use.
-
-
 
 To understand the motivation behind the DIP, let's start with its formal definition, given by Robert C. Martin in his book, Agile Software Development: Principles, Patterns, and Practices:
 
