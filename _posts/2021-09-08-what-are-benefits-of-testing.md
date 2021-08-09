@@ -14,7 +14,7 @@ Do i really need tests? Isn't it a waste of time? And other questions like this 
 
 It is a software development process relying on software requirements being converted to test cases before software is fully developed. First write tests that failed, then code to cover them and makes tests green and finally refactor code if its a need to.
 
-![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/test-driven-development-TDD.png)
+![img ]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/test-driven-development-TDD.png)
 
 
 ### **Benefits of having tests**
