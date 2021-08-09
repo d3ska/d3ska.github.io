@@ -19,7 +19,7 @@ It is a software development process relying on software requirements being conv
 
 ### **Benefits of having tests**
 
-* **Better program design and higher code quality** - redu\ce code complexity. Less and more thoughtful dependecies between classes. Smaller classes and functions which are easier to read.
+* **Better program design and higher code quality** - reduce code complexity. Less and more thoughtful dependecies between classes. Smaller classes and functions which are easier to read.
 
 
 * **Detailed project documentation** - test are really good as a documentation of project. Tests helps deep into project and understande it a bit faster. Especially that it is often a only source of current documentation.
