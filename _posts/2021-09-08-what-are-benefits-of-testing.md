@@ -10,14 +10,14 @@ tags:
 
 Do i really need tests? Isn't it a waste of time? And other questions like this that you might asked once or still asking yourself. Its not true and let me explain why.
 
-#### **TDD - Test Driven Development**
+### **TDD - Test Driven Development**
 
 It is a software development process relying on software requirements being converted to test cases before software is fully developed. First write tests that failed, then code to cover them and makes tests green and finally refactor code if its a need to.
 
 ![My helpful screenshot]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/test-driven-development-TDD.png)
 
 
-# Benefits of having tests
+### Benefits of having tests
 
 * **Better program design and higher code quality** - redu\ce code complexity. Less and more thoughtful dependecies between classes. Smaller classes and functions which are easier to read.
 
