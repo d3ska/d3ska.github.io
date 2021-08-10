@@ -151,7 +151,7 @@ The second class is a ElectricPowerSwitch
 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP2.png)
 
-Our switch is now ready to use, to turn the light bulb on and off the light bulb. But the mistake we did is apparent. Our high-level ElectricPowerSwitch class is directly dependent on the low-level LightBulb class. if you see in the code, the LightBulb class is hardcoded in ElectricPowerSwitch. But, a switch should not be tied to a bulb. It should be able to turn on and off other devices too, say a fan, an AC, or the entire lightningin our backyard.
+Our switch is now ready to use, to turn the light bulb on and off the light bulb. But the mistake we did is apparent. Our high-level ElectricPowerSwitch class is directly dependent on the low-level LightBulb class. if you see in the code, the LightBulb class is hardcoded in ElectricPowerSwitch. But, a switch should not be tied to a bulb. It should be able to turn on and off other devices too, say a fan, an AC, or the entire lightning in our backyard.
 
 Now let's change it to conform to the DIP principle.
 To do that we need an abstraction that both the ElectricPowerSwitch and LightBulb classes will depend on
