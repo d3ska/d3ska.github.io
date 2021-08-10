@@ -130,21 +130,46 @@ Suppose that John Doe is a swimming athlete. By implementing the Athlete interfa
 
 To understand the motivation behind the DIP, let's start with its formal definition, given by Robert C. Martin in his book, Agile Software Development: Principles, Patterns, and Practices:
 
-High-level modules should not depend on low-level modules. Both should depend on abstractions.
-Abstractions should not depend on details. Details should depend on abstractions.
+* High-level modules should not depend on low-level modules. Both should depend on abstractions.
+* Abstractions should not depend on details. Details should depend on abstractions.
 
 So, it's clear that at the core, the DIP is about inverting the classic dependency between high-level and low-level components by abstracting away the interaction between them.
 In traditional software development, high-level components depend on low-level ones. Thus, it's hard to reuse the high-level components.
 Based on other SOLID principles
-This might sound more complex than it often is. If you consequently apply the Open/Closed Principle and the Liskov Substitution Principle to your code, it will also follow the Dependency Inversion Principle.
+This might sound more complex than it is often. If you consequently apply the Open/Closed Principle and the Liskov Substitution Principle to your code, it will also follow the Dependency Inversion Principle.
 
+Let's look at an example (bad example):
 
-Direct DIP Implementation
+Consider the example of an electric switch that turns a light bulb on or off. We can create two classes to make its work. LightBulb class first.
 
-The layer's underlying storage is usually a database, but to keep the code simple, here we'll use a plain Map.
-Let's start by defining the high-level component:
 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP1.png)
+
+In the class above, we wrote two methods, turnOn() and turnOff().
+
+The second class is a ElectricPowerSwitch
+
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP2.png)
+
+Our switch is now ready to use, to turn the light bulb on and off the light bulb. But the mistake we did is apparent. Our high-level ElectricPowerSwitch class is directly dependent on the low-level LightBulb class. if you see in the code, the LightBulb class is hardcoded in ElectricPowerSwitch. But, a switch should not be tied to a bulb. It should be able to turn on and off other devices too, say a fan, an AC, or the entire lightningin our backyard.
+
+Now let's change it to conform to the DIP principle.
+To do that we need an abstraction that both the ElectricPowerSwitch and LightBulb classes will depend on
+
+First, create interface for switches.
+
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP3.png)
+
+We wrote an interface for switches with the isOn() and press() methods. This interface will give us the flexibility to plug in other types of switches, say a remote control switch later on, if required.
+
+Next, we will write the abstraction in a form of an interface called Switchable with the turnOn() and turnoff() methods.
+
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP4.png)
+
+That interface allows any switchable devices in the applicationto to implement it and provide their own functionality.
+Our ElectricPowerSwitch class will also depend on this interface, as shown below
+
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP5.png)
 
 
 tbc...
