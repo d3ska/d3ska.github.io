@@ -1,10 +1,17 @@
-SOLID: The First 5 Principles of Object Oriented Design
-
+---
+title: "SOLID: The First 5 Principles of Object Oriented Design"
+categories:
+- Blog
+  tags:
+- SOLID
+- Object oriented programming
+- Good practices
+---
 #### SOLID is an acronym for the first five object-oriented design (OOD) principles by Robert C. Martin (also known as Uncle Bob).
 
 It stands for:
 
-**S** - Single-responsiblity Principle
+**S** - Single-responsibility Principle
 
 **O** - Open-closed Principle
 
@@ -13,6 +20,8 @@ It stands for:
 **I** - Interface Segregation Principle
 
 **D** - Dependency Inversion Principle
+
+<p>&nbsp;</p>
 
 * **Single-Responsibility Principle**
 
@@ -25,42 +34,41 @@ Let's look at a class to represent a simple book, classic example:
 we have class that store data about books, well but except that we could storing the information, we coudnt do much more. Let's add a print method.
 Now it is possible, However this code violates the single responsibility principle we outlined earlier.
 
-
-
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/single2.jpg)
 
 To fix that class to be in accordance with the single responsibility principle we should create separate class that deals only with printing our informations about book.
-
 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/single3.png)
 
 It is a example but wheater its a logging, validating, email or anything else, we should have a separate classes dedicated to this one concern.	
 Simple as that. Don't worry about the fact that you will have more classes. Now its easier to read, refactor and maintain. Trust me you wouldn't like to work with classes with few thousands lines.
 
+<p>&nbsp;</p>
 
 * **Open-closed Principle** 
+  
+Open-closed Principle (OCP) states:
+Objects or entities should be open for extension but closed for modification.
 
-  Open-closed Principle (OCP) states:
-  Objects or entities should be open for extension but closed for modification.
+The code should be written in such a way that in the case of the development of the system and the emergence of new business requirements, there is no need to change the existing code. 	
+If a single change causes a lot of changes to dependent modules, then this is a design that is difficult to change.
+The OCP principle says that the program should be written in such a way that the changes introduced in the project do not cause further changes.
+When this principle is respected, we add new code, but do not change the existing one.
 
-  The code should be written in such a way that in the case of the development of the system and the emergence of new business requirements, there is no need to change the existing code. 	
-  If a single change causes a lot of changes to dependent modules, then this is a design that is difficult to change.
-  The OCP principle says that the program should be written in such a way that the changes introduced in the project do not cause further changes.
-  When this principle is respected, we add new code, but do not change the existing one.
+For the OCP principle, the Strategy and Template method pattern can be used. These are the most popular patterns in the OCP principle. OCP rule example:
 
-  For the OCP principle, the Strategy and Template method pattern can be used. These are the most popular patterns in the OCP principle. OCP rule example:
-
-  ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/OCP1.png)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/OCP1.png)
 
 
-  We will create separate class for every different way of logging. The first class will be the Console Logger class, which will log messages to the consoles.
+We will create separate class for every different way of logging. The first class will be the Console Logger class, which will log messages to the consoles.
 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/OCP2.jpg)
 
-  The second class FileLogger will log data to file.
+The second class FileLogger will log data to file.
 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/OCP3.jpg)
 
+<p>&nbsp;</p>
 
 * **The Liskov Subtition Princilpe** 
 
@@ -84,7 +92,7 @@ Ostrich is a bird, but it can't fly, Ostrich class is a subtype of class Bird, b
 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/LISKOV3.jpg)
 
-
+<p>&nbsp;</p>
 
 * **Interfacae segregation principle** 
 
@@ -113,10 +121,7 @@ And therefore John Doe will not have to implement actions that he is not capable
 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/interface6.jpg)
 
-
-
-
-
+<p>&nbsp;</p>
 
 * **Dependency Inversion Principle** 
 
