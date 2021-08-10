@@ -29,16 +29,16 @@ Single-responsibility Principle (SRP) states:
 A class should have one and only one reason to change, meaning that a class should have only one job.
 Let's look at a class to represent a simple book, classic example:
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/single1.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/single1.jpg)
 
 we have class that store data about books, well but except that we could storing the information, we coudnt do much more. Let's add a print method.
 Now it is possible, However this code violates the single responsibility principle we outlined earlier.
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/single2.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/single2.jpg)
 
 To fix that class to be in accordance with the single responsibility principle we should create separate class that deals only with printing our informations about book.
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/single3.png)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/single3.png)
 
 It is a example but wheater its a logging, validating, email or anything else, we should have a separate classes dedicated to this one concern.	
 Simple as that. Don't worry about the fact that you will have more classes. Now its easier to read, refactor and maintain. Trust me you wouldn't like to work with classes with few thousands lines.
@@ -57,16 +57,16 @@ When this principle is respected, we add new code, but do not change the existin
 
 For the OCP principle, the Strategy and Template method pattern can be used. These are the most popular patterns in the OCP principle. OCP rule example:
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/OCP1.png)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/OCP1.png)
 
 
 We will create separate class for every different way of logging. The first class will be the Console Logger class, which will log messages to the consoles.
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/OCP2.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/OCP2.jpg)
 
 The second class FileLogger will log data to file.
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/OCP3.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/OCP3.jpg)
 
 <p>&nbsp;</p>
 
@@ -80,17 +80,17 @@ If for each object o1 of type S there is an object o2 of type T such that for al
 
 Lets look at an a bad example.
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/LISKOV1.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/LISKOV1.jpg)
 	
 The duck can fly because it is a bird, but what about this:
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/LISKOV2.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/LISKOV2.jpg)
 	
 Ostrich is a bird, but it can't fly, Ostrich class is a subtype of class Bird, but it shouldn't be able to use the fly method, that means we are breaking the LSP principle.
 	
 **GOOD EXAMPLE**
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/LISKOV3.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/LISKOV3.jpg)
 
 <p>&nbsp;</p>
 
@@ -100,26 +100,26 @@ The next principle is interface segregation. The interface segregation erfacepri
 Imagine an interface with many methods in our codebase and that many of our classes implement this interface, although only some of its methods are implemented.
 In our case, the Athlete interface is an interface with some actions of an athlete:
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/interface1.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/interface1.jpg)
 
 We have added method compete and also some extra methods like highJump, longJump and swim.
 Suppose that John Doe is a proffessional swimmer. By implementing the Athlete interface we have to implement methods that John will never use like high or long jump.
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/interface2.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/interface2.jpg)
 
 We will follow the interface segregation principle and refactor the original interface:
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/interface3.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/interface3.jpg)
 
 Then we will create two other interfaces — one for Jumping athletes and one for Swimming athletes.
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/interface4.jpg)
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/interface5.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/interface4.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/interface5.jpg)
 
 
 And therefore John Doe will not have to implement actions that he is not capable of performing:
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/interface6.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/interface6.jpg)
 
 <p>&nbsp;</p>
 
@@ -143,7 +143,7 @@ Direct DIP Implementation
 The layer's underlying storage is usually a database, but to keep the code simple, here we'll use a plain Map.
 Let's start by defining the high-level component:
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-principles-of-object-oriented-programming/DIP1.jpg)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP1.jpg)
 
 
 tbc...
