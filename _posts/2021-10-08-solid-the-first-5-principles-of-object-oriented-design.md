@@ -104,7 +104,7 @@ In our case, the Athlete interface is an interface with some actions of an athle
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/IP1.png)
 
 We have added method compete and also some extra methods like highJump, longJump and swim.
-Suppose that John Doe is a proffessional swimmer. By implementing the Athlete interface we have to implement methods that John will never use like high or long jump.
+Suppose that John Smith is a proffessional swimmer. By implementing the Athlete interface we have to implement methods that John will never use like high or long jump.
 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/IP2.png)
 
@@ -118,7 +118,7 @@ Then we will create two other interfaces — one for Jumping athletes and one fo
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/IP5.png)
 
 
-And therefore John Doe will not have to implement actions that he is not capable of performing:
+And therefore John Smith will not have to implement actions that he is not capable of performing:
 
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/IP6.png)
 
@@ -126,7 +126,7 @@ And therefore John Doe will not have to implement actions that he is not capable
 
 * **Dependency Inversion Principle** 
 
-Suppose that John Doe is a swimming athlete. By implementing the Athlete interface, we have to implement methods like highJump and longJump, which JohnDoe will never use.
+Suppose that John Smith is a swimming athlete. By implementing the Athlete interface, we have to implement methods like highJump and longJump, which John Smith will never use.
 
 To understand the motivation behind the DIP, let's start with its formal definition, given by Robert C. Martin in his book, Agile Software Development: Principles, Patterns, and Practices:
 
@@ -172,7 +172,16 @@ Our ElectricPowerSwitch class will also depend on this interface, as shown below
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP5.png)
 
 
-tbc...
+In the ElectricPowerSwitch class, we implemented the Switch interface and referred to the Switchable interface instead of any specific class in the field. We then called the interface's turnOn () and turnoff () methods, which will be called at runtime on the object passed to the constructor. Now we can add low-level switchable classes without having to worry about modifying the ElectricPowerSwitch class (Remember about Open-closed Principle).
+Let's add two such classes.
+
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP6.png)
+
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP7.png)
+
+Now our code is flexible for changes and high-level classes doesn't depend on low-level classes.
+
+
 
 
 		
