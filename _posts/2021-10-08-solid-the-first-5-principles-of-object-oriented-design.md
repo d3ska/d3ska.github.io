@@ -140,10 +140,10 @@ This might sound more complex than it is often. If you consequently apply the Op
 
 Let's look at an example (bad example):
 
-Consider the example of an electric switch that turns a light bulb on or off. We can create two classes to make its work. LightBulb class first.
+Consider the example of an electric switch that turns a light bulb on or off. We can create two classes to make it work. LightBulb class first.
 
 
-![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP1.png)
+![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/LightBulb.png)
 
 In the class above, we wrote two methods, turnOn() and turnOff().
 
