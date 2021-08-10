@@ -1,12 +1,13 @@
 ---
 title: "SOLID: The First 5 Principles of Object Oriented Design"
 categories:
-- Blog
-  tags:
-- SOLID
-- Object oriented programming
-- Good practices
+  - Blog 
+tags:
+  - SOLID
+  - Object oriented programming
+  - Good practices
 ---
+
 #### SOLID is an acronym for the first five object-oriented design (OOD) principles by Robert C. Martin (also known as Uncle Bob).
 
 It stands for:
