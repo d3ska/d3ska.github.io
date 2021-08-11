@@ -65,7 +65,7 @@ plugins:
 author:
   name   : "Mateusz Deska"
   avatar : "/assets/images/bio-photo.jpg"
-  bio    : "I am a Junior Java developer who decided to documenting what he learned and what is learning by sharing that in blog posts."
+  bio    : "Java Developer"
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"
