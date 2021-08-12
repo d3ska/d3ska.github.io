@@ -1,11 +1,11 @@
 ---
 title: "Strategy Design Pattern"
 categories:
-- Blog
-  tags:
-- Design patterns
-- Strategy pattern
-- Open Closed principle
+  - Blog
+tags:
+  - Design patterns
+  - Strategy pattern
+  - Open Closed principle
 ---
 ## **Strategy pattern**.
 
