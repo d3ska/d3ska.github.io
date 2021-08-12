@@ -8,7 +8,7 @@ tags:
   - SOLID
 ---
 
-####Strategy is a behavioral design pattern that lets you define a family of algorithms, put each of them into a separate class, and make their objects interchangeable.
+#### Strategy is a behavioral design pattern that lets you define a family of algorithms, put each of them into a separate class, and make their objects interchangeable.
 
 It makes it easier for us to solve the same problem in different ways.
 A very important element is the intention, which is what we want to do, not how.
