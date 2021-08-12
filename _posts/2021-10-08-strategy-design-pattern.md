@@ -1,14 +1,14 @@
 ---
-title: "Strategy Design Pattern"
+title: "Strategy Design Patter"
 categories:
-  - Blog
+  - Blog 
 tags:
   - Design patterns
   - Strategy pattern
-  - Open Closed principle
+  - SOLID
 ---
 
-## **Strategy pattern**.
+### **Strategy pattern**
 
 It makes it easier for us to solve the same problem in different ways.
 A very important element is the intention, which is what we want to do, not how.
@@ -50,3 +50,4 @@ Now we have to create concrete implementation of algorithms for payment using on
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy6.png)
 
 Now we can use any strategy that implements our interface, whatsmore in Strategy pattern, a class behavior or its algorithm can be changed at run time. This type of design pattern comes under behavior pattern.
+	 
