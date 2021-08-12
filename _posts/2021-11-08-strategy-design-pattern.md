@@ -1,5 +1,5 @@
 ---
-title: "Strategy - Design Pattern"
+title: "Strategy Design Pattern"
 categories:
 - Blog
   tags:
