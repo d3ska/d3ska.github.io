@@ -7,6 +7,7 @@ tags:
   - Strategy pattern
   - Open Closed principle
 ---
+
 ## **Strategy pattern**.
 
 It makes it easier for us to solve the same problem in different ways.
