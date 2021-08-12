@@ -37,15 +37,25 @@ From the point of view of the person ordering a given functionality or the fragm
 
 First of all we will create the interface for our strategy pattern example, in our case to pay the amount passed as argument.
 
+**PayStrategy.java**
+
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy1.png)
 
 Now we have to create concrete implementation of algorithms for payment using one of above metho, e.g. PayPal, Credit Card or Cryptocurrencies.
 
+**PayByPayPal.java**
+
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy2.png)
+
+**PayByCreditCard.java**
 
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy4.png)
 
+**CreditCard.java**
+
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy5.png)
+
+**Order.java**
 
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy6.png)
 
