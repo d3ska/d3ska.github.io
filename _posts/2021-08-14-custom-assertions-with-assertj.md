@@ -10,7 +10,7 @@ tags:
 ---
 
 You may have contact with test that are not too readable, as the communicates when they fail.
-In that case you should take in consideration craeting your own specific assertions and use the domain model vocabulary, which will make them easier to read.
+In that case you should take in consideration creating your own specific assertions and use the domain model vocabulary, which will make them easier to read.
 It's also a way to apply Domain Driven Design ubiquitous language in tests.
 
 **Implementation**
@@ -33,8 +33,8 @@ First we checked that object that we are testing is notNull and then we implemen
 It is almost ready to use, if we would have more than one customer assertions class, we may wrap all assertThat methods in a class, providing a static factory method for each of the assertion classes:
 
 ![img]({{site.url}}/assets/blog_images/2021-14-08-custom-assertions-with-assertj/assertions4.png)
-
-Lets look at an examples of tests.
+<p>&nbsp;</p>
+**Lets look at an examples of tests.**
 
 ![img]({{site.url}}/assets/blog_images/2021-14-08-custom-assertions-with-assertj/assertions5.png)
 
