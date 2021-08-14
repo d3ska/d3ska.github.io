@@ -1,5 +1,5 @@
 ---
-title: "Custom Assertions with AssertJ?"
+title: "Custom Assertions with AssertJ"
 categories:
   - Blog
 tags:
