@@ -5,7 +5,7 @@ categories:
 tags:
   - Test
   - Custom Assertions
-  - Domain Driven Designb
+  - Domain Driven Design
   - DDD
 ---
 
