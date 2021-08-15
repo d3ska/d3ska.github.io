@@ -27,7 +27,9 @@ The last four scopes mentioned, request, session, application and websocket, are
 ### Singleton 
 
 When you define a bean with the singleton scope, the container will create an instance of the bean only once.
+
 The Framework returns that instance each time the bean is requested by your application code.
+
 It is also a default scope of bean in spring if you didn't define other one.
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/singleton1.png)
