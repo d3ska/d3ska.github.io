@@ -110,7 +110,7 @@ Controller that references this bean:
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/application3.png)
 
 
-##Websocket
+### Websocket
 
 Finally, let's create the bean with the websocket scope:
 
