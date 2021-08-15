@@ -22,8 +22,6 @@ The latest version of the Spring framework defines 6 types of scopes:
 
 **The last four scopes mentioned, request, session, application and websocket, are only available in a web-aware application.**
 
-<p>&nbsp;</p>
-
 ### Singleton 
 
 When you define a bean with the singleton scope, the container will create an instance of the bean only once.
@@ -117,7 +115,7 @@ Finally, let's create the bean with the websocket scope:
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/websocket1.png)
 
 
-When first accessed, WebSocket scoped beans are stored in the WebSocket session attributes. The same instance of the bean is then returned whenever that bean is accessed during the entire WebSocket session.
+The Spring Framework provides a WebSocket API that you can use to write client- and server-side applications that handle WebSocket messages. You can declare a Spring-managed bean in the websocket scope. Those are typically singletons and live longer than any individual WebSocket session.
 
 We can also say that it exhibits singleton behavior, but limited to a WebSocket session only.
 
