@@ -43,8 +43,11 @@ To be able to do that, the observable object needs to keep references to the obs
 <span style="color: green"> You can establish relations between objects at runtime. </span>
 <p>&nbsp;</p>
 <span style="color: red">  Subscribers are notified in random order. </span>
+<<<<<<< HEAD
 
 
 
 
 
+=======
+>>>>>>> 13e75e90ecbe1e7788d1bd796141b4efb8910dbb
