@@ -19,7 +19,7 @@ Without indexes, MongoDB must perform a collection scan, i.e. scan every documen
 
 To create an index in the Mongo Shell, use db.collection.createIndex().
 
-**db.collection.createIndex( <key and index type specification>, <options> )**
+**db.collection.createIndex( {key and index type specification}, {options} )**
 
 The following example creates a single key descending index on the name field:
 
