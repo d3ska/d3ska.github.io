@@ -8,8 +8,6 @@ tags:
   - efficiency
 ---
 
-MongoDB Indexes
-
 ### Why use indexes?
 
 ### For faster queries.
