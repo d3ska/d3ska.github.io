@@ -39,18 +39,17 @@ The db.collection.createIndex() method only creates an index if an index of the 
   <tr>
     <td>background</td>
     <td>boolean</td>
-    <td>Optional. Deprecated in MongoDB 4.2. Background builds do not block operations on the collection. 
-	The default value is false.
+    <td>Optional. Deprecated in MongoDB 4.2.
+	Background builds do not block operations on the collection. The default value is false.
     Changed in version 4.2.
-    All index builds use an optimized build process that holds the exclusive lock only at the beginning and end of the build process. The rest of the build process yields to interleaving read and write operations. MongoDB ignores the background option if specified.</td>
+    All index builds use an optimized build process that holds the exclusive lock only at the beginning and end of the build process.
+	The rest of the build process yields to interleaving read and write operations. MongoDB ignores the background option if specified.</td>
   </tr>
   <tr>
     <td>unique</td>
     <td>boolean</td>
     <td>Optional. Creates a unique index so that the collection will not accept insertion or update of documents where the index key value matches an existing value in the index.
-
 	Specify true to create a unique index. The default value is false.
-
 	The option is unavailable for hashed indexes.</td>
   </tr>
   <tr>
