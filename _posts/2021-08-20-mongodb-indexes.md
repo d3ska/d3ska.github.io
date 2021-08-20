@@ -5,7 +5,7 @@ categories:
 tags:
   - MongoDB
   - Indexes
-  - efficiency
+  - Efficiency
 ---
 
 ### Why use indexes?
