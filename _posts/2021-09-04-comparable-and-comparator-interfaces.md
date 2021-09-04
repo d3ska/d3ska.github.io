@@ -48,7 +48,7 @@ or simpler:
 Unlike Comparable, Comparator is external to the element type we are comparing. It’s a separate class. We create multiple separate classes (that implement Comparator) to compare by different members.
 Collections class has a second sort() method and it takes Comparator which could be found in java.util package. 
 The sort() method invokes the compare() to sort objects.
-To compare Student by age, we need to do 3 things :
+**To compare Student by age, we need to do 3 things :**
 
 1) Create a class that implements Comparator (and thus the compare() method that does the work previously done by compareTo()).
 
