@@ -36,6 +36,8 @@ or simpler:
 
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparable2.png)
 
+<p>&nbsp;</p>
+
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparable3.png)
 
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparable4.png)
@@ -48,13 +50,18 @@ Collections class has a second sort() method and it takes Comparator which could
 The sort() method invokes the compare() to sort objects.
 To compare Student by age, we need to do 3 things :
 
-
 1) Create a class that implements Comparator (and thus the compare() method that does the work previously done by compareTo()).
+
 2) Make an instance of the Comparator class.
+
 3) Call the overloaded sort() method, giving it both the list and the instance of the class that implements Comparator.<p> 
 Or you may call sort() method directly on Collection that you want to sort and give it Comparator as an argument.
 
+**Code Example**
+
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparator1.png)
+
+<p>&nbsp;</p>
 
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparator2.png)
 
