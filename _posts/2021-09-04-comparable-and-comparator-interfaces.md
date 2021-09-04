@@ -11,7 +11,7 @@ tags:
 ### Comparable.
 
 Both interfaces are used to order the objects of the user-defined class.
-Compmarable interface is found in java.lang package and contains only one method named compareTo(Object).
+Compmarable interface is found in java.lang package and contains only one method named compareTo(Object).<br>
 **It provides a single sorting sequence only**, i.e., you can sort the elements on the basis of single data member only.
 For example, it may be name, age or anything else.
 
@@ -54,7 +54,7 @@ To compare Student by age, we need to do 3 things :
 
 2) Make an instance of the Comparator class.
 
-3) Call the overloaded sort() method, giving it both the list and the instance of the class that implements Comparator.<p> 
+3) Call the overloaded sort() method, giving it both the list and the instance of the class that implements Comparator.<br> 
 Or you may call sort() method directly on Collection that you want to sort and give it Comparator as an argument.
 
 **Code Example**
