@@ -29,7 +29,7 @@ As with equals, hashCode is implemented in the Object class. Whenever the progra
 
 This method returns a number of the int type, which is used to assign a given object to a group. Thanks to the hashCode method, we are able to divide all possible instances of a given class into separate groups. Each of these groups is represented by a number returned by the hashCode method.
 
-**The hashCode method is used by collections such as HashSet, HashMap to ensure data consistency of these data sets. Without overrwritten those two methods, those collections wouldnt work properly.
+**The hashCode method is used by collections such as HashSet, HashMap to ensure data consistency of these data sets. Without overridden those two methods, those collections wouldnt work properly.
 Without replacing these two methods, these collections would not behave properly.**
 
 
@@ -42,6 +42,7 @@ The hashCode and equals methods are related, and their implementation should be 
 * If X.hashCode () == Y.hashCode () then it is not required that X.equals (Y) == true.
 
 
+<br>
 
 #### Code Example
 
