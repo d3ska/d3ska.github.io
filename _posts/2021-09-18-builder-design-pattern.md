@@ -9,11 +9,11 @@ tags:
 ---
 
 ### Builder is a creational design pattern that lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
-
+<br/>
 **Problem**
 
 Imagine you have an item that is quite complicated to create and has many possible combinations. For example, it could be a car.
-Some cars will be in the basic version while others may have many additional things.<br/>You might think about creating a class with common fields that others will extend as they have additional functions.
+Some cars will be in the basic version while others may have many additional things.<br/>You might think about creating a class with common fields that others will extend as they have additional functions.<br/>
 This solution comes to us with another problem, which is many classes extending the Car class, eg CarWithAutopilot, CarWithSteeringWheel, CarInSportVersion
 So it is not the optimal solution.</br>
 Another idea might be to create just one class, just Car, which will have all the possibilities as fields such as has Autopilot, isSportVersion, hasSteeringWheel, additionalWarranty, soundSystem and so on.
