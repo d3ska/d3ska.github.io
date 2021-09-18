@@ -1,5 +1,5 @@
 ---
-title: "Java equals() and hashCode() contract"
+title: "Java equals and hashCode contract"
 categories:
   - Blog
 tags:
