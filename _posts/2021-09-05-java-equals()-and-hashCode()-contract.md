@@ -46,32 +46,32 @@ The hashCode and equals methods are related, and their implementation should be 
 
 #### Code Example
 
-![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contracts/equals1.png)
+![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals1.png)
 
-![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contracts/equals2.png)
+![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals2.png)
 
 ![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contracts/equals3.png)
 
 
 Comparing two objects without the equals () method doesn't work as it should.
 
-![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contracts/equals4.png)
+![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals4.png)
 
-![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contracts/equals5.png)
+![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals5.png)
 
 As you can see, the overridden equals () method was enough to check for equality between objects.
 But let's see how the HashSet will behave with these objects.
 
-![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contracts/equals6.png)
+![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals6.png)
 
-![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contracts/equals7.png)
+![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals7.png)
 
 The HashSet should not add an object if the same object already exists in the collection.
 Let's check it again after overriding the hashCode () method.
 
-![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contracts/equals8.png)
+![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals8.png)
 
-![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contracts/equals9.png)
+![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals9.png)
 
 <br>
 
