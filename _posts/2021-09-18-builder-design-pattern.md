@@ -13,17 +13,21 @@ tags:
 **Problem**
 
 Imagine you have an item that is quite complicated to create and has many possible combinations. For example, it could be a car.
-Some cars will be in the basic version while others may have many additional things. You might think about creating a class with common fields that others will extend as they have additional functions.
+Some cars will be in the basic version while others may have many additional things.<br/>You might think about creating a class with common fields that others will extend as they have additional functions.
 This solution comes to us with another problem, which is many classes extending the Car class, eg CarWithAutopilot, CarWithSteeringWheel, CarInSportVersion
-So it is not the optimal solution.
+So it is not the optimal solution.</br>
 Another idea might be to create just one class, just Car, which will have all the possibilities as fields such as has Autopilot, isSportVersion, hasSteeringWheel, additionalWarranty, soundSystem and so on.
 So if we create a base car in most constructor fields we will pass null which looks messy.
 
-**Rozwiązanie**
+**Solution**
 
 Builder design patter suggest extraction production code from its class and place it in separate objects called builders.
 
-**EXAMPLE**
+**Example**
+
+![img]({{site.url}}/assets/blog_images/2021-09-18-builder-design-pattern/builder1.png)
+
+![img]({{site.url}}/assets/blog_images/2021-09-18-builder-design-pattern/builder2.png)
 
 * Use the Builder pattern to get rid of a “telescopic constructor”.
 
