@@ -20,7 +20,7 @@ The exact rules between these two are as follows:
 
 #### Fetch Modes:
 
-**SELECT** - generates separate query for each entity that needs to be loaded.
+* **SELECT** - generates separate query for each entity that needs to be loaded.
 So for example, if we would like to load Customer which has five Addresses hibernate would generate six queries.
 This is known as the n + 1 select problem. Executing one query will trigger n additional queries.
 
@@ -30,17 +30,17 @@ In our example, we have just five addresses so one query is enough.
 
 We'll still use the same query. **But it will only be run once.** Now we have just two queries: One to load the Customer and one to load the Addresses collection.
 
-**JOIN** - While FetchMode.SELECT loads relations lazily, FetchMode.JOIN loads them eagerly, using join.
+* **JOIN** - While FetchMode.SELECT loads relations lazily, FetchMode.JOIN loads them eagerly, using join.
 This results in just one query for both the Customer and their Addresses.
 But it may retrieve data duplicated.
 
-**SUBSELECT** - It as well avoids the N+1 issues as well as JOIN and doesn't duplicate data but it loads all the entities of the associated type into memory.
+* **SUBSELECT** - It as well avoids the N+1 issues as well as JOIN and doesn't duplicate data but it loads all the entities of the associated type into memory.
 
 #### Fetch Types:
 
-**LAZY** will only fire for primary table. If in your code you call any other method that has a parent table dependency then it will fire query to get that table information. (FIRES MULTIPLE SELECT)
+* **LAZY** will only fire for primary table. If in your code you call any other method that has a parent table dependency then it will fire query to get that table information. (FIRES MULTIPLE SELECT)
 
-**EAGER** will create join of all table including relevant parent tables directly. (USES JOIN)
+* **EAGER** will create join of all table including relevant parent tables directly. (USES JOIN)
 
 **When to Use:** Suppose you compulsorily need to use dependant parent table informartion then choose EAGER type. If you only need information for certain records then use FetchType.LAZY.
 
