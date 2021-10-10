@@ -26,7 +26,6 @@ This is known as the n + 1 select problem. Executing one query will trigger n ad
 Select mode has an optional configuration annotation using the **@BatchSize** annotation.
 Hibernate will try to load the orders collection in batches defined by the size parameter.
 In our example, we have just five addresses so one query is enough.
-
 We'll still use the same query. **But it will only be run once.** Now we have just two queries: One to load the Customer and one to load the Addresses collection.
 
 * **JOIN** - While FetchMode.SELECT loads relations lazily, FetchMode.JOIN loads them eagerly, using join.
