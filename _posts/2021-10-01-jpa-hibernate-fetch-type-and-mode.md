@@ -23,8 +23,7 @@ The exact rules between these two are as follows:
 * **SELECT** - generates separate query for each entity that needs to be loaded.
 So for example, if we would like to load Customer which has five Addresses hibernate would generate six queries.
 This is known as the n + 1 select problem. Executing one query will trigger n additional queries.
-
-SELECT mode has an optional configuration annotation using the **@BatchSize** annotation.
+Select mode has an optional configuration annotation using the **@BatchSize** annotation.
 Hibernate will try to load the orders collection in batches defined by the size parameter.
 In our example, we have just five addresses so one query is enough.
 
