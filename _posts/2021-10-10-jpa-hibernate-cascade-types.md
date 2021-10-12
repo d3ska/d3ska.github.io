@@ -13,7 +13,6 @@ tags:
 Cascade is the feature provided by hibernate to automatically manage the state of mapped entity whenever the state of its relationship owner entity is affected.
 For example, Person-Address relationship, without Person, Address it worthless. So when we delete Person entity, Address entity should also get deleted.
 
-
 **JPA Cascade Types**
 
 All JPA-specific cascade operations are represented by the javax.persistence.CascadeType enum containing entries:
@@ -35,6 +34,7 @@ Hibernate provides three additional cascade operations which are available in or
 * LOCK - Unintuitivly, CascadeType.LOCK reattaches the entity and its associated child entity with the persistent context again.
 
 
+**Remember**, There is no default cascade type in JPA. By default no operations are cascaded.
 
 
                                                                           
