@@ -22,6 +22,8 @@ ACID is an acronym that stands for an atomicity, consistency, isolation, and dur
 * Isolation - when multiple users are reading and writing from the same table all at once, isolation of their transactions ensures that the concurrent transactions don’t interfere with or affect one another. Each request can occur as though they were occurring one by one, even though they're actually occurring simultaneously.
 * Durability - ensures that changes to your data made by successfully executed transactions will be saved, even in the event of system failure.
 
+
+
 **Configure Transactions**
 
 Spring 3.1 introduces the @EnableTransactionManagement annotation that we can use in a @Configuration class to enable transactional support.
