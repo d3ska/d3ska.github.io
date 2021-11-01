@@ -58,11 +58,11 @@ after change:
 <br/>
 <br/>
 
-* (!a \|\| !b \|\| !c), so after while we see that all requirements must be met
+* (!a \|\| !b \|\| !c),after while we see that all requirements must be met
 
 after change:
 
-* !(a && b && c), know it is easier to read and understand
+* !(a && b && c), now we see it immediately
 
 <br/>
 
