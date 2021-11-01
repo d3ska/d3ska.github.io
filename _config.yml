@@ -78,7 +78,7 @@ author:
       url: "https://github.com/d3ska"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+      url: "https://www.instagram.com/mateusz_deska/"
 
 footer:
   links:
@@ -90,7 +90,7 @@ footer:
       url: "https://github.com/"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+      url: "https://www.instagram.com/mateusz_deska/"
 
 defaults:
   # _posts
