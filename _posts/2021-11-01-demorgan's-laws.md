@@ -53,19 +53,18 @@ It could help us and others to more easily read the if statements, and it's also
 
 after change: 
 
-* !(a \|| b \|| c), by using the second method, we can simply read this as “at least one of these is required.”
+* !(a \|\| b \|\| c), by using the second method, we can simply read this as “at least one of these is required.”
 
 <br/>
 <br/>
 
-* (!a \|| !b \|| !c), so after while we see that all requirements must be met
+* (!a \|\| !b \|\| !c), so after while we see that all requirements must be met
 
 after change:
 
 * !(a && b && c), know it is easier to read and understand
 
 <br/>
-
 
 **Summary**
 
