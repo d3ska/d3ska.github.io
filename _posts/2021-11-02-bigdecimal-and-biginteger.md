@@ -158,7 +158,7 @@ It also provides operations for modular arithmetic, GCD calculation, primality t
 
 * BigDecimals and BigInteger are immutable, operations do not modify the existing objects. Rather, they return new objects.                            
 
-* Comparing BigDecimal using == ignores the scale while comparing.
+* Comparing using == ignores the scale while comparing.
 
 * the equals method considers two BigDecimal objects as equal only if they are equal in value and scale. Thus, BigDecimals 3.0 and 3.00 are not equal when compared by this method.
 
