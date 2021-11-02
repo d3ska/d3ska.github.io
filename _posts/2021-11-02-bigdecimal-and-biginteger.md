@@ -41,7 +41,7 @@ By rounding a number, we replace it with another having shorter, simpler and mor
 
 There are two classes which control rounding behavior – RoundingMode and MathContext.
 
-The enum **RoundingMode** provides eight rounding modes:
+The enum **[RoundingMode](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/RoundingMode.html)** provides eight rounding modes:
 
 * CEILING – rounds towards positive infinity
 
@@ -61,7 +61,7 @@ The enum **RoundingMode** provides eight rounding modes:
 
 #### MathContext
 
-**MathContext encapsulates both precision and rounding mode**, and it provides four rounding modes:
+**[MathContext](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/MathContext.html) encapsulates both precision and rounding mode**, and it provides four rounding modes:
 
 * DECIMAL32 – 7 digits precision and a rounding mode of HALF_EVEN
 
