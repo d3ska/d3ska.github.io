@@ -7,9 +7,7 @@ tags:
   - Precise numbers
 ---
 
-### BigDecimal and BigInteger in Java
-
-#### BigDecimal
+### BigDecimal
 
 BigDecimal represents an immutable arbitrary-precision signed decimal number. It consists of two parts:
 
@@ -26,14 +24,6 @@ Just like others Number classes like Integer, Long, Double etc. BigDecimal provi
 Such as: add, subtract, multiply, divide and compareTo.
 
 BigDecimal has also methods to extract various attributes, such as precision, scale, and sign:
-
-#### Worth to remember
-
-* BigDecimals are immutable, operations do not modify the existing objects. Rather, they return new objects.                            
-
-* Comparing BigDecimal using == ignores the scale while comparing.
-
-* the equals method considers two BigDecimal objects as equal only if they are equal in value and scale. Thus, BigDecimals 3.0 and 3.00 are not equal when compared by this method.
 
 #### Roundings
 
@@ -80,3 +70,98 @@ BigDecimal bd = new BigDecimal("7.5");
 
 BigDecimal rounded = bd .round(new MathContext(2, RoundingMode.HALF_EVEN));
 ```
+
+
+### BigInteger
+
+BigInteger class is used for mathematical operation which involves very big integer calculations that are outside the limit of all available primitive data types.
+
+For example factorial of 100 contains 158 digits in it, so we can’t store it in any primitive data type available. We can store as large Integer as we want in it. 
+
+There is no theoretical limit on the upper bound of the range because memory is allocated dynamically but practically as memory is limited you can store a number which has Integer.MAX_VALUE number of bits in it which should be sufficient to store mostly all large values.
+
+
+**We can create BigInteger from a byte array or String:**
+```java
+ BigInteger biFromString = new BigInteger("1289231289098714924");
+
+ BigInteger biFromByteArray = new BigInteger(new byte[] { 64, 64, 64, 64, 64, 64 });
+
+ BigInteger biFromSignMagnitude = new BigInteger(-1, new byte[] { 64, 64, 64, 64, 64, 64 });
+```
+
+In addition, we can convert a long to BigInteger using the static method valueOf:
+```java
+ BigInteger biFromLong =  BigInteger.valueOf(7897343012089369395L);
+```
+
+#### Operations on BigInteger
+
+BigInteger class provides operations analogues to all of Java's primitive integer operators and for all relevant methods from java. lang. Math. 
+It also provides operations for modular arithmetic, GCD calculation, primality testing, prime generation, bit manipulation, and a few other miscellaneous operations like abs, min, max, pow, signum from Math class.
+
+**We compare the value of two BigIntegers using the compareTo method:**
+```java
+ BigInteger biFirst = new BigInteger("123456789012345678901234567890");
+ BigInteger biSecond = new BigInteger("123456789012345678901234567891");
+ boolean firstIsGreater = biFirst.compareTo(biSecond) > 0;
+```
+
+**BigInteger has the bit operations similar to int and long. But, we need to use the methods instead of operators:**
+```java
+ BigInteger biFirst = new BigInteger("4");
+ BigInteger biSecond = new BigInteger("7");
+
+ BigInteger and = biFirst.and(biSecond);
+ BigInteger or = biFirst.or(biSecond);
+ BigInteger not = biSecond.not();
+ BigInteger xor = biFirst.xor(biSecond);
+ BigInteger andNot = biFirst.andNot(biSecond);
+ BigInteger shiftLeft = biFirst.shiftLeft(1);
+ BigInteger shiftRight = biFirst.shiftRight(1);
+```
+
+**It has additional bit manipulation methods:**
+
+```java
+ BigInteger bi = new BigInteger("1024");
+
+ BigInteger setBit8 = bi.setBit(8);
+ BigInteger flipBit0 = bi.flipBit(0);
+ BigInteger clearBit2 = bi.clearBit(2);
+
+```
+
+**BigInteger provides methods for GCD(Greatest Common Divisor) computation and modular arithmetic:**
+```java
+ BigInteger biFirst = new BigInteger("50");
+ BigInteger biSecond = new BigInteger("18");
+ BigInteger biThird = new BigInteger("12");
+
+ BigInteger gcd = biSecond.gcd(biThird);  //6
+ BigInteger multiplyAndMod = biSecond.multiply(biThird).mod(biFirst); //20
+ BigInteger modInverse = biSecond.modInverse(biFirst); //30
+ BigInteger modPow = biSecond.modPow(biThird, biFirst); //1
+
+```
+
+**It also has methods related to prime generation and primality testing:**
+```java
+ BigInteger i = BigInteger.probablePrime(100, new Random());
+        
+ boolean isProbablePrime = i.isProbablePrime(1000); //true
+```
+
+
+
+#### Worth to remember
+
+* BigDecimals and BigInteger are immutable, operations do not modify the existing objects. Rather, they return new objects.                            
+
+* Comparing BigDecimal using == ignores the scale while comparing.
+
+* the equals method considers two BigDecimal objects as equal only if they are equal in value and scale. Thus, BigDecimals 3.0 and 3.00 are not equal when compared by this method.
+
+
+
+
