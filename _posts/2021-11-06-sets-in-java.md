@@ -35,24 +35,34 @@ Java HashSet class is used to create a collection that uses a hash table for sto
 The important points about Java HashSet class are:
 * It stores unique elements and permits nulls
 * It's backed by a HashMap
+
+**Performance**
+
 The performance of a HashSet is affected mainly by two parameters – its Initial Capacity and the Load Factor.
 The expected time complexity of adding an element to a set is O(1) which can drop to O(n) in the worst case scenario (only one bucket present) – therefore, it's essential to maintain the right HashSet's capacity.
-
 
 
 #### LinkedHashSet
 
 The LinkedHashSet is an ordered version of HashSet that maintains a doubly-linked List across all elements. 
-That's why it requires more storage, and it's slower than HashSet. Because LinkedHashSet maintains linked lists internally.
+That's why it requires more storage than HashSet, because LinkedHashSet maintains linked lists internally.
 When the iteration order is needed to be maintained this class is used. 
 If we would like to iterate through elements in LinkedHashSet, the elements will be at the same order as they were inserted.
+
+**Performance** 
+
+The performance of LinkedHashSet is slower than HashSet. It is because of linked lists present in LinkedHashSet
 
 #### TreeSet 
 
 TreeSet is a sorted collection that extends the AbstractSet class and implements the NavigableSet interface.
 However, we can customize the sorting of elements by using the [Comparable or Comparator](https://matthewonsoftware.com/blog/comparable-and-comparator-interfaces/) interface.
 The TreeSet uses a self-balancing binary search tree, more specifically a Red-Black tree.
-When compared to a HashSet the performance of a TreeSet is on the lower side. Operations like add, remove and search take O(log n) time while operations like printing n elements in sorted order require O(n) time.
+
+**Performance**
+
+When compared to a HashSet the performance of a TreeSet is on the lower side. 
+Operations like add, remove and search take O(log n) time while operations like printing n elements in sorted order require O(n) time.
 
 #### EnumSet
 
