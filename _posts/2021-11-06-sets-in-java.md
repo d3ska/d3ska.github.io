@@ -22,10 +22,10 @@ Two Set instances are equal if they contain the same elements. By default, sets 
 
 Since Set is an interface you need to instantiate a concrete implementation of the interface in order to use it. You can choose between the following Set implementations: 
 
-* HashSet
-* LinkedHashSet
-* TreeSet
-* EnumSet
+* [HashSet](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
+* [LinkedHashSet](https://matthewonsoftware.com/blog/sets-in-java/#linkedhashset)
+* [TreeSet](https://matthewonsoftware.com/blog/sets-in-java/#treeset)
+* [EnumSet](https://matthewonsoftware.com/blog/sets-in-java/#enumset)
 
 Of these implementations, the HashSet is the most commonly used.
 
