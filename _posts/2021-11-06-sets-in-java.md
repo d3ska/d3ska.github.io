@@ -68,7 +68,7 @@ The TreeSet uses a self-balancing binary search tree, more specifically a Red-Bl
 **Performance**
 
 When compared to a HashSet the performance of a TreeSet is on the lower side. 
-Operations like add, remove and search take O(log n) time while operations like printing n elements in sorted order require O(n) time.
+Operations like add, remove and search take <br/> O(log n) time while operations like printing n elements in sorted order require O(n) time.
 
 <br/>
 
