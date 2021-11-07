@@ -14,7 +14,7 @@ The Java List interface is a standard Java interface, and it is a subtype of the
 
 #### Implementations
 
-Since List is an interface you need to instantiate a concrete implementation of the interface in order to use it. You can choose between the following List implementations in the Java Collections API:
+Since List is an interface you need to instantiate a concrete implementation of the interface in order to use it. You can choose between the following List implementations:
 
 * java.util.ArrayList
 * java.util.LinkedList
