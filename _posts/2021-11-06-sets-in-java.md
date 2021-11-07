@@ -69,10 +69,28 @@ Operations like add, remove and search take <br/> O(log n) time while operations
 
 ### EnumSet
 
+An EnumSet is a specialized Set collection to work with enum classes. It implements the Set interface and extends from AbstractSet:
+When we want to use EnumSet we should take into consideration facts below:
 
+* It can contain only enum values and all the values have to belong to the same enum
+* It uses a fail-safe iterator that works on a copy, so it won't throw a ConcurrentModificationException if the collection is modified when iterating over it.
+* It's not thread-safe, so we need to synchronize it externally if required
+* The elements are stored following the order in which they are declared in the enum
+* It doesn't allow adding null values, throwing a NullPointerException in an attempt to do so
 
+**Implementations**
 
+EnumSet is a public abstract class, but JDK provides 2 different implementations – are package-private and backed by a bit vector:
 
+* RegularEnumSet -  uses a single long to represent the bit vector. So it can store up to 64 elements.
+* JumboEnumSet -  uses an array of long elements as a bit vector. This lets this implementation store more than 64 elements.
+
+It takes in account only size of the enum class, not elements that will be stored in the collection.
+
+**Performance**
+
+EnumSet that we've described above, all the methods in an EnumSet are implemented using arithmetic bitwise operations. 
+These computations are very fast and therefore all the basic operations are executed in a constant time.
 
 
 
