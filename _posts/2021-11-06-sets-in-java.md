@@ -13,7 +13,7 @@ A Set is a Collection that cannot contain duplicate elements.
 It models the mathematical set abstraction. 
 The Set interface contains only methods inherited from Collection and adds the restriction that duplicate elements are prohibited. 
 Set also adds a **stronger contract on the behavior of the equals and hashCode operations**, allowing Set instances to be compared meaningfully even if their implementation types differ. 
-Two Set instances are equal if they contain the same elements.
+Two Set instances are equal if they contain the same elements. By default, sets implementations are not synchronized.
 
 
 ![img]({{site.url}}/assets/blog_images/2021-11-06-sets-in-java/java-set-implementation.png)
@@ -37,11 +37,16 @@ It offers constant time performance for the basic operations (add, remove, conta
 
 
 #### LinkedHashSet
+
 The LinkedHashSet is an ordered version of HashSet that maintains a doubly-linked List across all elements. When the iteration order is needed to be maintained this class is used. 
 If we would like to iterate through elements in LinkedHashSet, the elements will be at the same order as they were inserted.
 
 #### TreeSet 
 
+TreeSet is a sorted collection that extends the AbstractSet class and implements the NavigableSet interface.
+However, we can customize the sorting of elements by using the [Comparable or Comparator](https://matthewonsoftware.com/blog/comparable-and-comparator-interfaces/) interface.
+The TreeSet uses a self-balancing binary search tree, more specifically a Red-Black tree.
+When compared to a HashSet the performance of a TreeSet is on the lower side. Operations like add, remove and search take O(log n) time while operations like printing n elements in sorted order require O(n) time.
 
 #### EnumSet
 
