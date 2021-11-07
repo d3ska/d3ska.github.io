@@ -12,7 +12,7 @@ tags:
 A Set is a Collection that cannot contain duplicate elements. 
 It models the mathematical set abstraction. 
 The Set interface contains only methods inherited from Collection and adds the restriction that duplicate elements are prohibited. 
-Set also adds a **stronger contract on the behavior of the equals and hashCode operations**, allowing Set instances to be compared meaningfully even if their implementation types differ. 
+**Set also adds a stronger contract on the behavior of the [equals and hashCode](https://matthewonsoftware.com/blog/java-equals-and-hashCode-contract/) operations**, allowing Set instances to be compared meaningfully even if their implementation types differ. 
 Two Set instances are equal if they contain the same elements. By default, sets implementations are not synchronized.
 
 
