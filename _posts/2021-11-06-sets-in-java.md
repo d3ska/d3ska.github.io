@@ -16,7 +16,6 @@ Set also adds a **stronger contract on the behavior of the equals and hashCode o
 Two Set instances are equal if they contain the same elements. By default, sets implementations are not synchronized.
 
 
-![img]({{site.url}}/assets/blog_images/2021-11-06-sets-in-java/java-set-implementation.png)
 
 ### Implementations
 
@@ -28,6 +27,8 @@ Since Set is an interface you need to instantiate a concrete implementation of t
 * [EnumSet](https://matthewonsoftware.com/blog/sets-in-java/#enumset)
 
 Of these implementations, the HashSet is the most commonly used.
+
+![img]({{site.url}}/assets/blog_images/2021-11-06-sets-in-java/java-set-implementation.png)
 
 ### HashSet
 
