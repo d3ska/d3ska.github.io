@@ -15,7 +15,6 @@ The Set interface contains only methods inherited from Collection and adds the r
 Set also adds a **stronger contract on the behavior of the equals and hashCode operations**, allowing Set instances to be compared meaningfully even if their implementation types differ. 
 Two Set instances are equal if they contain the same elements. By default, sets implementations are not synchronized.
 
-<br/>
 
 ### Implementations
 
@@ -44,7 +43,6 @@ The important points about Java HashSet class are:
 The performance of a HashSet is affected mainly by two parameters – its Initial Capacity and the Load Factor.
 The expected time complexity of adding an element to a set is O(1) which can drop to O(n) in the worst case scenario (only one bucket present) – therefore, it's essential to maintain the right HashSet's capacity.
 
-<br/>
 
 ### LinkedHashSet
 
@@ -57,8 +55,6 @@ If we would like to iterate through elements in LinkedHashSet, the elements will
 
 The performance of LinkedHashSet is slower than HashSet. It is because of linked lists present in LinkedHashSet
 
-<br/>
-
 ### TreeSet 
 
 TreeSet is a sorted collection that extends the AbstractSet class and implements the NavigableSet interface.
@@ -70,7 +66,6 @@ The TreeSet uses a self-balancing binary search tree, more specifically a Red-Bl
 When compared to a HashSet the performance of a TreeSet is on the lower side. 
 Operations like add, remove and search take <br/> O(log n) time while operations like printing n elements in sorted order require O(n) time.
 
-<br/>
 
 ### EnumSet
 
