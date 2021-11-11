@@ -72,10 +72,10 @@ Mentioned above data structure guarantee that basic operations like search, get,
 
 ### Which map choose
 
-* [HashMap](https://matthewonsoftware.com/blog/sets-in-java/#hashmap) - is good for general-purpose, very efficient but its doesn't insert entities in order nor sort them, so it's a little chaotic.
+* [HashMap](https://matthewonsoftware.com/blog/maps-in-java/#hashmap) - is good for general-purpose, very efficient but its doesn't insert entities in order nor sort them, so it's a little chaotic.
 
-* [LinkedHashMap](https://matthewonsoftware.com/blog/sets-in-java/#linkedhashmap) - is has good attributes from HashMap, and store entities in insertion order. It performs better in operations where there is a lot of iterations, because it 
+* [LinkedHashMap](https://matthewonsoftware.com/blog/maps-in-java/#linkedhashmap) - is has good attributes from HashMap, and store entities in insertion order. It performs better in operations where there is a lot of iterations, because it 
 only number of entities is taken into account regardless of capacity.
 
-* [TreeMap](https://matthewonsoftware.com/blog/sets-in-java/#treemap) - provides possibility of sorting keys by default or custom order. However, it offers worse general performance than the other two alternatives.
+* [TreeMap](https://matthewonsoftware.com/blog/maps-in-java/#treemap) - provides possibility of sorting keys by default or custom order. However, it offers worse general performance than the other two alternatives.
 
