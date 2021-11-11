@@ -17,9 +17,9 @@ All of above maps are not synchronized.
 
 Since Map is an interface you need to instantiate a concrete implementation of the interface in order to use it. You can choose between the following Map implementations: 
 
-* [HashMap](https://matthewonsoftware.com/blog/sets-in-java/#hashmap)
-* [LinkedHashMap](https://matthewonsoftware.com/blog/sets-in-java/#linkedhashmap)
-* [TreeMap](https://matthewonsoftware.com/blog/sets-in-java/#treemap)
+* [HashMap](https://matthewonsoftware.com/blog/maps-in-java/#hashmap)
+* [LinkedHashMap](https://matthewonsoftware.com/blog/maps-in-java/#linkedhashmap)
+* [TreeMap](https://matthewonsoftware.com/blog/maps-in-java/#treemap)
 
 
 Of these implementations, the HashMap is the most commonly used.
