@@ -14,6 +14,8 @@ tags:
 In real life and in programming objects have relationships between each other. 
 Below we will discuss three of them which are quite often mixed up composition, aggregation, and association.
 
+<br>
+
 #### Composition:
 
 Its relationship that is often describe in words 'has-a', 'belongs-to' or 'part-of'. It means that one of the object is a logically structure
@@ -41,6 +43,8 @@ public class School {
 }
 ```
 
+<br>
+
 #### Aggregation:
 
 It is also 'has-a' relationship, but in contrary to composition is fact, that it doesn't involve owning, so its weaker relationship.
@@ -61,6 +65,8 @@ public class Car {
     private List<Wheel> wheels;
 }
 ```
+
+<br>
 
 #### Association:
 
