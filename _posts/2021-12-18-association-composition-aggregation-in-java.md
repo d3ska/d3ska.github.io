@@ -84,6 +84,6 @@ It is the weakest of those three relationship, none of the objects belongs to an
 public class Child {}
 
 public class Mother {
-    private List<Child> chi;
+    private List<Child> children;
 }
 ```
