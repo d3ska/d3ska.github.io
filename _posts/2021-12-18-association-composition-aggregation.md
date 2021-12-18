@@ -1,5 +1,5 @@
 ---
-title: "Composition, Aggregation and Association in Java"
+title: "Composition, Aggregation and Association"
 categories:
   - Blog
 tags:
