@@ -50,8 +50,7 @@ The hashCode and equals methods are related, and their implementation should be 
 
 ![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals2.png)
 
-![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals()-and-hashCode()-contract/equals3.png)
-
+![img]({{site.url}}/assets/blog_images/2021-09-05-java-equals-and-hashCode-contract/equals3.png)
 
 Comparing two objects without the equals () method doesn't work as it should.
 
