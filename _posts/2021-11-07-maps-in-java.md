@@ -7,7 +7,7 @@ tags:
   - Sets
 ---
 
-## Map
+### Map
 
 Map is an interface that is part of Java's Collections Framework. Unlike lists and sets, maps do not implement the Collection interface.
 It's an object that maps keys to values. A map cannot contain duplicate keys; each key can map to at most one value.
