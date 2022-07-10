@@ -7,14 +7,15 @@ tags:
   - Communication
   - Buisness
 ---
+
 I have quite often meet with opinions that claims that business (by buisness I mean company)
 doesn't allow the programming team to refactor or just put some time to polish code.
 
 As definition stand for, refactoring is changing existing code without changing obersvable behavior.
 Think about it, and put yourself in business shoes, they usually don't think in same way as programmers do, they may think
 
-  Why should we pay for something that we doesn't see result of. They did something wrong before and have to repair it now?
-  Is it any new feature? What is the benefit of it? And answer to that is the key to success.
+Why should we pay for something that we doesn't see result of. They did something wrong before and have to repair it now?
+Is it any new feature? What is the benefit of it? And answer to that is the key to success.
 
 Most programmers are not the best in soft skills, but you must present refactoring as something from which
 business would take benefits from. Because that's true.
