@@ -33,11 +33,11 @@ Here it is, shortly explicitly shown the difference between them and when it may
   </tr>
   <tr>
     <td>When you want to enforce field constraints.</td>
-    <td>When you need high performance and low latency.</td>
+    <td>When your data model may quite often change.</td>
   </tr>  
   <tr>
     <td>When you want to use well documented access language (SQL).</td>
-    <td></td>
+    <td>When you need high performance and low latency.</td>
    </tr>
 </table> 
 
