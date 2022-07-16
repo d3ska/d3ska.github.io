@@ -29,7 +29,7 @@ Furthermore, it works great with @InjectMocks and can reduce the amount of setup
 #### @MockBean
 
 MockBean annotation can be used to add mock object to the Spring context. 
-The bean will replace any existing bean of the same type in the application context or will add new one, if any of that type will be not found.
+The bean will replace any existing bean of the same type in the application context or will add new one, if none of that type will be not found.
 
 This annotation can be useful in integration test where we want to mock some part of our logic, some bean like service or repository. 
 
