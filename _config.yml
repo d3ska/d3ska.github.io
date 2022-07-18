@@ -63,8 +63,8 @@ plugins:
 
 author:
   name   : "Mateusz Deska"
-  avatar : "/assets/images/me.jpg"
-  bio    : "Java Developer"
+  avatar : "/assets/images/abu-dhabi.jpg"
+  bio    : "Software Engineer"
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"
