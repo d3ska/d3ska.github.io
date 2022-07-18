@@ -1,5 +1,5 @@
 ---
-title: "How to approach to refactoring"
+title: "How to approach refactoring"
 categories:
   - Blog
 tags:
