@@ -9,7 +9,7 @@ tags:
 
 #### Introduce
 
-First of all, what is refactoring? The definition that I personally find most suitable is:
+Firstly, what does refactoring mean? The definition that I personally find most suitable is:
 "It's changing the structure of code without changing observable behaviour." 
 
 Also, what is the difference between refactoring and rewrite?
