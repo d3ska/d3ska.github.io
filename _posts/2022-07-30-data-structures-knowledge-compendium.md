@@ -1,5 +1,5 @@
 ---
-title: "Data Structures Knowledge Compendium"
+title: "Data structures knowledge compendium"
 categories:
   - Blog
 tags:
@@ -16,15 +16,13 @@ It may sound controversially, but you don't need to know everything about every 
 Here are subjects that you should master and understand:
 
 * [Complexity Analysis](https://matthewonsoftware.com/blog/complexity-analysis)
-* [Memory](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Big O Notation](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Logarithm](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Arrays](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Linked Lists](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Linked Lists](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Linked Lists](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Hash Tables](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Stacks and Queues](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Strings](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Graphs](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
-* [Trees](https://matthewonsoftware.com/blog/sets-in-java/#hashset)
+* [Memory](https://matthewonsoftware.com/)
+* [Big O Notation](https://matthewonsoftware.com/)
+* [Logarithm](https://matthewonsoftware.com/)
+* [Arrays](https://matthewonsoftware.com/)
+* [Linked Lists](https://matthewonsoftware.com/)
+* [Hash Tables](https://matthewonsoftware.com/)
+* [Stacks and Queues](https://matthewonsoftware.com/)
+* [Strings](https://matthewonsoftware.com/)
+* [Graphs](https://matthewonsoftware.com/)
+* [Trees](https://matthewonsoftware.com/)
