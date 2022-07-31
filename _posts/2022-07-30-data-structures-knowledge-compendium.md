@@ -16,7 +16,7 @@ It may sound controversially, but you don't need to know everything about every 
 Here are subjects that you should master and understand:
 
 * [Complexity Analysis](https://matthewonsoftware.com/blog/complexity-analysis)
-* [Memory](https://matthewonsoftware.com/memory)
+* [Memory](https://matthewonsoftware.com/blog/memory/)
 * [Big O Notation](https://matthewonsoftware.com/)
 * [Logarithm](https://matthewonsoftware.com/)
 * [Arrays](https://matthewonsoftware.com/)
