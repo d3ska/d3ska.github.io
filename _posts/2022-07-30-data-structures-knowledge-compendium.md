@@ -17,7 +17,7 @@ Here are subjects that you should master and understand:
 
 * [Complexity Analysis](https://matthewonsoftware.com/blog/complexity-analysis)
 * [Memory](https://matthewonsoftware.com/blog/memory/)
-* [Big O Notation](https://matthewonsoftware.com/)
+* [Big O Notation](https://matthewonsoftware.com/blog/big-o-notation)
 * [Logarithm](https://matthewonsoftware.com/)
 * [Arrays](https://matthewonsoftware.com/)
 * [Linked Lists](https://matthewonsoftware.com/)
