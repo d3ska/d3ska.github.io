@@ -24,7 +24,7 @@ Sometimes there may be best/ average/ worst case scenario depends on the input d
 
 Examples of algorithms and their time complexity:
 
-- fun(arr[]) ⇒ 1 + arr[0]     we just return static number and first element of an array (assume that’s not empty), so the size of input data will not affect the complexity anyhow. the time complexity will be O(1), in other words constant.
+- fun(arr[]) ⇒ 1 + arr\[0]     we just return static number and first element of an array (assume that’s not empty), so the size of input data will not affect the complexity anyhow. the time complexity will be O(1), in other words constant.
 - fun(arr []) ⇒ sum(arr)    here we are summing the given array, so we have to traverse through whole array, in other words the more elements are in given array, the more work our algorithm need to perform, so its linear complexity, in other words O(n).
 - fun(arr []) ⇒ pair(arr)    here we are pairing all elements, assume that it's done by nested for loops. Then guess what, it would require going through every element twice. In previous example it was O(n) to iterate over given array. In this case it will be O(n<sup>2</sup>).
 
