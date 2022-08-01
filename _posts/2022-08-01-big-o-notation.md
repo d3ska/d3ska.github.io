@@ -41,5 +41,4 @@ Now assume that we do the same but for input we're going to get two different ar
 
 O(m<sup>2</sup> + 2n) can we transform it to O(m<sup>2</sup>)?
 No! We can not! As those are different inputs, so we want to know the behaviour as it relates to these two different inputs, and you can imagine that there is actually a scenario where m<sup>2</sup> is tiny compared to N. <br>
-Imagine M is equal to two and N is equal to a thousand, then m<sup>2</sup> would be smaller than N. That’s why when you have two variables, you do always want to keep both of them.  So it has to remain O(m<sup>2</sup>+ n)  <br>
-(we can  still drop constants)
+Imagine M is equal to two and N is equal to a thousand, then m<sup>2</sup> would be smaller than N. That’s why when you have two variables, you do always want to keep both of them.  So it has to remain O(m<sup>2</sup>+ n)(we can  still drop constants)
