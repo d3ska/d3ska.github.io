@@ -20,7 +20,7 @@ Here are subjects that you should master and understand:
 * [Big O Notation](https://matthewonsoftware.com/blog/big-o-notation)
 * [Logarithm](https://matthewonsoftware.com/blog/logarithm)
 * [Arrays](https://matthewonsoftware.com/blog/arrays)
-* [Linked Lists](https://matthewonsoftware.com/)
+* [Linked Lists](https://matthewonsoftware.com/linked-lists)
 * [Hash Tables](https://matthewonsoftware.com/)
 * [Stacks and Queues](https://matthewonsoftware.com/)
 * [Strings](https://matthewonsoftware.com/)
