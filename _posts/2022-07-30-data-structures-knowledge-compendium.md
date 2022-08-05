@@ -21,7 +21,7 @@ Here are subjects that you should master and understand:
 * [Logarithm](https://matthewonsoftware.com/blog/logarithm)
 * [Arrays](https://matthewonsoftware.com/blog/arrays)
 * [Linked Lists](https://matthewonsoftware.com/blog/linked-lists)
-* [Hash Tables](https://matthewonsoftware.com/)
+* [Hash Tables](https://matthewonsoftware.com/blog/hash-tables)
 * [Stacks and Queues](https://matthewonsoftware.com/)
 * [Strings](https://matthewonsoftware.com/)
 * [Graphs](https://matthewonsoftware.com/)
