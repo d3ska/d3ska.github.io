@@ -22,7 +22,7 @@ Here are subjects that you should master and understand:
 * [Arrays](https://matthewonsoftware.com/blog/arrays)
 * [Linked Lists](https://matthewonsoftware.com/blog/linked-lists)
 * [Hash Tables](https://matthewonsoftware.com/blog/hash-tables)
-* [Stacks and Queues](https://matthewonsoftware.com/)
+* [Stacks and Queues](https://matthewonsoftware.com/blog/stacks-and-queues)
 * [Strings](https://matthewonsoftware.com/)
 * [Graphs](https://matthewonsoftware.com/)
 * [Trees](https://matthewonsoftware.com/)
