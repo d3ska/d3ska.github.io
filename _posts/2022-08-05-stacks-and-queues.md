@@ -9,9 +9,9 @@ tags:
   - Queues
 ---
   
-#### Stack
+#### Stacks
 
-Is an array-like data structure whose elements follow **L**ast **I**n **F**irst **O**ut principle. (**LIFO**)
+Is an array-like data structure whose elements follow <br>**L**ast **I**n **F**irst **O**ut principle. (**LIFO**)
 It's really easy to visualize because we faced which such structures on a daily basis, you can compare it to a plates in a sink, the last that was put in the sink is first that would be washed. 
 
 The following are a stack's standard operations and their corresponding complexities:
@@ -25,7 +25,7 @@ A stack is typically based on [**dynamic array**](https://matthewonsoftware.com/
 
 #### Queues
 
-Is an array-like data structure whose elements follow **F**irst **I**n **F**irst **O**ut principle. (**FIFO**)
+Is an array-like data structure whose elements follow <br>**F**irst **I**n **F**irst **O**ut principle. (**FIFO**)
 
 A queues in the other hand may be compared to a group of people standing in line to purchase a ticket - the first person to get in the line is the first one to purchase ticket and to get out of the queue.
 
