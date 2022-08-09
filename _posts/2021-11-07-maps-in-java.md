@@ -30,7 +30,7 @@ Of these implementations, the HashMap is the most commonly used.
 
 ### HashMap
 
-Key reason of using HashMap is performance. Comparing to a list, if we want find element in list, the time complexity is O(n), and if list is sorted, it will be O(log n).
+Key reason of using HashMap is performance. Comparing to a list, if we want to find element in list, the time complexity is O(n), and if list is sorted, it will be O(log n).
 The advantage of a HashMap is that the time complexity to insert and retrieve a value is O(1) on average. It's also a very similar class very Hashtable. 
 
 
