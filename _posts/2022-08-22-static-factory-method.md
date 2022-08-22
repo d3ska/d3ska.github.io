@@ -44,7 +44,7 @@ return b ? Boolean.TRUE : Boolean.FALSE;
 }
 ```
 
-Besides, the above examples what's worth mentioning is I think the most representative example of static factory methods in the JDK which is class. <br>
+Besides, the above examples what's worth mentioning is I think the most representative example of static factory methods in the JDK which is Collections class. <br>
 This is a non-instantiable class that implements only static methods.
 
 Few examples of Collections static factory methods:
