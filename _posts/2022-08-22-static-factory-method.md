@@ -51,7 +51,7 @@ Few examples of Collections static factory methods:
 
 ![img]({{site.url}}/assets/blog_images/2022-08-22-static-factory-method/collections-method.png)
 
-If you want to check something in more details [here](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html) is a documentation for Collections class.
+If you want to check some method of Collections class, you can find it [here](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html) is a documentation for Collections class.
 
 
 
