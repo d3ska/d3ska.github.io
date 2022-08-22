@@ -71,7 +71,7 @@ public class Client {
     }  
 
     public static Client createWithDefaultCountry(String name, String phoneNo) {
-        return new Client(name, phoneNo, Country.POLAND);
+        return new Client(name, phoneNo, "Poland");
     }
 
 }
