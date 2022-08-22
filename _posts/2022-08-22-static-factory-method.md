@@ -53,5 +53,36 @@ Few examples of Collections static factory methods:
 
 If you want to check some method of Collections class, you can find it [here](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html).
 
+<br>
+
+**Example of custom factory method**
+
+```java
+public class Client {
+    
+    private final String name;
+    private final String phoneNo;
+    private final String country;
+    
+    private Client(String name, String phoneNo, String country) {
+        this.name = name;
+        this.phoneNo = phoneNo;
+        this.country = country;
+    }  
+
+    public static Client createWithDefaultCountry(String name, String phoneNo) {
+        return new Client(name, phoneNo, Country.POLAND);
+    }
+
+}
+
+}
+```
+
+```java
+Client client = Client.createWithDefaultCountry("John", 001111111);
+```
+
+
 
 
