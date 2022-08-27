@@ -13,9 +13,9 @@ The Aggregate is one of the main pattern in Domain Driven Design (DDD) introduce
 
 How you may already deduced, it's aggregating, but what?
 
-It’s a cluster of domain objects that can be treated as a single unit. So its aggregating some part of business logic. <br>
-Be aware that it's not aggregating it from our 'contains' perspective as people often perceive it, I mean if client has addresses, and
-phone numbers or whatever, it does not mean that it should be stored in out aggregate.  
+It’s a cluster of domain objects that can be treated as a single unit. So it's aggregating some part of business logic. <br>
+But be aware that it's not aggregating it from our 'contains' perspective, as people often perceive it. If client has addresses, and
+phone number or whatever, it does not mean that it should be stored in our aggregate.  
 It should store necessary data that will make it possible to make a consistent and independent decision about some part of bossiness.
 Like a black box that answer for some question without any external data. 
 
