@@ -24,5 +24,5 @@ Here are subjects that you should master and understand:
 * [Hash Tables](https://matthewonsoftware.com/blog/hash-tables)
 * [Stacks and Queues](https://matthewonsoftware.com/blog/stacks-and-queues)
 * [Strings](https://matthewonsoftware.com/blog/strings)
-* [Graphs](https://matthewonsoftware.com/)
+* [Graphs](https://matthewonsoftware.com/blog/graphs)
 * [Trees](https://matthewonsoftware.com/)
