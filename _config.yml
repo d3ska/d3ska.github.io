@@ -63,7 +63,7 @@ plugins:
 
 author:
   name   : "Mateusz Deska"
-  avatar : "/assets/images/me.png"
+  avatar : "/assets/images/me.jpg"
   bio    : "Software Engineer"
   links:
     - label: "Website"
