@@ -13,7 +13,7 @@ It's very popular traversal algorithm that is really worth knowing, its used in 
 The depth-first search goes deep in each branch before moving to explore another branch.
 
 Here you could get familiar with 
-* [Trees](https://matthewonsoftware.com/) 
+* [Trees](https://matthewonsoftware.com/blog/trees) 
 * [Graphs](https://matthewonsoftware.com/blog/graphs) 
 
 data structures.
