@@ -44,7 +44,7 @@ There are two ways of implementing it, recursive and iterative.
 
 **Recursive:**
 ```java
-public void dfsTraverseInorder(Node root) {
+public void inorderRecursive(Node root) {
     if(root != null) {
         dfsTraverseInorder(root.left);
         visit(root.value)
