@@ -18,24 +18,29 @@ But the truth is that both have some pros and cons, so we have to be aware of wh
 
 #### Modular Monolith
 
-The modular monolith architecture has separate module that 'answers' for some business logic. 
-Those modules should have some shared API for different modules, but it should answer the business matters for which that particular module 
-is responsible, without sharing its inner implementations and logic. Each module should be independent and isolated in other words.
+The modular monolith architecture has separated modules that 'answers' for some business questions. 
+Those modules should have some shared, exposed API for different modules, but should not share its inner implementations and logic. 
+Each module should be independent and isolated in other words there should each module should have high cohesion and be lowly coupled with other modules.
 
 
 ##### What's the difference between monolith and modular monolith?
 
 Monolith is a system that has exactly one deployment unit, in one code base.
-Typically, it's tightly couples. But modular monolith offer some advantages in counter to classic monolith, it's:
+Typically, it's tightly couples. 
+
+###### Advantages of modular monolith in counter to classic monolith:
+
 * reusable 
 * independent and interchangeable 
 * has better-organized dependencies
+* better collaboration between teams and clearer responsibilities
 
 ![img]({{site.url}}/assets/blog_images/2022-08-31-microservices-vs-monolith/modular-monolith.png)
 ![img]({{site.url}}/assets/blog_images/2022-08-31-microservices-vs-monolith/monolith.png)
 
+<br>
 
-##### Advantages of a monolith architecture
+##### Advantages of a monolith architecture in general
 
 * **Easier deployment** - as we have just one executable file or directory.
 * **Testing** - end-to-end testing can be performed faster as all needed dependencies are centralized in a single unit.
@@ -82,7 +87,7 @@ there are 'small' apps that communicate with each others.
 * **Exponential infrastructure costs** - each new microservice can have it own costs for deployments, hosting infrastructure, monitoring tools and so on.
 
 
-
+<br>
 
 
 ##### Summarization
@@ -97,10 +102,10 @@ The helping questions may be:
 * Do we need it?
 * What we want to optimize and what would be the trade-off of our decision? 
 
-![img ]({{site.url}}/assets/blog_images/2022-08-31-microservices-vs-monolith/microservices.jpg)
+![img ]({{site.url}}/assets/blog_images/2022-08-31-microservices-vs-monolith/microservices.png)
 
 
-
+<br>
 
 ##### Recommendation
 
