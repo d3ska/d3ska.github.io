@@ -32,6 +32,8 @@ There are three different orders for traversing a tree using DFS:
 
 #### Tree Depth First Search 
 
+<br>
+
 ##### Inorder Traversal
 
 For inorder traversal, we traverse the left subtree first, then the root, then finally the right subtree.
@@ -84,6 +86,7 @@ public void inorderIterative(Node root) {
 ```
 
 <br>
+<br>
 
 ##### Preorder Traversal
 
@@ -135,6 +138,8 @@ public void traversePreorderIterative(Node root) {
 ```
 
 
+<br>
+<br>
 
 #### Postorder Traversal
 
