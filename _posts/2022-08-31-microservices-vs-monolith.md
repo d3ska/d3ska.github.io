@@ -97,6 +97,7 @@ The key downside of monoliths, both, classic one and modular, is the fact that t
 So in case if we need scale some particular part of our system, for example a payment system, it would be impossible. Or if our organization growth in size, and we would like to make work of teams more agile. 
 The helping questions may be:
 * What are we trying to achieve? 
+* What is our architectural driver and what would be more suitable?
 * Is it resilience? 
 * Is it scalability? 
 * Do we need it?
