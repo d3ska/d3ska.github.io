@@ -12,7 +12,7 @@ categories:
 
 Imagine that we have some domain objects, which can be presented, passed through or some action can be performed on them
 only if they satisfied some rules, those rules may often change and vary from environment, the market, country or the provider of some service. 
-
+ 
 <br>
 
 ##### What problem we're solving?
@@ -127,47 +127,46 @@ public class DpdVendor implements Vendor {
         //...
         return false;
     }
-
 }
 ```
 
 ```java
 @Test
 void shouldNotBeAbleToChangeDestinationWhenPackageIsShipped(){
-        //given
-        var shipmentDetails=ShipmentDetails.withStatus(ShipmentStatus.SHIPPED);
-        var newDestination=Localization.of(59.91,10.75);
-        //and
-        var noChangedDestinationBefore=new NotChangedDestinationBefore();
-        var noShippedYet=new NotShippedYet(List.of(ShipmentStatus.IN_PREPARATION,ShipmentStatus.IN_WAREHOUSE));
-        //and
-        var andRule=new AndRule(Set.of(noChangedDestinationBefore,noShippedYet));
+    //given
+    var shipmentDetails=ShipmentDetails.withStatus(ShipmentStatus.SHIPPED);
+    var newDestination=Localization.of(59.91,10.75);
+    //and
+    var noChangedDestinationBefore=new NotChangedDestinationBefore();
+    var noShippedYet=new NotShippedYet(List.of(ShipmentStatus.IN_PREPARATION,ShipmentStatus.IN_WAREHOUSE));
+    //and
+    var andRule=new AndRule(Set.of(noChangedDestinationBefore,noShippedYet));
 
-        //when
-        var wasChanged=dpdVendor.changeDestinationTo(shipmentDetails,newDestination,andRule);
+    //when
+    var wasChanged=dpdVendor.changeDestinationTo(shipmentDetails,newDestination,andRule);
 
-        //then
-        assertFalse(wasChanged);
-        }
+    //then
+    assertFalse(wasChanged);
+}
 ```
 
 ```java
 @Test
 void shouldBeAbleToChangeDestinationWhenPackageIsShippedButClientDoesNotChangedItBefore(){
-        //given
-        var shipmentDetails=ShipmentDetails.withStatus(ShipmentStatus.SHIPPED);
-        var newDestination=Localization.of(41.90,12.49);
-        //and
-        var noChangedDestinationBefore=new NotChangedDestinationBefore();
-        var noShippedYet=new NotShippedYet(List.of(ShipmentStatus.IN_PREPARATION,ShipmentStatus.IN_WAREHOUSE));
-        var orRule=new OrRule(Set.of(noChangedDestinationBefore,noShippedYet));
+    //given
+    var shipmentDetails=ShipmentDetails.withStatus(ShipmentStatus.SHIPPED);
+    var newDestination=Localization.of(41.90,12.49);
+    //and
+    var noChangedDestinationBefore=new NotChangedDestinationBefore();
+    var noShippedYet=new NotShippedYet(List.of(ShipmentStatus.IN_PREPARATION,ShipmentStatus.IN_WAREHOUSE));
+    var orRule=new OrRule(Set.of(noChangedDestinationBefore,noShippedYet));
 
-        //when
-        var wasChanged=dpdVendor.changeDestinationTo(shipmentDetails,newDestination,orRule);
+    //when
+    var wasChanged=dpdVendor.changeDestinationTo(shipmentDetails,newDestination,orRule);
 
-        //then
-        assertTrue(wasChanged);
-        }
+    //then
+    assertTrue(wasChanged);
+}
 ```
 
 <br>
