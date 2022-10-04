@@ -1,8 +1,8 @@
 ---
 title: "Specification Design Pattern"
 categories:
-
-- Blog tags:
+- Blog 
+tags:
 - Design Patterns
 - Specification Design Pattern
 
