@@ -20,7 +20,7 @@ But the truth is that both have some pros and cons, so we have to be aware of wh
 
 The modular monolith architecture has separated modules that 'answers' for some business questions. 
 Those modules should have some shared, exposed API for different modules, but should not share its inner implementations and logic. 
-Each module should be independent and isolated in other words there should each module should have high cohesion and be lowly coupled with other modules.
+Each module should be independent and isolated, in other words each module should have, high cohesion and be lowly coupled with other modules.
 
 
 ##### What's the difference between monolith and modular monolith?
@@ -80,6 +80,7 @@ there are 'small' apps that communicate with each others.
 ##### Disadvantages of a microservices
 
 * **Higher complexity** 
+* **Dealing with potential failure** - as they're separate deployment unit they need to communicate with each other through network, there will be a situation where communication between some microservices will fail due to network issues, its need to be handled somehow.
 * **Increased Network Traffic** - as they are independent unit, designed to be self-contained they rely on network to communicate with each other. This can result in slower response times.
 * **Difficulty in testing and debugging** - it can be difficult to test some functionalities in our microservices as it has a lot of dependencies that would need to be mocked. Debugging is also harder because it forces us to go through different microservices and their instances in order to find the issue.
 * **Dependency of DevOps** - in order to be successful with microservice architecture, organization need to have a reliable, strong DevOps team. It's because there would be need for deploying and managing microservices.
