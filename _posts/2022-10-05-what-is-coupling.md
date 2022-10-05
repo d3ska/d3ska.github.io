@@ -121,8 +121,7 @@ It's the highest coupling, local method. SaleService does know everything about 
 public class SaleService {
 
     private ConcreteSenderImpl concreteSender = new ConcreteSenderImpl();
-
-
+    
     void sendNotification(PurchaseDetails purchaseDetails){
         concreteSender.send(notification);
     }
@@ -134,6 +133,7 @@ public class SaleService {
 **WHO** - 'me' - EmailSender <br>
 **WHAT** - email will be sent
 
+We are not aware how it will be done, as it's done by different class.
 
 <br>
 
