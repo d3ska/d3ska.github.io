@@ -1,9 +1,11 @@
 ---
 title: "What is coupling?"
 categories:
-
-- Blog tags:
-- Metrics
+  - Blog
+tags:
+  - Metrics
+  - Design
+  - Coupling
 
 ---
 
@@ -44,7 +46,7 @@ decide to work on.
 **What** happened? <br>
 
 <table style="width:100%">
-  <caption style="">Coupling levels</caption>
+  <caption>Coupling levels</caption>
   <tr>
     <th></th>
     <th>Local method</th>
