@@ -100,14 +100,14 @@ We would strive to situation where our part of system can not answer for at leas
 
 ###### Local method
 ```java
-public class EmailSenderService {
+public class SaleService {
     
     void sendNotification(Notification notification){
         //...
     }
 }
 ```
-It's the highest coupling, local method. EmailSender does know everything about the other thing. <br>
+It's the highest coupling, local method. SaleService does know everything about the other thing. <br>
 **HOW** - implementation of the method~~ <br>
 **WHERE** - in my instance <br>
 **WHO** - 'me' - EmailSender <br>
@@ -118,12 +118,12 @@ It's the highest coupling, local method. EmailSender does know everything about 
 
 ###### Local instance
 ```java
-public class EmailSenderService {
+public class SaleService {
 
     private ConcreteSenderImpl concreteSender = new ConcreteSenderImpl();
 
 
-    void sendNotification(Notification notification){
+    void sendNotification(PurchaseDetails purchaseDetails){
         concreteSender.send(notification);
     }
 }
@@ -139,15 +139,15 @@ public class EmailSenderService {
 
 ###### External instance
 ```java
-public class EmailSenderService {
+public class SaleService {
 
     private final ConcreteSenderImpl concreteSender;
     
-    public EmailSenderService(ConcreteSenderImpl concreteSender){
+    public SaleService(ConcreteSenderImpl concreteSender){
         this.concreteSender = concreteSender;
     }
 
-    void sendNotification(Notification notification){
+    void sendNotification(PurchaseDetails purchaseDetails){
         concreteSender.send(notification);
     }
 }
@@ -164,15 +164,15 @@ We decreased coupling and 'where' is also gone, as we don't contain an object it
 
 ###### Configurable instance (Dependency Injection)
 ```java
-public class EmailSenderService {
+public class SaleService {
 
     private final EmailApiService emailSender;
     
-    public EmailSenderService(EmailApiService emailSender){
+    public SaleService(EmailApiService emailSender){
         this.emailSender = emailSender;
     }
 
-    void sendNotification(Notification notification){
+    void sendNotification(PurchaseDetails purchaseDetails){
         emailSender.send(notification);
     }
 }
@@ -185,28 +185,34 @@ public class EmailSenderService {
 
 It's also dependency injection as in previous example but this one is configurable as we are injecting interface, not concrete implementation of it, and because of that we get rid of the knowledge 'who' will send it.
 It may be that library or another, or we may send an event to external service and so on. We know that email will be sent, but we don't know by 'who'.
-
+This type of coupling is the most common one, and in most of the cases it's ok, it's enough. 
+But we can make it ever weaker...
 
 
 <br>
 
-###### Configurable instance (Dependency Injection)
+###### Notification
 ```java
-public class EmailSenderService {
+public class SaleService {
 
-    private final EmailApiService emailSender;
+    private final EventDelegator eventDelegator;
     
-    public EmailSenderService(EmailApiService emailSender){
+    public SaleService(EventDelegator eventDelegator){
         this.emailSender = emailSender;
     }
 
-    void sendNotification(Notification notification){
-        emailSender.send(notification);
+    void sendNotification(PurchaseDetails purchaseDetails){
+        eventDelegator.sendEvent(new ClientBoughtItem(purchaseDetails));
     }
 }
 ```
 
-~~It is aware **how** to send an email (implementation of the method),~~<br>
-~~**where** it will be sent, because EmailSender is going to send it (in my instance),~~ <br>
-~~**who** will send it, because EmailSender is going to send it ('me' - EmailSender),~~<br>
-~~and EmailSender is aware of **what** will be done, email will be sent. (email will be sent)~~
+~~**HOW** - implementation of the method~~ <br>
+~~**WHERE** - in my instance~~ <br>
+~~**WHO** - 'me' - EmailSender~~ <br>
+~~**WHAT** - email will be sent~~
+
+With notification, we are not 'saying' what to do, we're saying what happened... 
+We are now, not aware what will be reaction to the information that we just shared.
+Perhaps client will receive en sms, or email, or push notification or all of them? 
+We don't know what will be done with that information.
