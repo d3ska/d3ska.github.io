@@ -177,7 +177,7 @@ public class EmailSenderService {
 ~~**who** will send it, because EmailSender is going to send it ('me' - EmailSender),~~<br>
 and EmailSender is aware of **what** will be done, email will be sent. (email will be sent)
 
-By creating constructor with an interface instead of concrete sender, we get rid of knowledge 'who' will be sending it. 
+It's also dependency injection as in previous example but this one is configurable as we are injecting interface, not concrete implementation of it, and because of that we get rid of the knowledge 'who' will send it.
 It may be that library or another, or we may send an event to external service and so on. We know that email will be sent, but we don't know by 'who'.
 
 
