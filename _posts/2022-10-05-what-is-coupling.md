@@ -215,4 +215,4 @@ public class SaleService {
 With notification, we are not 'saying' what to do, we're saying what happened... 
 We are now, not aware what will be reaction to the information that we just shared.
 Perhaps client will receive en sms, or email, or push notification or all of them? 
-We don't know what will be done with that information.
+We are just 'saying' what happened, and we don't care how it will be handled.
