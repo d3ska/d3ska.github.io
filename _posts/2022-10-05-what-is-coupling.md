@@ -36,7 +36,7 @@ In the other hand what would you do if you noticed that your remote is not worki
 
 Besides, mentioned earlier thought and loose coupling, we may go a bit deeper and take a look what does it mean in
 context of code. I found a very good explanation, or a point of view on it on the conference talk made by Łukasz Szydło
-which can be found HERE.
+which can be found ![here](https://www.youtube.com/watch?v=Jy6eS9QHJOM)
 
 So we may separate a coupling in our code on four levels, starting from tightly coupled to loosely coupled one. We may
 define on which level our code is by answering for following questions (levels) in context of our piece of code that we
