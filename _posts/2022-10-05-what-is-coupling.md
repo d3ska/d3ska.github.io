@@ -35,7 +35,7 @@ In the other hand what would you do if you noticed that your remote is not worki
 
 But mentioned earlier thought and loose coupling, what does it mean in context of our code? <br>
 I got much better understanding of it, and how to think about it, after watching a conference talk made by Łukasz Szydło
-which can be found ![here](https://www.youtube.com/watch?v=Jy6eS9QHJOM).
+which can be found [here](https://www.youtube.com/watch?v=Jy6eS9QHJOM).
 
 
 Let's briefly go through that concept. <br>
