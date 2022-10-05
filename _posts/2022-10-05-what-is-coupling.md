@@ -95,5 +95,112 @@ We would strive to situation where our part of system can not answer for at leas
    </tr>
 </table> 
 
+<br>
+<br>
+
+###### Local method
+```java
+public class EmailSenderService {
+    
+    void sendNotification(Notification notification){
+        //...
+    }
+}
+```
+It's the highest coupling, local method. EmailSender does know everything about the other thing. <br>
+It is aware **how** to send an email (implementation of the method), <br> 
+**where** it will be sent, because EmailSender is going to send it (in my instance), <br> 
+**who** will send it, because EmailSender is going to send it ('me' - EmailSender), <br>
+and EmailSender is aware of **what** will be done, email will be sent. (email will be sent)  
 
 
+<br>
+
+###### Local instance
+```java
+public class EmailSenderService {
+
+    private ConcreteSenderImpl concreteSender = new ConcreteSenderImpl();
+
+
+    void sendNotification(Notification notification){
+        concreteSender.send(notification);
+    }
+}
+```
+
+<br>
+
+###### External instance
+```java
+public class EmailSenderService {
+
+    private final ConcreteSenderImpl concreteSender;
+    
+    public EmailSenderService(ConcreteSenderImpl concreteSender){
+        this.concreteSender = concreteSender;
+    }
+
+    void sendNotification(Notification notification){
+        concreteSender.send(notification);
+    }
+}
+```
+
+~~It is aware **how** to send an email (implementation of the method),~~<br>
+~~**where** it will be sent, because EmailSender is going to send it (in my instance),~~  <br>
+**who** will send it, because EmailSender is going to send it ('me' - EmailSender), <br>
+and EmailSender is aware of **what** will be done, email will be sent. (email will be sent)
+
+We decreased coupling and 'where' is also gone, as we don't contain an object itself but reference to it, so It's somewhere, but we don't know 'where'.
+
+<br>
+
+###### Configurable instance (Dependency Injection)
+```java
+public class EmailSenderService {
+
+    private final EmailApiService emailSender;
+    
+    public EmailSenderService(EmailApiService emailSender){
+        this.emailSender = emailSender;
+    }
+
+    void sendNotification(Notification notification){
+        emailSender.send(notification);
+    }
+}
+```
+
+~~It is aware **how** to send an email (implementation of the method),~~<br>
+~~**where** it will be sent, because EmailSender is going to send it (in my instance),~~ <br>
+~~**who** will send it, because EmailSender is going to send it ('me' - EmailSender),~~<br>
+and EmailSender is aware of **what** will be done, email will be sent. (email will be sent)
+
+By creating constructor with an interface instead of concrete sender, we get rid of knowledge 'who' will be sending it. 
+It may be that library or another, or we may send an event to external service and so on. We know that email will be sent, but we don't know by 'who'.
+
+
+
+<br>
+
+###### Configurable instance (Dependency Injection)
+```java
+public class EmailSenderService {
+
+    private final EmailApiService emailSender;
+    
+    public EmailSenderService(EmailApiService emailSender){
+        this.emailSender = emailSender;
+    }
+
+    void sendNotification(Notification notification){
+        emailSender.send(notification);
+    }
+}
+```
+
+~~It is aware **how** to send an email (implementation of the method),~~<br>
+~~**where** it will be sent, because EmailSender is going to send it (in my instance),~~ <br>
+~~**who** will send it, because EmailSender is going to send it ('me' - EmailSender),~~<br>
+~~and EmailSender is aware of **what** will be done, email will be sent. (email will be sent)~~
