@@ -8,8 +8,7 @@ tags:
   - Coupling
 ---
 
-In object-oriented paradigm, Coupling refers to the degree of direct knowledge that one element has of another. There
-are two types of coupling **tight** and **loose** one.
+In object-oriented paradigm, Coupling refers to the degree of direct knowledge that one element has of another. We may generally divide coupling to **tight** and **loose** one.
 
 <br>
 We may refer for an example of those to monolith architecture, we may generally say that classic monolith is rather tight coupled, when the modular is loosely coupled (if the module are separated correctly).
@@ -34,10 +33,12 @@ In the other hand what would you do if you noticed that your remote is not worki
 
 ##### Different look on coupling
 
-Besides, mentioned earlier thought and loose coupling, we may go a bit deeper and take a look what does it mean in
-context of code. I found a very good explanation, or a point of view on it on the conference talk made by Łukasz Szydło
-which can be found ![here](https://www.youtube.com/watch?v=Jy6eS9QHJOM)
+But mentioned earlier thought and loose coupling, what does it mean in context of our code? <br>
+I got much better understanding of it, and how to think about it, after watching a conference talk made by Łukasz Szydło
+which can be found ![here](https://www.youtube.com/watch?v=Jy6eS9QHJOM).
 
+
+Let's briefly go through that concept. <br>
 So we may separate a coupling in our code on four levels, starting from tightly coupled to loosely coupled one. We may
 define on which level our code is by answering for following questions (levels) in context of our piece of code that we
 decide to work on.
