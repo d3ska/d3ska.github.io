@@ -6,7 +6,6 @@ tags:
   - Metrics
   - Design
   - Coupling
-
 ---
 
 In object-oriented paradigm, Coupling refers to the degree of direct knowledge that one element has of another. There
