@@ -16,6 +16,9 @@ We may refer for an example of those to monolith architecture, we may generally 
 But let's think about less abstract example. A phone and a remote. What would you do if your battery in a new iPhone dies? You would probably get the new one because replacing it is difficult and costs a lot. 
 In the other hand what would you do if you noticed that your remote is not working, you will get new batteries and replace it in a seconds.
 
+<br>
+<br>
+
 ![img]({{site.url}}/assets/blog_images/2022-10-05-what-is-coupling/coupling-ilustration.png)
 
 <br>
@@ -43,6 +46,9 @@ decide to work on.
 **Where** it took place? <br>
 **Who** is doing it? <br>
 **What** happened? <br>
+
+We would strive to situation where our part of system can not answer for at least 3 of those (How? Where? Who?).
+
 
 <table style="width:100%">
   <caption>Coupling levels</caption>
