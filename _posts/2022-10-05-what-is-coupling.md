@@ -108,10 +108,10 @@ public class EmailSenderService {
 }
 ```
 It's the highest coupling, local method. EmailSender does know everything about the other thing. <br>
-It is aware **how** to send an email (implementation of the method), <br> 
-**where** it will be sent, because EmailSender is going to send it (in my instance), <br> 
-**who** will send it, because EmailSender is going to send it ('me' - EmailSender), <br>
-and EmailSender is aware of **what** will be done. (email will be sent)
+**HOW** - implementation of the method~~ <br>
+**WHERE** - in my instance <br>
+**WHO** - 'me' - EmailSender <br>
+**WHAT** - email will be sent
 
 
 <br>
@@ -129,10 +129,10 @@ public class EmailSenderService {
 }
 ```
 
-~~It is aware **how** to send an email (implementation of the method),~~ <br>
-**where** it will be sent, because EmailSender is going to send it (in my instance), <br>
-**who** will send it, because EmailSender is going to send it ('me' - EmailSender), <br>
-and EmailSender is aware of **what** will be done. (email will be sent)
+~~**HOW** - implementation of the method~~ <br>
+**WHERE** - in my instance <br>
+**WHO** - 'me' - EmailSender <br>
+**WHAT** - email will be sent
 
 
 <br>
@@ -153,10 +153,10 @@ public class EmailSenderService {
 }
 ```
 
-~~It is aware **how** to send an email (implementation of the method),~~<br>
-~~**where** it will be sent, because EmailSender is going to send it (in my instance),~~  <br>
-**who** will send it, because EmailSender is going to send it ('me' - EmailSender), <br>
-and EmailSender is aware of **what** will be done. (email will be sent)
+~~**HOW** - implementation of the method~~ <br>
+~~**WHERE** - in my instance~~ <br>
+**WHO** - 'me' - EmailSender <br>
+**WHAT** - email will be sent
 
 We decreased coupling and 'where' is also gone, as we don't contain an object itself but reference to it, so It's somewhere, but we don't know 'where'.
 
@@ -178,10 +178,10 @@ public class EmailSenderService {
 }
 ```
 
-~~It is aware **how** to send an email (implementation of the method),~~<br>
-~~**where** it will be sent, because EmailSender is going to send it (in my instance),~~ <br>
-~~**who** will send it, because EmailSender is going to send it ('me' - EmailSender),~~<br>
-and EmailSender is aware of **what** will be done. (email will be sent)
+~~**HOW** - implementation of the method~~ <br>
+~~**WHERE** - in my instance~~ <br>
+~~**WHO** - 'me' - EmailSender~~ <br>
+**WHAT** - email will be sent
 
 It's also dependency injection as in previous example but this one is configurable as we are injecting interface, not concrete implementation of it, and because of that we get rid of the knowledge 'who' will send it.
 It may be that library or another, or we may send an event to external service and so on. We know that email will be sent, but we don't know by 'who'.
