@@ -11,7 +11,7 @@ tags:
 In object-oriented paradigm, Coupling refers to the degree of direct knowledge that one element has of another. We may generally divide coupling to **tight** and **loose** one.
 
 <br>
-We may refer for an example of those to monolith architecture, we may generally say that classic monolith is rather tight coupled, when the modular is loosely coupled (if the module are separated correctly).
+We may refer for an example of those to monolith architecture, we may generally say that classic monolith is rather tight coupled, when the modular is loosely coupled (if the module are separated correctly). <br>
 But let's think about less abstract example. A phone and a remote. What would you do if your battery in a new iPhone dies? You would probably get the new one because replacing it is difficult and costs a lot. 
 In the other hand what would you do if you noticed that your remote is not working, you will get new batteries and replace it in a seconds.
 
