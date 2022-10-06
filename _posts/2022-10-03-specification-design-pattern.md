@@ -75,7 +75,7 @@ public class NotChangedDestinationBefore implements Rule {
 
 We may easily create more of them if there would be such requirement and encapsulate that logic under
 stable API of the interface. I mentioned that the logic may differ based on the vendor, so we can also easily implement
-some factory method/ facade or set this up on the start-up for our up using Spring profiles or even configuration can be changed in runtime by loading it from DB with usage a bit of reflection, which will imitate dynamic programming. 
+some factory method/ facade or set this up on the start-up for our up using Spring profiles or even configuration can be changed in runtime by loading it from DB with usage a bit of reflection, which will imitate dynamic programming (But if we wanted to do so, our Rules should have a common fields, and be more 'generic'). 
 So as you see there is few ways in which we can handle it.
 <br>
 
