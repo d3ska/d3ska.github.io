@@ -59,8 +59,9 @@ Now it is configurabish at most I would say, as now we depend on both, the concr
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/conrete-impl-constructor-initializing.jpg)
 
 The desire situation is where we would depend just on the interface.
-It's highly possible that we would have several SongsProvider implementation which we would like to use with but independent of the MovieLister class, 
-we may sign a contract with different provider, or just take those songs from some hosted file, for purpose of the local development.
+It's highly possible that we would have several SongsProvider implementation which we would like to use with but independent of the MovieLister class.
+
+There are chances, that we would want to use different source of songs, for example we would like to take songs from some hosted file, for purpose of the local development.
 
 We would like to have them just to be a dependencies/ plugins. But by direct instantiating it we are loosing that possibility, to have finder as a dependency/ plugin. 
 
@@ -124,10 +125,14 @@ class SongLister {
     If there is no constructor or setter method to inject the Item bean, the container will use reflection to inject our desire dependency. 
     It's not recommended to use this approach because of following reasons:
     * It's bound us highly with Spring framework
-    * This is done by reflection, which is costlier than constructor-based or setter-based injection and is also a reason for first point.
+    * This is done by reflection, which violate a Java, and it is costlier than constructor-based or setter-based injection and is also a reason for first point.
+    * It's harder to test. 
+    * Fields can not be final as final field has to be initialized through constructor, but Field-Based Injection is performed after constructing an object.
     * It's easy to add more and more dependencies, especially when using this approach and violate SRP. Constructor/setter-based injections would make us think earlier that we have too many dependencies. 
+   
 
 
+##### Spring Constructor Injection: Why is it the recommended approach to Dependency Injection?
 
 ##### Recommended and used articles:
 
