@@ -8,10 +8,11 @@ tags:
   - Application Architecture
 ---
 
-Inversion of Control and Dependency Injection
+#### Inversion of Control and Dependency Injection
 
-
-Let's take a look on the example where we have some service which provides list of songs by its author.
+I believe that many of you, as me also learn the fastest through an examples. 
+Let's consider a simple example. Imagine a program that is managing songs, you can search for some, read details and some interesting facts about it.
+There would probably a class that would search for those songs in some repository or ask some external provider for example.
 
 ```java
 class SongLister {
@@ -23,7 +24,7 @@ class SongLister {
     }
 }
 ```
-The above implementation is pretty naive. Why so?
+But the above implementation is pretty naive. Why it's so?
 We are using concrete implementation of some finder to get songs. 
 In current state, it's highly coupled, and it's not good.
 
@@ -86,3 +87,53 @@ One of most known implementation of IoC, which is based on idea to have a separa
 
 Dependency diagram with our songs example:
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/di-architecture.jpg)
+
+
+<br>
+
+Our code should look like below. Now we are expecting a provider in a constructor, or rather an SongsProvider interface, not a concrete implementation as you noticed.
+What are a pros of that? This give as a huge possibility to use different providers without breaking changes, thanks to the fact that it's decoupled.
+For me personally more suitable would be Configurable Dependency rather than Dependency Injection, but I hope that you got the idea.
+
+```java
+class SongLister {
+
+    private SongsProvider provider;
+
+    public MovieLister(SongsProvider provider) {
+        this.provider = provider;
+    }
+}
+```
+
+#### Types of Dependency Injection 
+
+**Dependency Injection in Spring can be done through constructors, setters or fields.**
+
+<br> 
+
+1. Constructor-Based Dependency Injection
+   The container will invoke a constructor with argument representing a dependency we want to set.
+   An example of that approach is above, it's recommended for mandatory dependencies, but to be honest it used most of the time.
+
+2. Setter-Based Dependency Injection
+   The container will call setter method after initiating a bean by invoking a no-argument constructor or no-argument static factory method.
+   Spring documentation recommends setter-based injection for optional ones.
+    
+3. Field-Based Dependency Injection
+    If there is no constructor or setter method to inject the Item bean, the container will use reflection to inject our desire dependency. 
+    It's not recommended to use this approach because of following reasons:
+    * It's bound us highly with Spring framework
+    * This is done by reflection, which is costlier than constructor-based or setter-based injection and is also a reason for first point.
+    * It's easy to add more and more dependencies, especially when using this approach and violate SRP. Constructor/setter-based injections would make us think earlier that we have too many dependencies. 
+
+
+
+##### Recommended and used articles:
+
+Baeldung: 
+* [Intro to Inversion of Control and Dependency Injection with Spring](https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring) 
+
+Martin Fowler's articles:
+* [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/bliki/InversionOfControl.html) 
+* [Inversion of Control](https://martinfowler.com/articles/injection.html) 
