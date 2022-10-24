@@ -130,6 +130,7 @@ class SongLister {
     * Fields can not be final as final field has to be initialized through constructor, but Field-Based Injection is performed after constructing an object.
     * It's easy to add more and more dependencies, especially when using this approach and violate SRP. Constructor/setter-based injections would make us think earlier that we have too many dependencies. 
    
+   The only scenario where it is acceptable, it's in tests. 
 
 
 ##### Spring Constructor Injection: Why is it the recommended approach to Dependency Injection?
