@@ -3,9 +3,7 @@ title: "Core concepts behind OOP"
 categories:
   - Blog
 tags:
-  - Metrics
-  - Design
-  - Coupling
+  - OOP
 ---
   
 ### What does mean object-oriented programming?
