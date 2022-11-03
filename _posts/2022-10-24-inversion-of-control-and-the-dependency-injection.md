@@ -49,7 +49,7 @@ class SongLister {
 
     private SongsProvider provider;
 
-    public MovieLister() {
+    public SongLister() {
         provider = new SpotifyProvider();
     }
 }
@@ -101,7 +101,7 @@ class SongLister {
 
     private SongsProvider provider;
 
-    public MovieLister(SongsProvider provider) {
+    public SongLister(SongsProvider provider) {
         this.provider = provider;
     }
 }
