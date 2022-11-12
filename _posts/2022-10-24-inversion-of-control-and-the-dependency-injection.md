@@ -92,9 +92,9 @@ Dependency diagram with our songs example:
 
 <br>
 
-Our code should look like below. Now we are expecting a provider in a constructor, or rather a SongsProvider interface, not a concrete implementation as you noticed.
-What are the pros of that? This gives us a huge possibility to use different providers without breaking changes, thanks to the fact that it's decoupled.
-For me, personally more suitable would be Configurable Dependency rather than Dependency Injection, but I hope that you got the idea.
+Our code should look like below. Now we are expecting a provider in a constructor, or rather a SongsProvider interface, not a concrete implementation as you noticed. <br>
+What are the pros of that? This gives us a huge possibility to use different providers without breaking changes, thanks to the fact that it's decoupled. <br>
+For me, personally more suitable name would be Configurable Dependency rather than Dependency Injection.
 
 ```java
 class SongLister {
@@ -133,8 +133,6 @@ class SongLister {
 
    The only scenario where it is acceptable, it's in tests.
 
-
-##### Spring Constructor Injection: Why is it the recommended approach to Dependency Injection?
 
 ##### Recommended and used articles:
 
