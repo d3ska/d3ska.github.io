@@ -10,9 +10,9 @@ tags:
 
 #### Inversion of Control and Dependency Injection
 
-I believe that many of you, as me also learn the fastest through an examples. 
-Let's consider a simple example. Imagine a program that is managing songs, you can search for some, read details and some interesting facts about it.
-There would probably a class that would search for those songs in some repository or ask some external provider for example.
+I believe that many of you, as me also learn the fastest through an examples. <br>
+Let's consider a simple example. Imagine a program that is managing songs, you can search them, read/ add details and some interesting facts about each. <br>
+There would probably be a class that would search for those songs in some repository or ask some external providers for example.
 
 ```java
 class SongLister {
