@@ -107,9 +107,10 @@ class SongLister {
 }
 ```
 
-#### Types of Dependency Injection
 
 <br> 
+
+#### Types of Dependency Injection
 
 **Dependency Injection in Spring can be done through constructors, setters, or fields.**
 
