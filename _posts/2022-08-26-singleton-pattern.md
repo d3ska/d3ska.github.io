@@ -132,7 +132,7 @@ Our second issue is with **reflection**, because when a non-accessible private c
 All the mentioned possible issues and others are resolved out of the box by Enum.
 
 
-Enums are inherently serializable, so we don't have to worry about.<br> 
+Enums are inherently serializable, so we don't have to worry about it.<br> 
 The reflection problem is also not there. <br>
 Creation of Enum instance is also thread-safe, so we don't need to worry about double-checked locking.<br>
 Thus, this method is recommended as **the best method of making singletons in Java.**
