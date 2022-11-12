@@ -73,7 +73,7 @@ Inversion of Control is a principle in software engineering that transfers the c
 This gives a few advantages such as:
 
 * Decoupling Between 'WHAT' and 'HOW' Something Is Achieved
-* Possibility of Configuring our Dependencies
+* Configurable components makes application easily extendable
 * Easier Testing
 * Separation of Concerns
 * Greater Modularity of a Program
