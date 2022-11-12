@@ -72,10 +72,11 @@ We would like to have them just be dependencies/ plugins. But by direct instanti
 Inversion of Control is a principle in software engineering that transfers the control of objects or portions of a program to a container or framework.
 This gives a few advantages such as:
 
-* decoupling between 'WHAT' and 'HOW' something is achieved
-* possibility of configuring our dependencies
-* easier testing
-* greater modularity of a program
+* Decoupling Between 'WHAT' and 'HOW' Something Is Achieved
+* Possibility of Configuring our Dependencies
+* Easier Testing
+* Separation of Concerns
+* Greater Modularity of a Program
 
 
 IoC can be achieved in a few ways, so actually IoC is a concept that is implemented by mechanisms such as Strategy design pattern, Factory pattern, Service Locator pattern, and finally Dependency Injection (DI).
