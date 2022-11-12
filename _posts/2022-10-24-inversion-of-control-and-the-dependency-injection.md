@@ -54,7 +54,7 @@ class SongLister {
     }
 }
 ```
-Now it is configurable at most I would say, as now we depend on both, the concrete implementation and a SongsProvider interface.
+Now it is configurabish at most I would say, as now we depend on both, the concrete implementation and a SongsProvider interface.
 
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/conrete-impl-constructor-initializing.jpg)
 
