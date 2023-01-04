@@ -27,7 +27,6 @@ So as on the image above we have four cores, that means at any point in time we 
 same time and these operations are really low-level computation operations.
 
 <br>
-
 But as you can imagine, our computer do more than four operations... Its possible thanks to threads and multiprocessing.
 
 <br>
