@@ -15,7 +15,7 @@ Those two concepts are often misunderstood or used interchangeably, where they a
 
 Let's take a look on visualization of processor with four cores.
 
-![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/cpu-visualization.jpg")
+![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/cpu-visualization.png")
 
 
 #### Parallelism
@@ -42,7 +42,7 @@ going to be executing and switching between which ones they perform operations o
 Let's take a look on analogy to concurrency and parallelism.
 <br>
 
-![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/concurrency-vs-parallelism.jpg")
+![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/concurrency-vs-parallelism.png")
 
 <br>
 <br>
