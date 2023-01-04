@@ -1,5 +1,5 @@
 ---
-title: "Concurrency vs parallelism"
+title: "Concurrency, Threading and Parallelism"
 categories:
   - Blog
 tags:
