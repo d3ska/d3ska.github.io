@@ -49,7 +49,7 @@ Let's take a look on analogy to concurrency and parallelism.
 
 Concurrency means that many threads are waiting to be processed by the CPU core, however, when the thread is being processed by the core, it doesn't mean that it will run until it finishes.
 I mean it may run on the same core and stop many times before it finished its job. Because the thread may hang, stop, or basically doesn't need to be executed at the current time, the processor core can execute another one when the previous one is waiting.
-And it describes **concurrent** programming, not when things run in parallel at the same time but when we're doing things in different timing sequences, so we can have multiple threads running at the same time and our CPU core
+<br>Its describes what **concurrency** means, not when things run in parallel at the same time but when we're doing things in different timing sequences, so we can have multiple threads running at the same time and our CPU core
 that we're running their threads on is switching between these threads in its execution chain.
 
 
