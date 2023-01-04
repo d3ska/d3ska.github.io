@@ -56,4 +56,4 @@ that we're running their threads on is switching between these threads in its ex
 #### Clock speed
 
 There is also thing called clock speed of processor, e.g. 2.6-Ghz.
-It means that each core in processor can run with speed of 2.6-Ghz, which basically mean that each core  can run 2.6 billion instructions in a second.
+So each core in processor can run with speed of 2.6-Ghz, which basically mean that each core  can run 2.6 billion instructions in a second.
