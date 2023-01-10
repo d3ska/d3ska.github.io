@@ -1,13 +1,11 @@
 ---
 title: "Prefer Composition over Inheritance"
 categories:
-
-- Blog
-  tags:
-- Inheritance
-- OOP
-- Composition
-
+  - Blog
+tags:
+  - Inheritance
+  - OOP
+  - Composition
 ---
 
 You probably already thought about this, as its quite popular statement.
