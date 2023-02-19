@@ -8,7 +8,7 @@ tags:
 ---
 
 The CAP theorem is a concept in distributed computing that states that in any distributed system, you can only have two out of the following three guarantees: consistency, availability, and partition tolerance.
-It's reminds me of the rule that, you can only have two out of the following, well done, cheap, fast. 
+It's reminds me of the “Fast/Good/Cheap” rule.
 
 **Consistency:** All clients accessing the system see the same data at the same time, regardless of which node they connect to. This requires data to be replicated or forwarded to all nodes before a write is considered successful.
 
