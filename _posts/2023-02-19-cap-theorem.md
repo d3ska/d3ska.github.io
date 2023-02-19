@@ -16,7 +16,6 @@ It's reminds me of the rule that, you can only have two out of the following, we
 
 **Partition tolerance:** The system continues to function even if there are communication breakdowns or lost connections between nodes in the distributed system. This means the system is designed to handle network partitions and ensure that all nodes can still communicate with each other.
 
-<br>
 
 ![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/venn-diagram-cap.png)
 
