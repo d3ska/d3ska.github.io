@@ -14,10 +14,10 @@ Martin Fowler shared the details of the conversation with Ralph Johnson.
 > A second common style of definition for architecture is that it's “the design decisions that need to be made early in a project”, but Ralph complained about this too, saying that it was more like the decisions you wish you could get right early in a project.
 > His conclusion was that "Architecture is about the important stuff. Whatever that is."
 > <br>
-> <cite>The article can be found ![here](https://martinfowler.com/architecture/).</cite>
+> <cite>The article can be found [here](https://martinfowler.com/architecture/).</cite>
 
 
-However, we can try to make this topic less abstract and define what a software architecture consists of.
+However, we can try to make this topic less abstract and define what a software architecture consists of. <br>
 "Architecture consists of the structure combined with architecture characteristics ("-ilities"), architecture decisions, and design principles."
 
 <br>
