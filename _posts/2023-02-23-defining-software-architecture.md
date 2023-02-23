@@ -18,7 +18,7 @@ The article can be found [here](https://martinfowler.com/architecture/).</cite>
 
 
 However, we can try to make this topic less abstract and define what a software architecture consists of. <br>
-"Architecture consists of the structure combined with architecture characteristics ("-ilities"), architecture decisions, and design principles."
+Architecture consists of the structure combined with architecture characteristics ("-ilities"), architecture decisions, and design principles.
 
 <br>
 
