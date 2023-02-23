@@ -66,4 +66,4 @@ In contrast, architecture decisions (rules) cannot possibly account for every ci
 <br>
 
 The topics described above have been comprehensively covered in the book
-"Fundamentals of Software Architecture by Mark Richards and Neal Ford (O'Reilly)."
+**"Fundamentals of Software Architecture by Mark Richards and Neal Ford (O'Reilly)."**

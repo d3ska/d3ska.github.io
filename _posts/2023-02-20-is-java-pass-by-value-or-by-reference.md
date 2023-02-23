@@ -7,7 +7,7 @@ tags:
   - Memory
 ---
 
-Let me answer that question right away, Java is ALWAYS pass by value.
+Let me answer that question right away, Java is **ALWAYS** pass by value.
 <br>
 
 The reason for the confusion about these terms is typically related to the concept of object reference in Java. Technically speaking, Java always uses pass-by-value, because although a variable can hold a reference to an object, that reference is actually a value that indicates the object's memory location. Therefore, object references are passed by value in Java.
