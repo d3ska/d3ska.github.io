@@ -8,12 +8,9 @@ tags:
 
 #### What are data structures? 
 
-You can think of them as a tools that you may use to solve some problems.
+Data structures can be thought of as tools used to solve various problems. They often involve complexity and mathematical concepts, and can sometimes be quite intricate. However, it's not necessary to know everything about every data structure. Instead, it's more important to have a deep understanding of certain key concepts and be able to apply them effectively.
 
-It includes complexity, math, and it may be really complex but here I will try to make you understand what is hidden under most of them and how they work under the hood. 
-It may sound controversially, but you don't need to know everything about every data structure and so on. But there are few concepts and things that you really should deeply understand and easily use.
-
-Here are subjects that you should master and understand:
+Below are the topics that you should focus on mastering and understanding:
 
 * [Complexity Analysis](https://matthewonsoftware.com/blog/complexity-analysis)
 * [Memory](https://matthewonsoftware.com/blog/memory/)
@@ -25,4 +22,4 @@ Here are subjects that you should master and understand:
 * [Stacks and Queues](https://matthewonsoftware.com/blog/stacks-and-queues)
 * [Strings](https://matthewonsoftware.com/blog/strings)
 * [Graphs](https://matthewonsoftware.com/blog/graphs)
-* [Trees](https://matthewonsoftware.com/)
+* [Trees](https://matthewonsoftware.com/blog/trees)
