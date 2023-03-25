@@ -1,14 +1,13 @@
 ---
-title: "Java memory models"
+title: "Java Memory Models"
 categories:
   - Blog
 tags:
-  - Modularity
-  - Cohesion
-  - Software Architecture
+  - Memory models
+  - JVM
 ---
 
-### Java Memory Management 
+### Java Memory Models
 
 In this tutorial, we will delve into Java's memory models: Stack Memory and Heap Space. We will first discuss their main characteristics, followed by an explanation of how they are stored in RAM and their appropriate use cases. Finally, we will outline the key differences between the two memory models.
 
