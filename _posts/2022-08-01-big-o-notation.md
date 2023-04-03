@@ -33,7 +33,7 @@ The constants in Big O Notation does not matter and how to simplify it.
 
 Let’s assume that we have function that do bunch of elementary operations, it sums up few numbers, declare some variables, an array with few elements, it's going to be algorithm that may run in O(25) but that would be written down to O(1). So you never want to say O(25) as it does not really make sense, and you should write it as O(1).
 The second example might be an algorithm in which we iterate over a given array from left to right and from right to left.  That would be an O(2n) complexity, but you would drop a two because that’s a constant, so it would be just O(n).
-Also, important thing to remember, let’s assume that in our function we have a pairing algorithm and the one described just before. That is O(n<sup>2</sup> + 2n) but we would remove the two as its constant and n also as it’s become meaningless next to the N squared, so it would be O($n^2)$.
+Also, important thing to remember, let’s assume that in our function we have a pairing algorithm and the one described just before. That is O(n<sup>2</sup> + 2n) but we would remove the two as its constant and n also as it’s become meaningless next to the N squared, so it would be O(n<sup>2</sup>).
 
 Other example: O(n! + n<sup>3</sup> + log(n) + 3)   ⇒   O(n!)   as factorial would growth the fastest.
 We were able to drop this in above way as we were iterating on the same input data N.
