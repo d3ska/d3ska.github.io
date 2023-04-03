@@ -68,7 +68,7 @@ that developers, software engineers can use to really define meaningful and easy
 <br>
 
 ### HTTP
-The **H**yper**T**ext **T**ransfer **P**rotocol is very common network protocol implemented on top of TCP, it provides a higher level of abstraction above TCP and IP through the request and response paradigm. This paradigm enables machines to communicate with each other by following a set of rules that govern the exchange of requests and responses.
+The **H**yper**T**ext **T**ransfer **P**rotocol is very common network protocol implemented on top of TCP, it provides a higher level of abstraction above TCP and IP through the request and response paradigm. This enables machines to communicate with each other by following a set of rules that govern the exchange of requests and responses.
 
 HTTP's request and response paradigm, along with its accompanying rules, makes it easy for developers to create robust and maintainable systems. This is why most of the modern-day systems rely on the HTTP protocol for communication.
 
