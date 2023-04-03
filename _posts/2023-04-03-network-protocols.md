@@ -45,14 +45,11 @@ being sent over **IP**, aside from bytes. An IP packet consists of:
 ### IP
 
 Stands for **Internet Protocol**. This network protocol outlines how almost all machine-to-machine communications should happen in the world. 
-Other protocols like **TCP**, **UDP** and **HTTP** are build on top of IP. The modern internet effectively operates following Internet Protocol, it means that when the machine or client for instance, try to interact with another machine or server, and it sends data to the another machine or a server and it sends data to the other machine, that data is going to be sent in the form of whats known as a IP packet. 
+Other protocols like **TCP**, **UDP** and **HTTP** are build on top of IP. The modern internet effectively operates following Internet Protocol, it means that when the machine or client for instance, try to interact with another machine or server, and it sends data to the another machine or a server, that data is going to be sent in the form of whats known as a IP packet. 
 
 You can think of an **IP Packet** as the fundamental unit of data that is sent from one machine to another. IP packets are the building blocks of communication between machines over the internet, and are made up of bytes. 
-They really have two main sections are known as the **IP header and the data**. <br>
 
-The header of an IP packet typically contains important information, such as the IP addresses of the source and destination, along with other fields that help route the packet. Given its importance, it is designed to be compact, ranging from 20 to 60 bytes in size.
-
-In contrast, the data portion of an IP packet contains the actual information being transmitted between machines. However, IP packets have a maximum size limit of only 65,536 bytes, which may not be sufficient for transmitting large files or data. When sending data that exceeds this limit, the information is split into multiple IP packets.
+IP packets have a maximum size limit of only 65,536 bytes, which may not be sufficient for transmitting large files or data. When sending data that exceeds this limit, the information is split into multiple IP packets.
 
 However, if the only protocol used is the Internet Protocol, there is no guarantee that all the packets will be received or that they will be received in the correct order. Some packets may get lost, leading to incomplete data transmission. In addition, the order in which packets are received and interpreted may not be as intended.
 
@@ -62,8 +59,6 @@ However, if the only protocol used is the Internet Protocol, there is no guarant
 The Transmission Control Protocol (TCP) is designed to address the issues mentioned earlier and is built on top of the Internet Protocol (IP). Its purpose is to send IP packets in an ordered, reliable, and error-free manner. This means that the order in which packets are read by the destination machine is guaranteed, and if any packets fail to reach their destination or get corrupted during transmission, the sender is informed so that the packets can be resent without corruption.
 
 TCP is used in almost all web applications, allowing for the transmission of arbitrarily long pieces of data between machines. It achieves this by creating a connection [handshake](https://developer.mozilla.org/en-US/docs/Glossary/TCP_handshake) between the sender and receiver, ensuring the reliability of data transmission.
-
-It is worth noting that TCP, being built on top of the IP protocol, includes a TCP header in addition to the IP header and data part. This TCP header contains essential information, such as source and destination port numbers, sequence and acknowledgement numbers, and other fields that enable TCP to perform its reliable data transmission functions.
 
 TCP is typically implemented in the kernel and exposes sockets to applications. Applications can use these sockets to stream data through an open connection, ensuring the data is transmitted reliably and accurately.
 
