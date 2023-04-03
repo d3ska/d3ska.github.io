@@ -9,7 +9,7 @@ tags:
 
 ### What a protocol is?
 
-Protocol can be defined as an agreed-upon set of rules that govern an interaction between two or more parties. In our daily lives, we use protocols when interacting with people we meet, such as greeting them with a friendly "Hello, how are you doing?" and shaking hands. Similarly, when machines interact with each other, they also follow specific network protocols
+Protocol can be defined as an agreed-upon set of rules that govern an interaction between two or more parties. In our daily lives, we use protocols when interacting with people we meet, such as greeting them with a friendly "Hello, how are you doing?" and shaking hands. Similarly, when machines interact with each other, they also follow specific network protocols.
 These protocols ensure that communication between machines is standardized and efficient, just like how human protocols facilitate smooth interactions between individuals. For example, the Transmission Control Protocol (TCP) is a network protocol used for communication between machines on the internet. It provides a reliable, ordered, and error-checked delivery of data between applications running on different hosts.
 
 
