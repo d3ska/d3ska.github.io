@@ -45,11 +45,10 @@ being sent over **IP**, aside from bytes. An IP packet consists of:
 ### IP
 
 Stands for **Internet Protocol**. This network protocol outlines how almost all machine-to-machine communications should happen in the world. 
-Other protocols like **TCP**, **UDP** and **HTTP** are build on top of IP. The modern internet effectively operates following Internet Protocol, it means that when the machine or client for instance, try to interact with another machine or server, and it sends data to the another machine or a server, that data is going to be sent in the form of whats known as a IP packet. 
+Other protocols like **TCP**, **UDP** and **HTTP** are build on top of IP. The modern internet effectively operates following Internet Protocol, it means that when the machine or client for instance, try to interact with another machine or server, and it sends data to the another machine or a server, that data is going to be sent in the form of what's known as a IP packet. 
 
-You can think of an **IP Packet** as the fundamental unit of data that is sent from one machine to another. IP packets are the building blocks of communication between machines over the internet, and are made up of bytes. 
 
-IP packets have a maximum size limit of only 65,536 bytes, which may not be sufficient for transmitting large files or data. When sending data that exceeds this limit, the information is split into multiple IP packets.
+They have a maximum size limit of only 65,536 bytes, which may not be sufficient for transmitting large files or data. When sending data that exceeds this limit, the information is split into multiple IP packets.
 
 However, if the only protocol used is the Internet Protocol, there is no guarantee that all the packets will be received or that they will be received in the correct order. Some packets may get lost, leading to incomplete data transmission. In addition, the order in which packets are received and interpreted may not be as intended.
 
