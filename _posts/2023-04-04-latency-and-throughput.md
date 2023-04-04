@@ -21,12 +21,12 @@ Similarly, if you're reading data from memory or perhaps from a disk, the time i
 One crucial aspect of latency to understand is that different components in systems have varying latencies. There is a trade-off involved in the design of a system, as some elements will exhibit higher latencies, while others will have lower latencies.
 
 For example, if you are: 
-- Reading 1 MB from RAM: 250 μs (0.25 ms)
-- Reading 1 MB from SSD: 1,000 μs (1ms)
-- Transfer 1 MB over Network (1 Gbps): 10,000 μs (10ms)
-- Reading 1MB from HDD: 20,000 μs (20ms)
-- Inter-Continental Round Trip: 150,000 μs (150ms) <br>
-  for packet from CA->Netherlands->CA
+- **Reading 1 MB from RAM**: 250 μs (0.25 ms)
+- **Reading 1 MB from SSD**: 1,000 μs (1ms)
+- **Transfer 1 MB over Network (1 Gbps)**: 10,000 μs (10ms)
+- **Reading 1MB from HDD**: 20,000 μs (20ms)
+- **Inter-Continental Round Trip for packet**: 150,000 μs (150ms) <br>
+  **from CA->Netherlands->CA**
 
 
 <br>
