@@ -26,7 +26,6 @@ For example, if you are:
 - **Transfer 1 MB over Network (1 Gbps)**: 10,000 μs (10ms)
 - **Reading 1MB from HDD**: 20,000 μs (20ms)
 - **Inter-Continental Round Trip for packet**: 150,000 μs (150ms) <br>
-  **from CA->Netherlands->CA**
 
 
 <br>
