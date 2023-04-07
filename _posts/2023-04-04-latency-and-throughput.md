@@ -1,7 +1,7 @@
 ---
 title: "Latency And Throughput"
 categories:
-  - Blog
+  - System Design
 tags:
   - Latency and Throughput
 ---

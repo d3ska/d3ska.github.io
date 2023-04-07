@@ -1,7 +1,7 @@
 ---
 title: "Defining Software Architecture"
 categories:
-  - Blog
+  - System Design
 tags:
   - Design
   - Software Architecture

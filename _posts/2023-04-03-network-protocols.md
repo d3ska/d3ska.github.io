@@ -1,7 +1,7 @@
 ---
 title: "Network Protocols"
 categories:
-  - Blog
+  - System Design
 tags:
   - Network
   - Protocols
