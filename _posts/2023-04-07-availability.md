@@ -175,6 +175,8 @@ Five nines of availability (99.999%) is often considered the gold standard for a
 <br>
 A (Service Level Agreement) and SLO (Service Level Objective) are related concepts used to define and measure the quality of service provided by a service provider.
 
+<br>
+
 #### SLA (Service Level Agreement)
 An SLA is a formal, legally binding contract between a service provider and a client that outlines the expected level of service, performance metrics, and responsibilities of both parties. It specifies measurable targets such as availability, response time, and throughput, as well as consequences for not meeting these targets, such as refunds or service credits.
 
@@ -206,8 +208,7 @@ To enhance availability and eliminate the SPOF, you can add more servers and a l
 
 However, the load balancer itself could become a single point of failure, so it should also be replicated and run on multiple servers.
 
-
-
+<br>
 
 #### Passive Redundancy
 In passive redundancy, a primary system/component is backed up by a secondary (standby) system/component, which remains idle until the primary fails. Upon failure, the secondary takes over the operation. This approach is also called "hot standby" or "failover." Examples include redundant power supplies, database replication with a standby database, or a backup server that takes over when the primary server fails.
