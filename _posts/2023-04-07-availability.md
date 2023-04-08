@@ -182,10 +182,6 @@ An SLA is a formal, legally binding contract between a service provider and a cl
 An SLO is a specific, measurable goal or target within an SLA that defines a particular aspect of the service quality. SLOs serve as benchmarks to evaluate the service provider's performance and ensure that the agreed-upon service levels are met. Examples of SLOs include system availability (e.g., 99.9% uptime), maximum response time for support requests, or error rates.
 
 
-
-
-
-
 <br>
 While availability is a critical consideration in system design, it's not always of utmost importance. Achieving five nines of availability (99.999%) isn't always necessary, as high availability comes with trade-offs. Ensuring a high level of availability can be challenging and resource-intensive.
 
@@ -221,5 +217,18 @@ In active redundancy, multiple systems/components work in parallel and share the
 
 It's also important to mention that you'll want to have a rigorous process in place to handle system failures, as they might require human intervention. For instance, if servers in your system crash, you'll need a person to bring them back online, and it's crucial to establish processes that ensure timely recovery. So, keeping that in mind is essential for maintaining high availability in your system
 
+<br>
 
+#### Trade-offs
 
+Like many aspects of programming, achieving availability also involves trade-offs, such as:
+
+* **Cost**: Higher availability typically requires redundant resources, such as additional servers, storage, and networking infrastructure, leading to increased operational costs.
+
+* **Complexity**: Implementing fault tolerance, failover, and load balancing mechanisms to achieve high availability can introduce complexity into the system architecture, making it harder to understand, maintain, and troubleshoot.
+
+* **Performance**: Highly available systems may require distributing data across multiple nodes or geographic locations, which can increase latency and reduce overall performance.
+
+* **Consistency**: In distributed systems, maintaining high availability may involve sacrificing strong consistency for eventual consistency or using weaker consistency models, which can impact application logic and data integrity.
+
+In summary, while high availability is crucial for many systems, it's essential to carefully consider the trade-offs involved and balance them against the specific requirements and constraints of your application.
