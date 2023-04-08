@@ -54,11 +54,11 @@ Below you can find a chart from Wikipedia that showcases a range of popular avai
     <td>10.67 hours</td>
   </tr>  
   <tr>
-    <td>90% ("one nine")</td>
-    <td>36.53 days</td>
-    <td>73.05 hours</td>
-    <td>16.80 hours</td>
-    <td>2.40 hours</td>
+    <td>**90% ("one nine")**</td>
+    <td>**36.53 days**</td>
+    <td>**73.05 hours**</td>
+    <td>**16.80 hours**</td>
+    <td>**2.40 hours**</td>
   </tr>
   <tr>
     <td>95% ("one and half nines")</td>
@@ -82,11 +82,11 @@ Below you can find a chart from Wikipedia that showcases a range of popular avai
     <td>28.80 minutes</td>
   </tr>
   <tr>
-    <td>99% ("two nines")</td>
-    <td>3.65 days</td>
-    <td>7.31 hours</td>
-    <td>1.68 hours</td>
-    <td>14.40 minutes</td>
+    <td>**99% ("two nines")**</td>
+    <td>**3.65 days**</td>
+    <td>**7.31 hours**</td>
+    <td>**1.68 hours**</td>
+    <td>**14.40 minutes**</td>
   </tr>
   <tr>
     <td>99.5% ("two and a half nines")</td>
@@ -103,11 +103,11 @@ Below you can find a chart from Wikipedia that showcases a range of popular avai
     <td>2.88 minutes</td>
   </tr>
   <tr>
-    <td>99.9% ("three nines")</td>
-    <td>8.77 hours</td>
-    <td>43.83 minutes</td>
-    <td>10.08 minutes</td>
-    <td>1.44 minutes</td>
+    <td>**99.9% ("three nines")**</td>
+    <td>**8.77 hours**</td>
+    <td>**43.83 minutes**</td>
+    <td>**10.08 minutes**</td>
+    <td>**1.44 minutes**</td>
   </tr>
   <tr>
     <td>99.95% ("three and a half nines)</td>
@@ -117,11 +117,11 @@ Below you can find a chart from Wikipedia that showcases a range of popular avai
     <td>43.20 seconds</td>
   </tr>
   <tr>
-    <td>99.99% ("fours nines")</td>
-    <td>52.60 minutes</td>
-    <td>4.38 minutes</td>
-    <td>1.01 minutes</td>
-    <td>8.64 seconds</td>
+    <td>**99.99% ("fours nines")**</td>
+    <td>**52.60 minutes**</td>
+    <td>**4.38 minutes**</td>
+    <td>**1.01 minutes**</td>
+    <td>**8.64 seconds**</td>
   </tr>
   <tr>
     <td>99.995% ("four and a half nines")</td>
@@ -131,60 +131,39 @@ Below you can find a chart from Wikipedia that showcases a range of popular avai
     <td>4.32 seconds</td>
   </tr>
   <tr>
-    <td>99.999% ("five nines")</td>
-    <td>5.26 minutes</td>
-    <td>26.30 seconds</td>
-    <td>6.05 seconds</td>
-    <td>864.00 milliseconds</td>
+    <td>**99.999% ("five nines")**</td>
+    <td>**5.26 minutes**</td>
+    <td>**26.30 seconds**</td>
+    <td>**6.05 seconds**</td>
+    <td>**864.00 milliseconds**</td>
   </tr>
   <tr>
-    <td>99.9999% ("six nines")</td>
-    <td>31.56 seconds</td>
-    <td>2.63 seconds</td>
-    <td>604.80 milliseconds</td>
-    <td>86.40 milliseconds</td>
+    <td>**99.9999% ("six nines")**</td>
+    <td>**31.56 seconds**</td>
+    <td>**2.63 seconds**</td>
+    <td>**604.80 milliseconds**</td>
+    <td>**86.40 milliseconds**</td>
   </tr>
   <tr>
-    <td>99.99999% ("seven nines")</td>
-    <td>3.16 seconds</td>
-    <td>262.98 milliseconds</td>
-    <td>60.48 milliseconds</td>
-    <td>8.64 milliseconds</td>
+    <td>**99.99999% ("seven nines")**</td>
+    <td>**3.16 seconds**</td>
+    <td>**262.98 milliseconds**</td>
+    <td>**60.48 milliseconds**</td>
+    <td>**8.64 milliseconds**</td>
   </tr>
   <tr>
-    <td>99.999999% ("eight nines")</td>
-    <td>315.58 milliseconds</td>
-    <td>26.30 milliseconds</td>
-    <td>6.05 milliseconds</td>
-    <td>864.00 microseconds</td>
+    <td>**99.999999% ("eight nines")**</td>
+    <td>**315.58 milliseconds**</td>
+    <td>**26.30 milliseconds**</td>
+    <td>**6.05 milliseconds**</td>
+    <td>**864.00 microseconds**</td>
   </tr>
   <tr>
-    <td>99.9999999% ("nine nines")</td>
-    <td>31.56 milliseconds</td>
-    <td>2.63 milliseconds</td>
-    <td>604.80 microseconds</td>
-    <td>86.40 microseconds</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td>**99.9999999% ("nine nines")**</td>
+    <td>**31.56 milliseconds**</td>
+    <td>**2.63 milliseconds**</td>
+    <td>**604.80 microseconds**</td>
+    <td>**86.40 microseconds**</td>
   </tr>
 </table>
 
