@@ -173,9 +173,8 @@ As you can see, even though 99% availability seems impressive, being down for th
 Five nines of availability (99.999%) is often considered the gold standard for availability. If your system achieves this level of availability, it can be regarded as a highly available system.
 
 <br>
-A (Service Level Agreement) and SLO (Service Level Objective) are related concepts used to define and measure the quality of service provided by a service provider.
 
-<br>
+A (Service Level Agreement) and SLO (Service Level Objective) are related concepts used to define and measure the quality of service provided by a service provider.
 
 #### SLA (Service Level Agreement)
 An SLA is a formal, legally binding contract between a service provider and a client that outlines the expected level of service, performance metrics, and responsibilities of both parties. It specifies measurable targets such as availability, response time, and throughput, as well as consequences for not meeting these targets, such as refunds or service credits.
