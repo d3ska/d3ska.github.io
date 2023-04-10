@@ -10,3 +10,6 @@
   * domain models (entities)
 * SAGA
 * Event Driven Architecture
+
+
+* completable future in java https://www.youtube.com/watch?v=3rJBLFA95Io&t=1240s
