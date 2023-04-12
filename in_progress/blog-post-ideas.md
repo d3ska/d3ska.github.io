@@ -34,6 +34,7 @@ To watch
   * https://www.youtube.com/watch?v=BvP8zGyp4HU
   * https://www.youtube.com/watch?v=2hXNd6x9sZs
   * https://www.youtube.com/watch?v=0rJ94rbdteE
+  * https://www.youtube.com/watch?v=LbmvbXPj8Fs
 
 * Spring Tips GraalVM / Spring Framework 6
   * https://www.youtube.com/watch?v=JsUAGJqdvaA
@@ -46,6 +47,17 @@ To watch
   * https://www.youtube.com/watch?v=xlkSa44Mdz8
   * https://www.youtube.com/watch?v=gbjF4ahIX7E
   * https://www.youtube.com/watch?v=3rJBLFA95Io
-
+    * https://www.youtube.com/watch?v=GJ5Tx43q6KM&t=349s
+    * https://www.youtube.com/watch?v=oFRtBuRviHM
+  
 * Java
   * https://www.youtube.com/watch?v=bAYwPth2vmI
+
+* Spring Boot
+  * https://www.youtube.com/playlist?list=PLgGXSWYM2FpOa_FTla-x5Wd10dpmgrRC4
+
+* Resilience4J
+  * https://www.youtube.com/watch?v=Z4CSGsOLb1c&list=RDCMUCORuRdpN2QTCKnsuEaeK-kQ&index=9
+
+* JWT
+  * https://www.youtube.com/watch?v=MWvnmyLRUik
