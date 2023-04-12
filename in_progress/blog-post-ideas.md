@@ -22,6 +22,7 @@ To watch
 
 * DDD
   * https://www.youtube.com/watch?v=1ZyR_tgGTp8
+  * https://www.youtube.com/watch?v=rulQQE31OVU
   
 * CQRS
   * https://www.youtube.com/watch?v=jU5aKVQmBeM
