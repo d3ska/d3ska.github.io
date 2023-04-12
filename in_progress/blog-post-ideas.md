@@ -40,7 +40,9 @@ To watch
   * https://www.youtube.com/watch?v=2hXNd6x9sZs
   * https://www.youtube.com/watch?v=0rJ94rbdteE
   * https://www.youtube.com/watch?v=LbmvbXPj8Fs
-
+  
+  * https://www.youtube.com/watch?v=tSjnf6l8cq8
+  * https://www.youtube.com/watch?v=biGr232TBwc
 * Spring Tips GraalVM / Spring Framework 6
   * https://www.youtube.com/watch?v=JsUAGJqdvaA
   * https://www.youtube.com/watch?v=TOfYlLjXufw&themeRefresh=1
