@@ -78,3 +78,22 @@ If partitioning occurs between the leader and follower nodes in this model, the 
 ![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/partitioning-example.png)
 
 From the perspective of the CAP theorem, this model guarantees consistency, as the transaction was not committed. When requesting data from either the leader or follower nodes, the data will be consistent and have the same nickname. The model also guarantees partitioning tolerance, as the system remains operational even if the connection between the leader and follower nodes is lost. However, the model does not guarantee availability, as even though the node is operational, it returns an error. Therefore, from a CAP perspective, this model guarantees CP (consistency and partition tolerance).e was operational, it returns error, so from CAP perspective that model guarantee **CP**.
+
+
+#### AP (Availability and Partition tolerance)
+
+Let's discuss the async replication approach now. Following the previous example, assume that when we send a request to the leader to change the nickname, the transaction on the leader is committed and an asynchronous request is sent to the follower (fire and forget). Meanwhile, the client receives a response with a positive result, indicating that the operation ended successfully.
+
+What happens when a partition occurs between the leader and the follower? As the leader is sending the request to the follower in a fire-and-forget manner, it doesn't even expect an acknowledgment from the follower and sends a positive response to the client.
+
+In this scenario, when the customer requests data from the leader, they will receive updated data. However, if the request goes to the follower, it will return stale data. In our example, this would be the previous nickname, as the follower never received the information to update the data.
+
+In this model, we guarantee Availability and Partition Tolerance, as even though partitioning occurs, the system still remains operational. However, we sacrifice Consistency to achieve availability, as every node will respond to requests without error, so the client may have no idea that something went wrong. The cost, as mentioned, is consistency, as different nodes may return different data.
+
+#### CA (Consistency and Availability)
+
+Imagine that our system operates using synchronized replication, and we assume that everything runs perfectly with no partitioning occurring. As a general rule, we should always receive consistent data, and the system should be available. However, the trade-off lies in the lack of Partition Tolerance (the letter P). In the CA model, when a partition does occur, the system's reliability may be compromised.
+
+In the CA model, the focus is on maintaining both data consistency and system availability, assuming that network partitions are rare or non-existent. The system ensures that all nodes have the same, consistent data and remain accessible to clients. However, this model is not well-suited for handling partitioning events. If a network partition does occur, the system might become partially or fully unavailable, as it is not designed to handle such situations effectively.
+
+It is important to note that in distributed systems. The CA model prioritizes Consistency and Availability, sacrificing Partition Tolerance in the process.
