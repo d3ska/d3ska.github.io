@@ -10,6 +10,7 @@
   * domain models (entities)
 * SAGA
 * Event Driven Architecture
+* non-blocking vs async - what's the difference
 
 
 * completable future in java https://www.youtube.com/watch?v=3rJBLFA95Io&t=1240s
