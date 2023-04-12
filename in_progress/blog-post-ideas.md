@@ -13,7 +13,7 @@
 * non-blocking vs async - what's the difference
 * jdbc vs jpa (hibernate?) 
 * runtime vs compile 
-
+* Fallacies of distributed computing https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing
 * completable future in java https://www.youtube.com/watch?v=3rJBLFA95Io&t=1240s
 
 
@@ -23,6 +23,9 @@ To watch
 * DDD
   * https://www.youtube.com/watch?v=1ZyR_tgGTp8
   * https://www.youtube.com/watch?v=rulQQE31OVU
+  
+* Architecture 
+  * https://www.youtube.com/watch?v=uUNIo0c3Z1o&list=PLE6LA5cDflHr7fZBH_fY19sjDh1heTnvt
   
 * CQRS
   * https://www.youtube.com/watch?v=jU5aKVQmBeM
