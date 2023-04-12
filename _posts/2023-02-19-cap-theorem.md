@@ -52,7 +52,6 @@ most of the systems don't need that level of consistency.
 #### Availability 
 In the context of a system, signifies that every functioning node reliably provides non-error responses. This ensures that the system consistently delivers valid responses from working nodes, even when some nodes are down. In the CAP theorem, a system that meets this criterion is considered available.
 
-<br>
 
 #### Partition tolerance 
 Is the capability of a distributed system to continue functioning despite communication breakdowns, lost connections between nodes, or even data loss. Essentially, it ensures that the system remains operational when facing network partitions, disruptions between nodes, or data loss events.
