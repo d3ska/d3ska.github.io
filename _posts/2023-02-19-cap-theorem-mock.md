@@ -38,7 +38,7 @@ based on the approach, leader in synchronized way waits until leaders update the
 The second approach is that we write to the leader that response us immedieatly and leaders are updated in the 'background' in async way, fire-forget we may say.
 Usually it would be updated in a moment, but as some obstacles may occur related to the network, user may see the stale data, in other words outdated.
 
-![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consitency.jpg)
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consitency.png)
 
 similarly it may happen that different users would see different state of the system.
 
