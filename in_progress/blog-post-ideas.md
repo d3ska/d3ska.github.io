@@ -12,6 +12,7 @@
 * Event Driven Architecture
 * non-blocking vs async - what's the difference
 * jdbc vs jpa (hibernate?) 
+* runtime vs compile 
 
 * completable future in java https://www.youtube.com/watch?v=3rJBLFA95Io&t=1240s
 
