@@ -15,7 +15,9 @@
 * runtime vs compile 
 * Fallacies of distributed computing https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing
 * completable future in java https://www.youtube.com/watch?v=3rJBLFA95Io&t=1240s
-
+* materialized view
+* sockets
+* websockets vs http
 
 
 To watch 
@@ -40,7 +42,8 @@ To watch
   * https://www.youtube.com/watch?v=2hXNd6x9sZs
   * https://www.youtube.com/watch?v=0rJ94rbdteE
   * https://www.youtube.com/watch?v=LbmvbXPj8Fs
-  
+    https://www.youtube.com/watch?v=4YU_r70yGjQ
+  * 
   * https://www.youtube.com/watch?v=tSjnf6l8cq8
   * https://www.youtube.com/watch?v=biGr232TBwc
 * Spring Tips GraalVM / Spring Framework 6
