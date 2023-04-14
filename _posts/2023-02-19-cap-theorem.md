@@ -1,7 +1,7 @@
 ---
 title: "CAP Theorem"
 categories:
-  - Blog
+  - System Design
 tags:
   - Databases
   - CAP
@@ -14,11 +14,10 @@ That statement is quite old, as it was formally introduced in 2000 by Eric Brewe
 That's why it's alternative name is a Brewer theorem.
 The presentation can be found [here](https://people.eecs.berkeley.edu/~brewer/cs262b-2004/PODC-keynote.pdf).
 
-Generally it's statement sounds rather simple, namely every distributed system can guarantee two out of three following characteristics
+Generally, its statement sounds rather simple, namely every distributed system can guarantee two out of the following three characteristics. This is often misunderstood by people. So let's dive a bit deeper into each of them.
 
 ![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/venn-diagram-cap.png)
 
-Lets deep dive a bit in each of them.
 
 <br>
 
