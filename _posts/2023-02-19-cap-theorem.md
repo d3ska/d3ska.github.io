@@ -16,6 +16,8 @@ The presentation can be found [here](https://people.eecs.berkeley.edu/~brewer/cs
 
 Generally it's statement sounds rather simple, namely every distributed system can guarantee two out of three following characteristics
 
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/venn-diagram-cap.png)
+
 Lets deep dive a bit in each of them.
 
 <br>
