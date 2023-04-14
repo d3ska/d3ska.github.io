@@ -70,7 +70,7 @@ If partitioning occurs between the leader and follower nodes in this model, the 
 
 ![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/partitioning-example.png)
 
-From the perspective of the CAP theorem, this model guarantees consistency, as the transaction was not committed. When requesting data from either the leader or follower nodes, the data will be consistent and have the same nickname. The model also guarantees partitioning tolerance, as the system remains operational even if the connection between the leader and follower nodes is lost. However, the model does not guarantee availability, as even though the node is operational, it returns an error. Therefore, from a CAP perspective, this model guarantees CP (consistency and partition tolerance).e was operational, it returns error, so from CAP perspective that model guarantee **CP**.
+From the perspective of the CAP theorem, this model guarantees consistency, as the transaction was not committed. When requesting data from either the leader or follower nodes, the data will be consistent and have the same nickname. The model also guarantees partitioning tolerance, as the system remains operational even if the connection between the leader and follower nodes is lost. However, the model does not guarantee availability, as even though the node is operational, it returns an error. Therefore, from a CAP perspective, this model guarantees CP (consistency and partition tolerance).
 
 <br>
 
