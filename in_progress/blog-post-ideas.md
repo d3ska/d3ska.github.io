@@ -19,6 +19,14 @@
 * sockets
 * websockets vs http
 
+* Hibernate traps
+
+* RestTemplate vs FEIGN
+
+* Project Loom
+
+* Contract testing (Pact) https://docs.pact.io/
+
 
 To watch 
 
