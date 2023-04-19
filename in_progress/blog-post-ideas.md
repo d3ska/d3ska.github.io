@@ -28,6 +28,8 @@
 * Contract testing (Pact) https://docs.pact.io/
 
 
+* Authentication https://www.meetup.com/warszawa-jug/events/292729513/rsvp/ 
+
 To watch 
 
 * DDD
@@ -77,5 +79,6 @@ To watch
 * Resilience4J
   * https://www.youtube.com/watch?v=Z4CSGsOLb1c&list=RDCMUCORuRdpN2QTCKnsuEaeK-kQ&index=9
 
-* JWT
+* Authentication/ JWT
   * https://www.youtube.com/watch?v=MWvnmyLRUik
+  * https://www.meetup.com/warszawa-jug/events/292729513/rsvp/
