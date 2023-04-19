@@ -16,9 +16,9 @@ The single server has limited resources and can only handle a certain number of 
 
 To address this issue, the system needs to be scaled. There are two ways to accomplish this:
 
-Vertical scaling involves increasing the server's power and performance. However, there is a limit to how much a single server or machine can be enhanced.
+1. **Vertical scaling** involves increasing the server's power and performance. However, there is a limit to how much a single server or machine can be enhanced.
 
-Horizontal scaling means adding more servers or machines to the system. For example, if we have four servers, the system can now handle requests from clients in a balanced way. Assuming that all servers have equal resources and power, the system can handle four times the load it could previously manage with only one server. This assumes that all clients distribute their requests evenly among the servers.
+2. **Horizontal scaling** means adding more servers or machines to the system. For example, if we have four servers, the system can now handle requests from clients in a balanced way. Assuming that all servers have equal resources and power, the system can handle four times the load it could previously manage with only one server. This assumes that all clients distribute their requests evenly among the servers.
 
 The challenge is determining how clients know which server to send their requests to. This is where load balancers come into play.
 
