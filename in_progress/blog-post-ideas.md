@@ -82,3 +82,5 @@ To watch
 * Authentication/ JWT
   * https://www.youtube.com/watch?v=MWvnmyLRUik
   * https://www.meetup.com/warszawa-jug/events/292729513/rsvp/
+  
+  * https://www.youtube.com/watch?v=GhrvZ5nUWNg
