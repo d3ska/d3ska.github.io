@@ -84,3 +84,8 @@ To watch
   * https://www.meetup.com/warszawa-jug/events/292729513/rsvp/
   
   * https://www.youtube.com/watch?v=GhrvZ5nUWNg
+
+
+
+
+  * https://www.youtube.com/watch?v=xoVJKj8lcNQ
