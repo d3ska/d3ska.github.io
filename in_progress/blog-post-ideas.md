@@ -89,3 +89,9 @@ To watch
 
 
   * https://www.youtube.com/watch?v=xoVJKj8lcNQ
+
+
+
+Threads (fajny kanal i seria)
+  https://www.youtube.com/watch?v=LCSqZyjBwWA&list=PLL8woMHwr36EDxjUoCzboZjedsnhLP1j4&index=4
+  
