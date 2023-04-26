@@ -7,6 +7,7 @@ tags:
   - Strategy pattern
 ---
 
+
 #### Understanding and Implementing the Strategy Design Pattern
 
 The Strategy design pattern is a behavioral design pattern that allows you to define a family of algorithms, place each of them in a separate class, and make their objects interchangeable. This pattern simplifies the process of solving the same problem in different ways. A crucial aspect is the intention, which refers to what we want to achieve, rather than how we achieve it.
@@ -32,11 +33,15 @@ First, we need to create an interface for our strategy pattern example. In our c
 
 Now, we must create concrete implementations of algorithms for payment using one of the methods mentioned earlier, such as PayPal, Credit Card, or Cryptocurrencies.
 
+**PayPal strategy**
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy2.png)
 
+<br>
+
+**CreditCard strategy**
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy4.png)
 
-![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy5.png)
+<br> 
 
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy6.png)
 
