@@ -36,7 +36,7 @@ or simpler:
 
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparable2.png)
 
-<p>&nbsp;</p>
+<br>
 
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparable3.png)
 
@@ -61,13 +61,13 @@ Or you may call sort() method directly on Collection that you want to sort and g
 
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparator1.png)
 
-<p>&nbsp;</p>
+<br>
 
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparator2.png)
 
 ![img]({{site.url}}/assets/blog_images/2021-09-04-comparable-and-comparator-interfaces/comparator3.png)
 
-<p>&nbsp;</p>
+<br>
 
 **Key differences between Comparable vs Comparator in Java.**
 

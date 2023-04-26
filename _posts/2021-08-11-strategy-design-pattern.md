@@ -1,63 +1,43 @@
 ---
 title: "Strategy Design Patter"
 categories:
-  - Blog 
+  - Design patterns 
+  - Behavioral design patterns
 tags:
-  - Design patterns
   - Strategy pattern
-  - SOLID
 ---
 
-#### Strategy is a behavioral design pattern that lets you define a family of algorithms, put each of them into a separate class, and make their objects interchangeable.
+#### Understanding and Implementing the Strategy Design Pattern
 
-It makes it easier for us to solve the same problem in different ways.
-A very important element is the intention, which is what we want to do, not how.
+The Strategy design pattern is a behavioral design pattern that allows you to define a family of algorithms, place each of them in a separate class, and make their objects interchangeable. This pattern simplifies the process of solving the same problem in different ways. A crucial aspect is the intention, which refers to what we want to achieve, rather than how we achieve it.
 
-However, each strategy is simply a way of doing what we want to accomplish.
+Each strategy represents a distinct approach to achieving the desired outcome.
 
-For example:
+Consider this example, we would like to implement a payment processing module.
 
-**Problem**: No payment for the order
-
-**Intention**:  The possibility of paying for the order
-
-Now, think for a moment how many ways do you know for payment?
-
-We can pay by using for example:
-* Visa Card,
-* Mastercard Card,
+Now, how many payment methods can you think of?
+Possible payment methods may include:
+* Visa Card
+* Mastercard Card
 * Credit Card
-* PayPal,
-* Cash,
+* PayPal
+* Cash
 * Cryptocurrencies
 
-From the point of view of the person ordering a given functionality or the fragment of code that is responsible for the payment, it does not matter how it will be implemented, the effect is important, what counts is that the payment will be settled.
+From the perspective of the person ordering a particular functionality or the code segment responsible for payment, the implementation is not important. The desired outcome is that the payment will be processed.
 
-### **Implementation**
-
-First of all we will create the interface for our strategy pattern example, in our case to pay the amount passed as argument.
-
-**PayStrategy.java**
+First, we need to create an interface for our strategy pattern example. In our case, the interface will be responsible for processing the payment amount passed as an argument.
 
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy1.png)
 
-Now we have to create concrete implementation of algorithms for payment using one of above metho, e.g. PayPal, Credit Card or Cryptocurrencies.
-
-**PayByPayPal.java**
+Now, we must create concrete implementations of algorithms for payment using one of the methods mentioned earlier, such as PayPal, Credit Card, or Cryptocurrencies.
 
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy2.png)
 
-**PayByCreditCard.java**
-
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy4.png)
-
-**CreditCard.java**
 
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy5.png)
 
-**Order.java**
-
 ![img]({{site.url}}/assets/blog_images/2021-12-08-strategy-design-pattern/strategy6.png)
 
-Now we can use any strategy that implements our interface, whatsmore in Strategy pattern, a class behavior or its algorithm can be changed at run time. This type of design pattern comes under behavior pattern.
-	 
+With the Strategy pattern, we can use any strategy that implements our interface. Moreover, a class behavior or algorithm can be changed at runtime. This design pattern falls under the behavioral pattern category.	 

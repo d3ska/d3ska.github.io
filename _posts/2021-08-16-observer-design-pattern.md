@@ -39,7 +39,7 @@ To be able to do that, the observable object needs to keep references to the obs
 **Pros and Cons**
 
 <span style="color: green"> Open/Closed Principle. You can introduce new subscriber classes without having to change the publisher’s code (and vice versa if there’s a publisher interface). </span>
-<p>&nbsp;</p>
+<br>
 <span style="color: green"> You can establish relations between objects at runtime. </span>
-<p>&nbsp;</p>
+<br>
 <span style="color: red">  Subscribers are notified in random order. </span>
