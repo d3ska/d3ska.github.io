@@ -9,9 +9,9 @@ tags:
   - Bean Scopes
 ---
 
-#### The scope defines the runtime context within which the bean instance is available.
+#### Bean Scopes Define the Runtime Context Availability
 
-The latest version of the Spring framework defines 6 types of scopes:
+The latest version of the Spring framework defines 6 types of bean scopes:
 
 * singleton.
 * prototype.
@@ -20,62 +20,60 @@ The latest version of the Spring framework defines 6 types of scopes:
 * application.
 * websocket.
 
-**The last four scopes mentioned, request, session, application and websocket, are only available in a web-aware application.**
+The last four scopes mentioned (request, session, application, and websocket) are only available in a web-aware application.
+
+Additionally, there is the possibility to create custom bean scopes.
 
 ### Singleton 
 
-When you define a bean with the singleton scope, the container will create an instance of the bean only once.
-
-The Framework returns that instance each time the bean is requested by your application code.
-
-It is also a default scope of bean in spring if you didn't define other one.
+When a bean is defined with the singleton scope, the container creates an instance of the bean only once. The framework returns that instance each time the bean is requested by your application code. Singleton is also the default bean scope in Spring if no other scope is defined.
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/singleton1.png)
 
-So it would work exactly the same as:
+This would work exactly the same as:
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/singleton2.png)
 
-We can also use a constant instead of the String value in the following manner:
+We can also use a constant instead of a string value as follows:
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/singleton3.png)
 
-This solution is especially used for:
-* database connections.
-* connections with devices that use serial port communication.
-* libraries operating throughout the life of the program, e.g. log4net.
-* e.t.c.
+Singleton scope is typically used for:
+* database connections
+* connections with devices using serial port communication
+* libraries operating throughout the life of the program, e.g., log4net
+* etc.
 
 ### Prototype
 
-When you create a bean with the Prototype scope, the framework will return a different instance every time it is requested from the container. It is defined by setting the value prototype to the @Scope annotation in the bean definition:
+When a bean is created with the prototype scope, the framework returns a different instance every time it is requested from the container. The prototype scope is defined by setting the value prototype to the @Scope annotation in the bean definition:
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/prototype1.png)
 
-We can also use a contact like we did for singleton scope:
+We can also use a constant like we did for the singleton scope:
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/prototype2.png)
 
-### Prototype
+### Request
 
-Scopes a single bean definition to the lifecycle of a single HTTP request; that is each and every HTTP request will have its own instance of a bean created off the back of a single bean definition. Only valid in the context of a web-aware Spring ApplicationContext.
+The request scope defines a single bean with a lifecycle tied to a single HTTP request. For every HTTP request, a new instance of the bean is created from the single bean definition. This scope is only valid in the context of a web-aware Spring ApplicationContext.
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/request3.png)
 
 
-The proxyMode attribute is necessary because at the moment of the instantiation of the web application context, there is no active request. Spring creates a proxy to be injected as a dependency, and instantiates the target bean when it is needed in a request.
+The **proxyMode** attribute is necessary because there is no active request at the time of the web application context instantiation. Spring creates a proxy to be injected as a dependency and instantiates the target bean when needed in a request.
 
-We can also use a @RequestScope composed annotation that acts as a shortcut for the above definition:
+We can also use a **@RequestScope** composed annotation as a shortcut for the above definition:
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/request1.png)
 
-Now let's create a controller that references this bean:
+Now, let's create a controller that references this bean:
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/request2.png)
 
-### Scope
+### Session
 
-The session scope defines a single bean definition which lives within the lifecycle of an HTTP Session. Similar to the Request scope, the Session scope is applicable to beans in Web applications.
+The session scope defines a single bean with a lifecycle tied to an HTTP Session. Like the request scope, the session scope is applicable to beans in web applications.
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/scope1.png)
 
@@ -90,16 +88,11 @@ Controller that references this bean:
 
 ### Application
 
-The application scope creates the bean instance for the lifecycle of a ServletContext.
-
-This is similar to the singleton scope, but there is a very important difference with regards to the scope of the bean.
-
-It is a singleton per ServletContext, not per Spring 'ApplicationContext' (for which there may be several in any given web application), and it is actually exposed and therefore visible as a ServletContext attribute
-
+The application scope creates the bean instance for the lifecycle of a ServletContext. This is similar to the singleton scope, but there is an important difference concerning the scope of the bean. It is a singleton per ServletContext, not per Spring 'ApplicationContext' (of which there may be several in any given web application), and it is actually exposed and therefore visible as a ServletContext attribute.
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/application1.png)
 
-Or use special annotation:
+Or use a special annotation:
 
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/application2.png)
 
@@ -115,10 +108,15 @@ Finally, let's create the bean with the websocket scope:
 ![img]({{site.url}}/assets/blog_images/2021-08-15-spring-bean-scopes/websocket1.png)
 
 
-The Spring Framework provides a WebSocket API that you can use to write client- and server-side applications that handle WebSocket messages. You can declare a Spring-managed bean in the websocket scope. Those are typically singletons and live longer than any individual WebSocket session.
+The Spring Framework provides a WebSocket API that you can use to write client- and server-side applications that handle WebSocket messages. You can declare a Spring-managed bean in the websocket scope. Those beans are typically singletons and live longer than any individual WebSocket session.
 
-We can also say that it exhibits singleton behavior, but limited to a WebSocket session only.
+In other words, the websocket scope exhibits singleton behavior, but it is limited to a WebSocket session only.
 
+### Creating Custom Bean Scopes
+
+In addition to the built-in bean scopes provided by Spring, it is also possible to create your own custom bean scopes. This can be useful when you need to manage bean instances according to specific requirements that are not covered by the existing scopes.
+
+To create a custom bean scope, you need to implement the org.springframework.beans.factory.config.Scope interface. This interface defines the contract for managing the lifecycle of a bean in the custom scope.
 
 
 
