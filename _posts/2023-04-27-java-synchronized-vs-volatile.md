@@ -109,7 +109,7 @@ public class TaskStatus {
     }
 }
 ```
-By declaring the taskCompleted variable as volatile, we ensure that all reads and writes to it happen directly in main memory, and any changes are immediately visible to all threads. This ensures proper memory visibility.
+By declaring the taskCompleted variable as volatile, we ensure that all reads and writes to it happen directly in main memory, and any changes are immediately visible to all threads. This ensures proper memory visibility but does not protect from race conditions.
 
 <br>
 
@@ -119,8 +119,8 @@ Understanding the differences between synchronized and volatile can help you dec
 
 * Use **synchronized** when you need to ensure execution control for a block of code and guarantee atomicity for compound operations, such as read-update-write sequences. Synchronization can be more expensive in terms of performance because it requires acquiring and releasing locks, which can lead to contention if multiple threads are competing for the same lock. However, it is necessary for complex scenarios where multiple operations need to be performed atomically or when a combination of shared variables must be accessed together.
 
-* Use **volatile** when you only need to ensure memory visibility for individual reads and writes to a shared variable, and atomicity of compound operations is not required. Volatile is generally faster as it only ensures memory visibility without the need for locking. It is often the better choice for simpler scenarios, such as sharing a simple flag or single variable across threads with proper memory visibility.
+* Use **volatile** when you need to ensure memory visibility for individual reads and writes to a shared variable without requiring atomicity for compound operations. Volatile is typically faster since it avoids the need for locking, providing only memory visibility guarantees. It is often a more suitable choice for simpler scenarios, such as sharing a basic flag or single variable among threads while maintaining proper memory visibility. However, it is important to note that volatile does not protect against race conditions, as it does not utilize locking mechanisms like synchronization or atomic classes do to ensure exclusive access to shared resources.
 
-In the context of read-update-write operations, volatile is generally insufficient for ensuring thread safety, as it only guarantees atomicity for individual reads and writes, not for compound operations like read-update-write. For read-update-write operations, you should use synchronized to ensure proper execution control and atomicity, or use Atomic classes provided by the 'java.util.concurrent.atomic' package.
+In the context of read-update-write operations, volatile is generally insufficient for ensuring thread safety, as it only guarantees atomicity for individual reads and writes, not for compound operations like read-update-write. For read-update-write operations, you should use synchronized or atomic access (provided by the classes from 'java.util.concurrent.atomic') to ensure proper execution control and atomicity. Atomic and Synchronized access are very similar to each other, but the atomic operations are generally implemented at a lower level of programming. Also, it is entirely possible to synchronize only some accesses to a variable and allow other accesses to be unsynchronized (e.g., synchronize all writes to a variable but none of the reads from it).
 
 In summary, consider the specific requirements of your multithreaded application when choosing between synchronized and volatile. Use synchronized for complex scenarios that require atomic compound operations and execution control, and use volatile for simpler scenarios that only require memory visibility for individual reads and writes. By making the right choice, you can ensure your application's thread safety while maximizing its performance and efficiency.

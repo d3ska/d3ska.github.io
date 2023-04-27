@@ -2,7 +2,6 @@
 title: "Strategy Design Patter"
 categories:
   - Design patterns 
-  - Behavioral design patterns
 tags:
   - Strategy pattern
 ---
