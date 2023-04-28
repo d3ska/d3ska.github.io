@@ -1,7 +1,7 @@
 ---
 title: "Data structures knowledge compendium"
 categories:
-  - Blog
+  - Data Structures
 tags:
   - Data Structures
 ---

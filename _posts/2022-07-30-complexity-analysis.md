@@ -28,7 +28,7 @@ algorithms. It’s expressed using Big O notation.
 <br>
 
 
-What’s worh to add, is that different data structures are going to have different time complexity and space complexity
+What’s worth to add, is that different data structures are going to have different time complexity and space complexity
 for functions and operations that they support. 
 The key thing is not only to figure what data structure best allows you
 to solve the problem but also what data structure allows you to do so with the best time/space complexity.
