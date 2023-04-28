@@ -17,7 +17,7 @@ Thread safety has two primary aspects:
 
 Understanding the differences between execution control and memory visibility is crucial for designing safe and efficient multithreaded applications.
 
-<br>
+
 
 ### Execution Control
 
@@ -67,7 +67,7 @@ public class BankAccount {
 ```
 Now, only one thread can execute the deposit or withdraw method at a time, ensuring proper execution control.
 
-<br>
+
 
 ### Memory Visibility
 
@@ -111,13 +111,13 @@ public class TaskStatus {
 ```
 By declaring the taskCompleted variable as volatile, we ensure that all reads and writes to it happen directly in main memory, and any changes are immediately visible to all threads. This ensures proper memory visibility but does not protect from race conditions.
 
-<br>
+
 
 ### Atomic Classes
 
 In addition to using 'synchronized' and 'volatile', Java provides a set of atomic classes in the 'java.util.concurrent.atomic' package, which can be used as an alternative to manage shared variables in a more efficient way. These classes, such as AtomicInteger, AtomicLong, and AtomicReference, use low-level, lock-free operations to provide atomicity
 
-<br>
+
 
 ### When to Use Each
 
