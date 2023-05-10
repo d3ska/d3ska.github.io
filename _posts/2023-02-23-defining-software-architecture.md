@@ -3,7 +3,7 @@ title: "Defining Software Architecture"
 categories:
   - System Design
 tags:
-  - Design
+  - System Design
   - Software Architecture
 ---
 

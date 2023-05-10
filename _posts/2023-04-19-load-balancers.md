@@ -6,8 +6,6 @@ tags:
   - Load Balancing
 ---
 
-#### Load Balancing
-
 A load balancer can be better understood through a simple use case. Consider a basic client-server architecture where a client sends requests to a server, which processes them and returns a response. Now, imagine the system expanding with multiple clients (two, three, four, and so on) sending requests to a single server. Clients might issue multiple requests as well.
 
 ![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/client-server.jpg)
