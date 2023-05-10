@@ -1,5 +1,5 @@
 ---
-title: "Why Are Tests Essential? A Comprehensive Look at Software Testing"
+title: "Why Are Tests Essential?"
 categories:
   - Testing
   - System Quality
