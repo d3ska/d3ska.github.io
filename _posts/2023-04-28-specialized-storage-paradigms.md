@@ -1,7 +1,7 @@
 ---
 title: "Specialized Storage Paradigms"
 categories:
-  - System design
+  - System Design
 tags:
   - Databases
 ---

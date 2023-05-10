@@ -1,7 +1,7 @@
 ---
 title: "SQL vs NoSQL Databases"
 categories:
-  - System design
+  - System Design
 tags:
   - Databases
   - SQL

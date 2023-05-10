@@ -1,7 +1,7 @@
 ---
 title: "Peer-To-Peer Networks"
 categories:
-  - System design
+  - System Design
 tags:
   - Peer-To-Peer Networks
 ---

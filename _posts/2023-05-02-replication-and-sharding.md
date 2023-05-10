@@ -1,7 +1,7 @@
 ---
 title: "Replication And Sharding"
 categories:
-  - System design
+  - System Design
 tags:
   - Databases
 ---
