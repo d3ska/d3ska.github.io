@@ -28,4 +28,5 @@ Here are the topics that merit your focused attention and comprehension:
 * [Replication ANd Sharding](https://matthewonsoftware.com/system%20design/replication-and-sharding/)
 * [Leader Election](https://matthewonsoftware.com/system%20design/leader-election/)
 * [Peer-To-Peer Networks](https://matthewonsoftware.com/system%20design/peer-to-peer-networks/)
+* [Polling-And-Streaming](https://matthewonsoftware.com/system%20design/polling-and-streaming/)
 
