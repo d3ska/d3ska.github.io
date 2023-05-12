@@ -47,7 +47,7 @@ void testVerification() throws IOException {
 
 While this test might work perfectly, it's somewhat hard to reason about. It's not immediately clear what the test setup is, what operation is being tested, and what the expected outcome is. This can become problematic as the codebase grows and as more developers interact with the tests.
 
-To address these issues, we can refactor the test to be more readable and clear. The Given-When-Then practice, commonly used in behavior-driven development (BDD), is a brilliant approach to make tests more comprehensible. It separates the test method into three well-defined sections:
+To address these issues, we can refactor the test to be more readable and clear. **The Given-When-Then practice (Arrange-Act-Assert)**, commonly used in behavior-driven development (BDD), is a brilliant approach to make tests more comprehensible. It separates the test method into three well-defined sections:
 
 * **Given (set up)**: Outlines the preconditions.
 * **When (execution)**: Describes the action to be tested.
@@ -84,7 +84,7 @@ void testVerification() throws IOException {
 
 In the realm of software testing, readability and clarity are crucial elements. By breaking down tests into smaller, well-named methods and adhering to the Given-When-Then pattern, we significantly improve the readability and maintenance of our code. This pattern is very effective in breaking down the test into clear, understandable stages. The test itself becomes more focused, making it easier to understand the functionality that's being tested, the initial state, the operation being tested, and the expected outcome.
 
-However, the Given-When-Then approach is just one of many techniques we can use to improve our tests. Other testing patterns and methodologies can provide additional clarity and efficiency, and they are worth considering as part of a robust testing strategy. Here are a few worth mentioning:
+However, the **Given-When-Then (Arrange-Act-Assert)** approach is just one of many techniques we can use to improve our tests. Other testing patterns and methodologies can provide additional clarity and efficiency, and they are worth considering as part of a robust testing strategy. Here are a few worth mentioning:
 
 * **Assertion Class**: This involves creating a separate class to handle assertions. This makes tests easier to read and allows for better reuse of common assertions.
 
