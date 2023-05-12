@@ -100,6 +100,19 @@ However, the Given-When-Then approach is just one of many techniques we can use 
 By incorporating these practices, along with the Given-When-Then pattern, we can make our test suite more efficient, effective, and manageable as part of our development process. The key is to consider the specific needs and challenges of our testing environment and to apply the methods and patterns that provide the most benefit in our context.
 
 
+### Following Consistent Naming Conventions in Your Project
+
+Adhering to a consistent naming convention across your testing suite is a crucial aspect of maintaining clean and comprehensible code. This practice makes it easier for developers to understand the purpose of a test at a glance and allows for more efficient navigation through the test suite.
+
+Let's consider the naming of test methods. A good test name should clearly articulate what functionality is being tested and the expected outcome. One common convention is to structure the test name like so: **'methodName_Condition_ExpectedBehavior'**.
+
+For example, if you are testing the **'withdraw'** method in a **'BankAccount'** class, a test might be named **'withdraw_InsufficientFunds_ThrowsException'**. This clearly communicates that the **'withdraw'** method, when dealing with a condition of insufficient funds, is expected to throw an exception.
+
+A consistent naming convention also applies to the organization of your test files. Tests should be grouped logically and clearly labeled so that it's straightforward to find the tests related to a specific component. If you're using a tool that supports it, consider structuring your tests to mirror the structure of your application code. This makes it even easier to locate the tests for a particular piece of functionality.
+
+Maintaining consistent naming conventions isn't just about cleanliness—it's about communication. Clear, descriptive names make your tests more understandable to others (and your future self), making your codebase easier to maintain and evolve. By establishing and following these conventions in your project, you can create a more effective and efficient testing environment.
+
+
 ### Avoiding False Negatives in Testing
 
 While clarity in tests is key, it's equally important to trust our tests. False negatives can lead to missed bugs and give a false sense of confidence. This is often due to poorly constructed tests or those that pass without the correct logic.
