@@ -1,5 +1,5 @@
 ---
-title: "Testing Practices and Avoiding False Negatives"
+title: "Best Practices for Writing Effective and Reliable Tests"
 categories:
   - Testing
   - System Quality
