@@ -7,10 +7,7 @@ tags:
   - Testing
 ---
 
-### Introduction
-
 Many teams face a common challenge after introducing the practice of writing tests: builds take up to half an hour, refactoring tests prove to be difficult, and testing consumes too much of the team's time and energy. However, this problem can be solved by adhering to good testability practices.
-
 
 ### The FIRST Principle
 
