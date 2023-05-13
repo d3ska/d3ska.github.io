@@ -92,7 +92,7 @@ However, the **Given-When-Then (Arrange-Act-Assert)** approach is just one of ma
 
 * **Custom Assertions**: Developing custom assertions for your tests can improve readability and reduce code duplication. This might involve creating a method that takes in parameters and performs an assertion based on those parameters.
 
-* **Parametrized Testing**: This pattern involves parameterizing your tests to run them with different inputs, reducing code duplication and making your tests more flexible and comprehensive.
+* **Data-Driven Testing**: This pattern involves parameterizing your tests to run them with different inputs, reducing code duplication and making your tests more flexible and comprehensive.
 
 By incorporating these practices, along with the Given-When-Then pattern, we can make our test suite more efficient, effective, and manageable as part of our development process. The key is to consider the specific needs and challenges of our testing environment and to apply the methods and patterns that provide the most benefit in our context.
 
