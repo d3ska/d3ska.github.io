@@ -10,7 +10,7 @@ In computing systems, the interaction between clients and servers is fundamental
 
 ### Polling
 
-![img]({{site.url}}/assets/blog_images/2023-05-11-polling-and-streaming/polling-bez-koloru.png)
+![img]({{site.url}}/assets/blog_images/2023-05-11-polling-and-streaming/client-server-polling.png)
 
 Polling is essentially the process of gathering data at regular intervals. For instance, a system may be set up to request temperature data every 'X' seconds. This method has its utility, but it is not without its limitations.
 
@@ -22,7 +22,7 @@ For a single client, issuing 10 requests per second might seem manageable. Howev
 
 ### Streaming
 
-![img]({{site.url}}/assets/blog_images/2023-05-11-polling-and-streaming/streaming-bez-koloru.png)
+![img]({{site.url}}/assets/blog_images/2023-05-11-polling-and-streaming/client-server-streaming.png)
 
 In the context of networking, streaming generally refers to continuously receiving a feed of information from a server by maintaining an open connection between the client and the server.
 
