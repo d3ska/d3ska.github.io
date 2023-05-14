@@ -75,3 +75,88 @@ User tests are performed by potential end-users who carry out specific tasks or 
 ### Conclusion
 
 Remember, each type of testing serves its purpose, and their collective use ensures the development of a robust, user-friendly, and efficient software system.
+
+---
+
+### Testing Approaches: Verifying Results, Checking State, and Ensuring Communication
+
+In addition to the various types of testing, such as unit testing, integration testing, and end-to-end testing, there are also different testing approaches that can be employed in software development.
+
+### Verifying Results
+
+One approach to testing involves verifying the results returned by a component after processing specific input data. This type of test focuses on the output of the code and does not require verifying the internal state of the component or any side effects it may have. By validating the returned result against expected values, we can ensure that the component behaves as intended.
+
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/result-verfication.png)
+
+Consider the following example:
+
+```java
+@Test
+void shouldCreateStudentLoan() {
+    LoanOrderService loanOrderService = new LoanOrderService();
+    Customer student = aStudent();
+
+    LoanOrder loanOrder = loanOrderService.studentLoanOrder(student);
+
+    assertThat(loanOrder.getPromotions())
+        .filteredOn(promotion -> promotion.getName().equals("Student Promo"))
+        .size().isEqualTo(1);
+}
+```
+In this test, we create a student loan order using the LoanOrderService and verify that the resulting LoanOrder contains a promotion named "Student Promo." By checking the size of the promotions list and filtering it based on the promotion name, we can assert the expected behavior of the code.
+
+This approach to testing focuses on the effectiveness of the tests by directly comparing the actual output with the expected output. It promotes better architectural design as it encourages writing code that produces verifiable results.
+
+
+### Checking State
+
+Another testing approach involves verifying the state of the system after the completion of an operation. This type of test focuses on the state of the tested component, its collaborators, or external dependencies (e.g., in integration tests). By checking the state of relevant objects, we can ensure that the desired changes have occurred.
+
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/state-verfications.png)
+
+Consider the following example:
+
+```java
+@Test
+void shouldAddManagerPromo() {
+    LoanOrder loanOrder = new LoanOrder(LocalDate.now(), aCustomer());
+    UUID managerUuid = UUID.randomUUID();
+
+    loanOrder.addManagerDiscount(managerUuid);
+
+    assertThat(loanOrder.getPromotions()).hasSize(1);
+    assertThat(loanOrder.getPromotions().get(0).getName())
+        .contains(managerUuid.toString());
+    assertThat(loanOrder.getPromotions().get(0).getDiscount())
+        .isEqualTo(50);
+}
+```
+
+In this test, we create a LoanOrder and add a manager discount using the addManagerDiscount method. We then verify that the promotions list has a size of 1, the name of the first promotion contains the manager's UUID, and the discount value is equal to 50. By asserting the expected changes in the state of the LoanOrder object, we can ensure that the addManagerDiscount method works correctly.
+
+This approach is useful when testing methods that return void and when it is necessary to verify the state of the system due to the existing architecture or design decisions.
+
+
+### Ensuring Communication/Verification
+
+The third testing approach involves verifying the communication between objects. This includes checking the messages sent to other objects or using mocks to verify interactions. By capturing and verifying the expected communication, we can ensure that the correct messages are being exchanged.
+
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verfication.png)
+
+Consider the following example:
+
+
+```java
+@Test
+void setUp() {
+    customer = buildCustomer();
+    eventEmitter = mock(EventEmitter.class);
+    customerVerifier = new CustomerVerifier(buildVerifications(eventEmitter));
+
+@Test
+void shouldAddManagerPromo() {
+    customerVerifier.verify(customer);
+
+    verify(eventEmitter, times(3)).emit(argThat(VerificationEvent::passed));
+}
+```
