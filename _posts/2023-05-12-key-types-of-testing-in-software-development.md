@@ -141,7 +141,7 @@ This approach is useful when testing methods that return void and when it is nec
 
 The third testing approach involves verifying the communication between objects. This includes checking the messages sent to other objects or using mocks to verify interactions. By capturing and verifying the expected communication, we can ensure that the correct messages are being exchanged.
 
-![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verfication.png)
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verification.png)
 
 Consider the following example:
 
