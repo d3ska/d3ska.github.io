@@ -6,8 +6,6 @@ tags:
   - Rate Limiting
 ---
 
-### Rate Limiting
-
 Rate limiting is a pivotal technique employed to manage and control the number of incoming and outgoing requests
 interacting with a system. Not only does it serve as a defensive shield against denial-of-service (DoS) attacks, but it
 also facilitates a fair distribution of resources among users, ensuring a smooth and uninterrupted service for all. The
