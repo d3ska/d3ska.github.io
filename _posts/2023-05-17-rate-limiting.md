@@ -47,15 +47,3 @@ To visualize the concept of rate limiting, consider a popular restaurant with a 
 
 For DoS and DDoS attacks, imagine a highway filled with cars. In a DoS attack, it's as if a single truck has intentionally blocked all lanes, stopping the flow of traffic. In a DDoS attack, it's like hundreds of cars from different directions converging on the same highway, causing a massive traffic jam.
 
-
-### Mitigation Strategies
-
-For DoS and DDoS attacks, rate limiting is one of many defensive measures. Here are a few more strategies:
-
-* **Anomaly detection:** Systems can be configured to identify unusual traffic patterns or request rates and respond accordingly.
-
-* **IP blacklisting:** IPs known to be sources of malicious traffic can be blocked from making requests.
-
-* **Redundancy:** Having multiple servers can help to ensure that if one server becomes overwhelmed, others can pick up the load.
-
-* **DDoS mitigation services:** Third-party services specialize in detecting and neutralizing DDoS attacks before they reach your network.
