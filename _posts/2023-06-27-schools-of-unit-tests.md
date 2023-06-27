@@ -20,10 +20,25 @@ In stark contrast, the London School defines a unit as a single class. The goal 
 In the London School, we create a test implementation of a class, for instance, CustomerVerifier, that performs customer verification based on different implementations. The test implementation might be "always passed verification" or "always failed". Each verification type, such as by name or PESEL (Polish national identification number), would then be tested separately.
 
 ### Which School to Choose?
-Both schools come with their distinct advantages and disadvantages. A balanced approach may be the most beneficial. The choice between the Classic School and the London School heavily depends on the specific circumstances in your project and the objects you want to test.
 
-The Classic School's primary strength lies in the fact that its tests reflect the actual operation of the system, offering better coverage of the real system logic. However, the London School is not without its merits. It simplifies the process of isolating and finding errors. Furthermore, writing such tests is often faster and easier as the use of test doubles and mocks simplifies the intricate graphs of collaborators.
+Both schools come with their distinct advantages and disadvantages. Here are the pros of each approach:
+
+#### Classic School (Detroit or Classical School)
+
+* **Reflects Real Operation:** The Classic School's tests closely mimic the actual functioning of the system, providing a high degree of confidence in the system's real-world performance.
+
+* **Better Coverage:** With a more comprehensive approach to testing, the Classic School achieves superior coverage of the real system logic.
+
+* **Emphasizes Production Code:** This school encourages the usage of production code in testing as much as possible, limiting the use of mocks and stubs only to dependencies introducing shared state.
+
+#### London School
+
+* **Isolation:** The London School excels at isolating the code for testing purposes, making it easier to pinpoint and rectify errors.
+
+* **Simplifies Test Writing:** Utilizing test doubles and mocks helps simplify the graphs of collaborators, making the test writing process faster and easier.
+
+* **Effective for Complex Collaborators' Graph:** This approach is especially beneficial when dealing with complex collaborators' graph and difficult setup for tests. The extensive use of mocks enables efficient testing of the code in isolation.
 
 Jakub Pilimon proposed a heuristic in [his presentation "Testing – Love, Hate, Love"](https://www.youtube.com/watch?v=GjKYLmimGeE) that may be useful in this context. He recommends examining the class being tested and considering if the dependencies are separate merely for better code readability or if they introduce different responsibilities and layers. If it's solely a matter of readability, using the actual object is preferable. However, if multiple responsibilities and layers emerge, it's better to use a mock.
 
-In conclusion, the key is to avoid being purists. Depending on the complexity of the collaborators' graph and the difficulty of setting up the tests, both schools can be employed. However, caution with mocks is advised. As noted by the authors of the Mockito mocking library, if everything is mocked, are we truly testing the production code at all? They advocate for a mixed approach, underscoring the importance of not being afraid to avoid mocking, suggesting a more balanced strategy rather than strict adherence to one school.
+In conclusion, the key is to avoid being purists. Depending on the complexity of the collaborators' graph and the difficulty of setting up the tests, both schools can be employed. However, caution with mocks is advised. As noted by the authors of the Mockito mocking library, if everything is mocked, are we truly testing the production code at all? They advocate for a mixed approach, underscoring the
