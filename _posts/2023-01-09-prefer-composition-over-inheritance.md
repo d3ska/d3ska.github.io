@@ -8,78 +8,115 @@ tags:
   - Composition
 ---
 
-You probably already thought about this, as its quite popular statement.
-Let's delve deeper into the subject.
-I wrote article that explain what is
-composition [here](https://matthewonsoftware.com/blog/association-composition-aggregation/), and about
-inheritance [here](https://matthewonsoftware.com/blog/core-concepts-behind-oop/).
+# Prefer Composition over Inheritance
 
-<br>
+You've probably heard this statement before, as it's quite popular. Let’s dive deeper into the subject. I've written articles that explain what composition is [here](link-to-composition-article) and about inheritance [here](link-to-inheritance-article).
 
-Both concepts are about reusing piece of code. <br><br>
-In general, it is generally considered good design to prefer composition over inheritance. This is because composition allows for greater flexibility and reuse of code, as it allows you to combine simple objects to achieve more complex behavior, rather than having to create complex inheritance hierarchies.
-<br>
+## Table of Contents:
 
-Inheritance can be inflexible because it involves creating a subclass that is tightly coupled to its superclass. This means that any changes to the superclass may require changes to the subclass as well, which can be difficult to manage and maintain as the codebase grows. Additionally, inheritance can make it difficult to reuse code because it can be hard to know what behavior is inherited from the superclass and what behavior is implemented specifically in the subclass.
+1. [Introduction](#introduction)
+2. [Composition vs. Inheritance](#composition-vs-inheritance)
+3. [Examples in Java](#examples-in-java)
+4. [Caveats with the `equals` Method](#caveats-with-equals-method-new-section)
+5. [Recommendations and Conclusion](#recommendations-and-conclusion)
 
-On the other hand, composition allows you to build complex behavior by composing simple objects, rather than having to create complex inheritance hierarchies. This makes it easier to reuse code and make changes to your codebase because you can easily substitute different objects to achieve the desired behavior.
+## 1. Introduction
 
-However, it is worth noting that both inheritance and composition have their own strengths and weaknesses, and it is important to choose the right approach for the specific problem at hand. There is no one-size-fits-all answer, and it is important to consider the specific requirements and constraints of your project when deciding which approach to use.
+Both concepts revolve around reusing pieces of code.
 
-Worth knowing is that inheritance offer polymorphism out of the box, but in case of composition we don't get it for free but instead our classes are not tightly coupled, but with usage of interfaces we can achieve polymorphisms with composition as well, so then we get low coupling and polymorphism.
-We can use table below to visualize the differences between those two concepts. 
+In general, it is widely considered good design to favor composition over inheritance. This preference arises because composition allows for greater flexibility and code reuse. It enables you to combine simple objects to achieve more complex behavior without the need to create intricate inheritance hierarchies.
 
-<table style="width:100%">
-  <tr>
-    <th></th>
-    <th>Parameter</th>
-    <th>Type</th>
-  </tr>
-  <tr>
-    <td>Inheritance</td>
-    <td>Extending</td>
-    <td>Parent Classes</td>
-  </tr>  
-  <tr>
-    <td>Composition</td>
-    <td>Using</td>
-    <td>Interfaces</td>
-  </tr>
-</table>
+## 2. Composition vs. Inheritance
 
+Inheritance can be inflexible because it involves creating a subclass that is tightly coupled to its superclass. This means that any changes to the superclass may necessitate changes to the subclass as well. This can become challenging to manage and maintain as the codebase expands. Moreover, inheritance can complicate code reuse because distinguishing between behavior inherited from the superclass and behavior specifically implemented in the subclass can be tricky.
 
-<br>
+On the other hand, composition empowers you to construct complex behavior by assembling simple objects. This makes it easier to reuse code and make changes to your codebase, as you can readily substitute different objects to attain the desired behavior.
 
-Keep in mind that it's not that we should use only composition from now on, most of the time? Yes, but not always.
+Let's illustrate these concepts with Java examples.
 
+## 3. Examples in Java
 
+### Composition Example
 
-#### The cons of Composition
+Consider a simple example of composition in Java where we have a `Car` class composed of an `Engine` and `Wheels`:
 
-* Code Repetition in interface implementations to initialize internal types
-* Wrapper methods to expose information from internal types
+```java
+class Engine {
+    void start() {
+        // Implementation for starting the engine
+    }
+}
 
+class Wheels {
+    void rotate() {
+        // Implementation for rotating the wheels
+    }
+}
 
-#### The pros of Composition
+class Car {
+    private Engine engine;
+    private Wheels wheels;
 
-* Reduces coupling to re-used code
-* Adaptable as new requirements come in
+    public Car() {
+        this.engine = new Engine();
+        this.wheels = new Wheels();
+    }
 
+    void drive() {
+        engine.start();
+        wheels.rotate();
+        // Additional car-specific functionality
+    }
+}
+```
 
-#### Tips for Inheritance
+In this example, the Car class uses composition to combine the functionality of an Engine and Wheels to create a fully functional Car.
 
-* Design the parent class to be inherited
-* Avoid protected member variables with direct access
-* Create a protected API from children classes to use
-* Mark all other methods as final/sealed/private
+### Inheritance Example
 
+Now, let's look at an example involving inheritance. Consider a class hierarchy representing different types of vehicles:
 
-#### When to use Inheritance
+```java
+class Vehicle {
+    void start() {
+// Implementation for starting a generic vehicle
+    }
+}
 
-When we have some boilerplate in some classes, we can move it to the parent class, so other classes can inherit it. 
-As you see its scenario where we are not expecting that the model would growth.
+class Car extends Vehicle {
+    void drive() {
+        start();
+// Additional car-specific functionality
+    }
+}
 
+class Bicycle extends Vehicle {
+    void pedal() {
+        start();
+// Additional bicycle-specific functionality
+    }
+}
+```
 
+In this example, the Car and Bicycle classes inherit the start method from the Vehicle class. While this demonstrates inheritance, it's essential to note that changes to the start method in the Vehicle class can impact all subclasses, potentially leading to maintenance challenges.
 
+## 3. Caveats with the `equals` Method (New Section)
 
+When using inheritance, especially in complex class hierarchies, you must exercise caution with the `equals` method. This method is essential for comparing objects for equality, but it can be challenging to implement correctly when multiple classes are involved.
+
+The potential caveats with the `equals` method in inheritance hierarchies include:
+
+- **Violation of Transitive Rule:** Inheritance hierarchies can lead to violations of the transitive rule of equality. If not carefully implemented, you might encounter situations where object A equals object B, and object B equals object C, but object A does not equal object C. This can lead to subtle bugs and unexpected behavior in your code.
+
+- **Complexity and Consistency:** Inheritance hierarchies can introduce complexity in determining which attributes and criteria should be considered for equality comparison. Ensuring that the `equals` method is consistent across all classes in the hierarchy can be challenging.
+
+To delve deeper into these issues and learn best practices for implementing the `equals` method in inheritance hierarchies, refer to our comprehensive article on [equals and hashCode](link-to-equals-hashcode-article).
+
+## 4. Recommendations and Conclusion
+
+In conclusion, while composition is generally favored over inheritance for its flexibility and code reuse benefits, there are situations where inheritance can be useful, especially for reducing code duplication in common parent classes. However, always approach inheritance with caution, taking into consideration the potential pitfalls of the `equals` method and other complexities it may introduce.
+
+Remember that design decisions should be made based on the specific needs of your project. Consider the advantages and disadvantages of both composition and inheritance in the context of your application, and strive for a balance that aligns with your project's requirements.
+
+By following best practices and staying informed about potential caveats, you can make informed decisions about when to use inheritance and when to prefer composition in your Java projects.
 
