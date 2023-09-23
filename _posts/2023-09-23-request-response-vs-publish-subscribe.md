@@ -4,7 +4,7 @@ categories:
   - Blog
 tags:
   - Request Response
-  - Pub/Sub
+  - Pub-Sub
   - Communication styles
 ---
 
@@ -50,7 +50,7 @@ The system managing these subscriptions and dispatching messages is commonly ref
 
 * Easily scales with multiple receivers or subscribers.
 * Perfectly suited for microservices architecture.
-* Loose coupling (services are not directly aware of each other - [please refer to this post about coupling](https://matthewonsoftware.com/blog/what-is-coupling/))
+* Loose coupling ([please refer to this post about coupling](https://matthewonsoftware.com/blog/what-is-coupling/))
 * Operational even when some clients are offline.
 
 **Cons:**
