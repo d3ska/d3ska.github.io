@@ -3,9 +3,9 @@ title: "Request-Response vs Publish-Subscribe Architecture"
 categories:
   - Blog
 tags:
-  - Cache
-  - Spring
-  - Spring Cache
+  - Request Response
+  - Pub/Sub
+  - Communication styles
 ---
 
 ### Request-Response Architecture
