@@ -159,11 +159,3 @@ n the ElectricPowerSwitch class, we implemented the Switch interface and referre
 ![img]({{site.url}}/assets/blog_images/2021-10-08-solid-the-first-5-principles-of-object-oriented-design/DIP7.png)
 
 Now our code is flexible for changes, and high-level classes don't depend on low-level classes.
-
-
-
-		
-
-	 
-	 
-	 
