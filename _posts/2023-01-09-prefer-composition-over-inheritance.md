@@ -112,7 +112,13 @@ The potential caveats with the `equals` method in inheritance hierarchies includ
 
 To delve deeper into these issues and learn best practices for implementing the `equals` method in inheritance hierarchies, refer to our comprehensive article on [equals and hashCode](link-to-equals-hashcode-article).
 
-## 4. Recommendations and Conclusion
+
+## 4. Violation of encapsulation
+
+Subclasses rely on the implementation details of their superclasses for correct operation. The implementation within a superclass may vary across different releases, potentially leading to a breakdown in the subclass, despite no changes to its own code.
+Consequently, a subclass necessitates co-evolution with its superclass, unless the superclass has been clearly designed and documented by its authors for the purpose of extension.
+
+## 5. Recommendations and Conclusion
 
 In conclusion, while composition is generally favored over inheritance for its flexibility and code reuse benefits, there are situations where inheritance can be useful, especially for reducing code duplication in common parent classes. However, always approach inheritance with caution, taking into consideration the potential pitfalls of the `equals` method and other complexities it may introduce.
 
