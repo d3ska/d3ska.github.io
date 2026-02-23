@@ -10,15 +10,7 @@ tags:
 
 # Prefer Composition over Inheritance
 
-You've probably heard this statement before, as it's quite popular. Let’s dive deeper into the subject. I've written articles that explain what composition is [here](link-to-composition-article) and about inheritance [here](link-to-inheritance-article).
-
-## Table of Contents:
-
-1. [Introduction](#introduction)
-2. [Composition vs. Inheritance](#composition-vs-inheritance)
-3. [Examples in Java](#examples-in-java)
-4. [Caveats with the `equals` Method](#caveats-with-equals-method-new-section)
-5. [Recommendations and Conclusion](#recommendations-and-conclusion)
+You've probably heard this statement before, as it's quite popular. Let's dive deeper into the subject. I've written an article that explains what composition is [here](/posts/association-composition-aggregation/).
 
 ## 1. Introduction
 
@@ -110,7 +102,7 @@ The potential caveats with the `equals` method in inheritance hierarchies includ
 
 - **Complexity and Consistency:** Inheritance hierarchies can introduce complexity in determining which attributes and criteria should be considered for equality comparison. Ensuring that the `equals` method is consistent across all classes in the hierarchy can be challenging.
 
-To delve deeper into these issues and learn best practices for implementing the `equals` method in inheritance hierarchies, refer to our comprehensive article on [equals and hashCode](link-to-equals-hashcode-article).
+To delve deeper into these issues and learn best practices for implementing the `equals` method in inheritance hierarchies, refer to our comprehensive article on [equals and hashCode](/posts/java-equals-and-hashcode-contract/).
 
 
 ## 4. Violation of encapsulation
