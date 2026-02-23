@@ -1,6 +1,8 @@
 ---
-permalink: /about/
-title: "About"
+layout: page
+title: About
+icon: fas fa-info-circle
+order: 4
 ---
 
 As you already know my name is Mateusz (Matthew) im from Poland and im Software Engineer. I decided to documenting what I've learned and what im learning by sharing that in blog posts form.
