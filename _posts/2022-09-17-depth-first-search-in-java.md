@@ -9,12 +9,14 @@ tags:
 
 ### Depth First Search \[DFS]
 
-It's very popular traversal algorithm that is really worth knowing, its used in for both Tree and Graph data structures. 
+It's very popular traversal algorithm that is really worth knowing, it's used for both Tree and Graph data structures.
 The depth-first search goes deep in each branch before moving to explore another branch.
 
-Here you could get familiar with 
-* [Trees](https://matthewonsoftware.com/blog/trees) 
-* [Graphs](https://matthewonsoftware.com/blog/graphs) 
+> **Note:** This post focuses on DFS as applied to **tree traversal**. DFS is equally applicable to graphs, where it is used for cycle detection, topological sorting, finding connected components, and more. The core idea remains the same -- explore as deep as possible before backtracking -- but graph DFS requires tracking visited nodes to avoid infinite loops in cyclic structures.
+
+Here you can get familiar with
+* [Trees](https://matthewonsoftware.com/blog/trees)
+* [Graphs](https://matthewonsoftware.com/blog/graphs)
 
 data structures.
 
@@ -30,7 +32,7 @@ There are three different orders for traversing a tree using DFS:
 
 <br>
 
-#### Tree Depth First Search 
+#### Tree Depth First Search
 
 <br>
 
@@ -42,16 +44,20 @@ Inorder &#8594; Left, Root, Right.
 
 Inorder traversal for a BST means that we're traversing the nodes in increasing order of their values.
 
+**Time complexity:** O(n), where n is the number of nodes.
+**Space complexity:** O(h), where h is the height of the tree (O(log n) for balanced trees, O(n) for skewed trees).
+
 There are two ways of implementing it, recursive and iterative.
 
 **Recursive:**
 ```java
 public void inorderRecursive(Node root) {
     if(root != null) {
-        dfsTraverseInorder(root.left);
-        visit(root.value)
-        dfsTraverseInorder(root.right);
+        inorderRecursive(root.left);
+        visit(root.value);
+        inorderRecursive(root.right);
     }
+}
 ```
 
 <br>
@@ -94,6 +100,9 @@ For preorder traversal, we traverse the root first, then the left subtree, then 
 
 Preorder &#8594; Root, Left, Right.
 
+**Time complexity:** O(n), where n is the number of nodes.
+**Space complexity:** O(h), where h is the height of the tree.
+
 To implement it iteratively we will need a Stack and following steps:
 
 * Push root in our stack
@@ -107,8 +116,8 @@ To implement it iteratively we will need a Stack and following steps:
 public void traversePreorderRecursive(Node root) {
     if(root != null) {
         visit(root.value);
-        dfsTraversePreorder(root.left);
-        dfsTraversePreorder(root.right);
+        traversePreorderRecursive(root.left);
+        traversePreorderRecursive(root.right);
     }
 }
 ```
@@ -126,14 +135,14 @@ public void traversePreorderIterative(Node root) {
     while(!stack.isEmpty()) {
         current = stack.pop();
         visit(current.value);
-        
+
         if(current.right != null) {
             stack.push(current.right);
-        }    
+        }
         if(current.left != null) {
             stack.push(current.left);
         }
-    }        
+    }
 }
 ```
 
@@ -141,11 +150,14 @@ public void traversePreorderIterative(Node root) {
 <br>
 <br>
 
-#### Postorder Traversal
+##### Postorder Traversal
 
-For postorder traversal, we traverse the left subtree first, then finally the right subtree, then finally the root.
+For postorder traversal, we traverse the left subtree first, then the right subtree, and finally the root.
 
 Post order &#8594; Left, Right, Root.
+
+**Time complexity:** O(n), where n is the number of nodes.
+**Space complexity:** O(h), where h is the height of the tree.
 
 To implement postorder traversal without recursion:
 
@@ -171,7 +183,7 @@ public void traversePostorderRecursive(Node root) {
 **Iterative:**
 
 ```java
-public void traversePostorderIterative() {
+public void traversePostorderIterative(Node root) {
     Stack<Node> stack = new Stack<Node>();
     Node prev = root;
     Node current = root;
@@ -180,7 +192,7 @@ public void traversePostorderIterative() {
     while (!stack.isEmpty()) {
         current = stack.peek();
         boolean hasChild = (current.left != null || current.right != null);
-        boolean isPrevLastChild = (prev == current.right || 
+        boolean isPrevLastChild = (prev == current.right ||
           (prev == current.left && current.right == null));
 
         if (!hasChild || isPrevLastChild) {
@@ -195,6 +207,12 @@ public void traversePostorderIterative() {
                 stack.push(current.left);
             }
         }
-    }   
+    }
 }
 ```
+
+<br>
+
+### DFS vs BFS
+
+DFS and Breadth-First Search (BFS) are the two fundamental approaches to tree and graph traversal. DFS dives deep into one branch before exploring siblings, while BFS explores all nodes at the current depth level before moving deeper. In terms of complexity, both run in O(n) time for trees, but their space usage differs: DFS uses O(h) space (the height of the tree), while BFS uses O(w) space (the maximum width of the tree). For a balanced binary tree, the width can be up to n/2 at the deepest level, making BFS more memory-intensive. DFS is generally preferred when searching deep structures or when the solution is likely far from the root. BFS is the natural choice when looking for the shortest path or when the target is expected to be close to the root.

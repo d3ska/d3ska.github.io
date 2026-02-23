@@ -18,7 +18,7 @@ Imagine a system supporting airplane software, which allows an airplane to funct
 
 Even with less critical examples like YouTube or Twitter, downtime would be detrimental, as hundreds of millions of people use these platforms daily.
 
-Another example might be cloud providers, such as AWS, Azure, or GCP, also need to maintain high availability. If parts of their systems go down, it affects all the businesses and customers relying on their services. For example, in summer 2019, Google Cloud Platform experienced a significant outage that lasted for a few hours, affecting many businesses, including Vimeo.
+Cloud providers such as AWS, Azure, and GCP also need to maintain high availability. If parts of their systems go down, it affects all the businesses and customers relying on their services. For example, in summer 2019, Google Cloud Platform experienced a significant outage that lasted for a few hours, affecting many businesses, including Vimeo.
 
 In summary, availability is of great importance in system design and operations.
 
@@ -110,14 +110,14 @@ Below you can find a chart from Wikipedia that showcases a range of popular avai
     <td><b>1.44 minutes</b></td>
   </tr>
   <tr>
-    <td>99.95% ("three and a half nines)</td>
+    <td>99.95% ("three and a half nines")</td>
     <td>4.38 hours</td>
     <td>21.92 minutes</td>
     <td>5.04 minutes</td>
     <td>43.20 seconds</td>
   </tr>
   <tr>
-    <td><b>99.99% ("fours nines")</b></td>
+    <td><b>99.99% ("four nines")</b></td>
     <td><b>52.60 minutes</b></td>
     <td><b>4.38 minutes</b></td>
     <td><b>1.01 minutes</b></td>
@@ -210,12 +210,30 @@ However, the load balancer itself could become a single point of failure, so it 
 <br>
 
 #### Passive Redundancy
-In passive redundancy, a primary system/component is backed up by a secondary (standby) system/component, which remains idle until the primary fails. Upon failure, the secondary takes over the operation. This approach is also called "hot standby" or "failover." Examples include redundant power supplies, database replication with a standby database, or a backup server that takes over when the primary server fails.
+In passive redundancy, a primary system/component is backed up by a secondary (standby) system/component that takes over when the primary fails. There are several standby strategies, each with different recovery characteristics:
 
-#### Active Redundancy 
+* **Cold standby**: The backup system is offline and powered down. When the primary fails, the standby must be started and configured before it can serve traffic. Recovery time is the longest of the three, often measured in minutes or longer. This approach is the cheapest to maintain.
+* **Warm standby**: The backup system is running and periodically synchronized with the primary, but it is not actively serving traffic. On failure, it needs a brief promotion step (e.g., updating DNS or promoting a database replica). Recovery is faster than cold standby, typically measured in seconds to a few minutes.
+* **Hot standby**: The backup system is running, fully synchronized, and ready to take over instantly. Failover can happen automatically with near-zero downtime. This is the most expensive option but provides the fastest recovery.
+
+Examples include redundant power supplies, database replication with a standby database, or a backup server that takes over when the primary server fails.
+
+#### Active Redundancy
 In active redundancy, multiple systems/components work in parallel and share the workload, ensuring continued operation even if one or more components fail. Active redundancy may also provide load balancing and improved performance. Examples include redundant network connections, RAID configurations for data storage, or multiple load-balanced servers providing the same service.
 
-It's also important to mention that you'll want to have a rigorous process in place to handle system failures, as they might require human intervention. For instance, if servers in your system crash, you'll need a person to bring them back online, and it's crucial to establish processes that ensure timely recovery. So, keeping that in mind is essential for maintaining high availability in your system
+#### High Availability Technologies
+
+In practice, several widely adopted technologies help achieve high availability:
+
+* **Load balancers** (such as Nginx, HAProxy, or cloud-native solutions like AWS ALB) distribute traffic across multiple backend servers and automatically route around unhealthy instances.
+* **Database replication** (primary-replica setups in PostgreSQL, MySQL, or managed services like Amazon RDS Multi-AZ) ensures that a copy of the data is always available for failover.
+* **Container orchestration** platforms like Kubernetes maintain desired pod replica counts, automatically restarting failed containers and rescheduling them onto healthy nodes.
+
+#### Monitoring and Alerting
+
+Redundancy alone does not guarantee high availability. Without proper **monitoring and alerting**, failures can go undetected, and recovery processes may never be triggered. At a minimum, an HA system should include health checks for all critical components, dashboards that surface real-time system status, and automated alerts (via tools like Prometheus, Grafana, Datadog, or PagerDuty) that notify on-call engineers when thresholds are breached. The faster a team detects a failure, the faster it can respond -- whether automatically or through manual intervention.
+
+It's also important to mention that you'll want to have a rigorous process in place to handle system failures, as they might require human intervention. For instance, if servers in your system crash, you'll need a person to bring them back online, and it's crucial to establish processes that ensure timely recovery. So, keeping that in mind is essential for maintaining high availability in your system.
 
 <br>
 

@@ -54,8 +54,10 @@ So basically the "-ilities".
 ### Architecture decisions
 
 Architecture decisions establish the guidelines for constructing a system. An architect may, for instance, specify that only the business and services layers in a layered architecture can access the database or mandate specific data formats. 
-These decisions impose limitations on the system and guide development teams on what is permissible and what is not. 
+These decisions impose limitations on the system and guide development teams on what is permissible and what is not.
 Nonetheless, a variance mechanism exists that allows for the deviation from a particular architecture decision if it cannot be implemented in a certain part of the system due to various constraints or conditions.
+
+A proven way to capture and communicate architecture decisions is through **Architecture Decision Records (ADRs)**. An ADR is a short document that records a single decision: the context, the decision itself, the alternatives considered, and the consequences. Over time, ADRs form a decision log that gives any team member -- current or future -- a clear trail of *why* the architecture looks the way it does. Tools like [adr-tools](https://github.com/npryce/adr-tools) or simply a folder of Markdown files in the repository make ADRs lightweight to maintain.
 <br>
 
 ### Design principles
@@ -65,5 +67,18 @@ A design principle might recommend that development teams use asynchronous messa
 In contrast, architecture decisions (rules) cannot possibly account for every circumstance or possibility when communicating between services, so a design principles can provide guidance on the preferred approach, enabling developers to make more informed decisions.
 <br>
 
+### Architecture governance: fitness functions
+
+Defining architecture characteristics and decisions is only half the battle -- enforcing them over time is the other half. This is where **architecture fitness functions** come in. A fitness function is any mechanism that provides an objective assessment of whether a particular architecture characteristic is being maintained. Fitness functions can take many forms:
+
+- **Automated tests** that verify layering rules (e.g., ArchUnit tests ensuring the persistence layer never imports from the presentation layer)
+- **Metrics thresholds** for performance, such as "95th percentile response time must stay below 200ms"
+- **Static analysis rules** that flag cyclic dependencies between modules
+- **Deployment pipeline gates** that enforce code coverage or security scan results
+
+By embedding fitness functions in your CI/CD pipeline, you turn architecture decisions from documentation into living, enforceable constraints. Architecture drift -- where the implemented system gradually diverges from the intended design -- becomes detectable and preventable.
+
+<br>
+
 The topics described above have been comprehensively covered in the book
-**"Fundamentals of Software Architecture by Mark Richards and Neal Ford (O'Reilly)."**
+**"Fundamentals of Software Architecture by Mark Richards and Neal Ford (O'Reilly)."** The concept of fitness functions is explored further in their follow-up work, **"Building Evolutionary Architectures."**

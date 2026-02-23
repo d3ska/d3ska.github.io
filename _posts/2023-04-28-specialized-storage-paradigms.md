@@ -19,13 +19,20 @@ values, such as megabytes or even gigabytes.
 Common use cases for blob storage include storing large binaries, database snapshots, or static assets like images for
 websites. Blob storage infrastructure is complex to maintain on-premises and is typically provided by large companies
 like Google, Amazon, or Microsoft. In the context of system design interviews, you can assume the availability of GCS,
-S3, or ABS, which are blob storage services hosted by Google, Amazon, and Microsoft, respectively.
+S3, or Azure Blob Storage, which are blob storage services hosted by Google, Amazon, and Microsoft, respectively.
 
 ### Time Series Database
 
-A Time Series Database (TSDB) is a specialized database optimized for storing and analyzing time-indexed data—data
-points occurring at specific moments in time. Examples of TSDBs include InfluxDB, Prometheus, and Graphite, which are
-primarily used for monitoring purposes.
+A Time Series Database (TSDB) is a specialized database optimized for storing and analyzing time-indexed data -- data
+points occurring at specific moments in time. TSDBs are built around the assumption that data arrives in chronological order and is predominantly appended rather than updated in place, which allows them to use highly efficient compression and storage strategies.
+
+Common TSDBs include **InfluxDB**, **TimescaleDB** (a PostgreSQL extension), **Prometheus**, and **Graphite**. Typical use cases extend well beyond basic monitoring:
+
+* **Infrastructure and application metrics** -- tracking CPU, memory, request latency, and error rates over time.
+* **IoT sensor data** -- ingesting millions of data points per second from connected devices.
+* **Financial data** -- storing tick-by-tick stock prices, trading volumes, and market indicators for time-based analysis.
+
+TSDBs typically offer built-in support for downsampling, retention policies, and time-windowed aggregations, making them far more efficient for these workloads than a general-purpose relational database.
 
 ### Graph Database
 
@@ -35,6 +42,8 @@ connected data efficiently.
 
 Graph databases are often preferred over relational databases when dealing with systems where data points naturally form
 a graph with multiple levels of relationships, such as social networks.
+
+However, graph databases are not the right choice for every scenario. For simple relational data with well-defined schemas and straightforward join patterns, a traditional SQL database will typically outperform a graph database and be easier to maintain. Graph databases can also struggle with high-write, bulk-ingest workloads, as maintaining index structures for edges and nodes adds overhead compared to row-oriented or column-oriented stores.
 
 #### Cypher
 
@@ -49,7 +58,7 @@ MATCH (some_node:SomeLabel)-[:SOME_RELATIONSHIP]->(some_other_node:SomeLabel {so
 ### Spatial Database
 
 Spatial databases are designed for storing and querying spatial data, such as map locations. They utilize spatial
-indexes like quadtrees to perform spatial queries efficiently, like finding all locations near a specific region.
+indexes to perform spatial queries efficiently, like finding all locations near a specific region. Common indexing mechanisms include **quadtrees** (which recursively subdivide 2D space into four quadrants), **R-trees** (which group nearby objects into bounding rectangles, excelling at range queries and nearest-neighbor searches), and **geohashes** (which encode latitude/longitude into a single string, enabling efficient prefix-based proximity lookups). The choice of index depends on the query patterns -- quadtrees work well for uniformly distributed point data, R-trees excel with overlapping regions and polygons, and geohashes are simple to implement and integrate with key-value stores.
 
 #### Quadtree
 

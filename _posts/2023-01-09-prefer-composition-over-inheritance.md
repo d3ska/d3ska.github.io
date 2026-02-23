@@ -18,6 +18,8 @@ Both concepts revolve around reusing pieces of code.
 
 In general, it is widely considered good design to favor composition over inheritance. This preference arises because composition allows for greater flexibility and code reuse. It enables you to combine simple objects to achieve more complex behavior without the need to create intricate inheritance hierarchies.
 
+The Gang of Four (GoF) captured this principle succinctly in *Design Patterns*: **"Program to an interface, not an implementation."** By depending on abstractions rather than concrete classes, you naturally gravitate toward composition. Your objects collaborate through well-defined interfaces, and you can swap implementations freely -- something that rigid inheritance hierarchies make difficult.
+
 ## 2. Composition vs. Inheritance
 
 Inheritance can be inflexible because it involves creating a subclass that is tightly coupled to its superclass. This means that any changes to the superclass may necessitate changes to the subclass as well. This can become challenging to manage and maintain as the codebase expands. Moreover, inheritance can complicate code reuse because distinguishing between behavior inherited from the superclass and behavior specifically implemented in the subclass can be tricky.
@@ -92,7 +94,7 @@ class Bicycle extends Vehicle {
 
 In this example, the Car and Bicycle classes inherit the start method from the Vehicle class. While this demonstrates inheritance, it's essential to note that changes to the start method in the Vehicle class can impact all subclasses, potentially leading to maintenance challenges.
 
-## 3. Caveats with the `equals` Method (New Section)
+## 4. Caveats with the `equals` Method (New Section)
 
 When using inheritance, especially in complex class hierarchies, you must exercise caution with the `equals` method. This method is essential for comparing objects for equality, but it can be challenging to implement correctly when multiple classes are involved.
 
@@ -105,12 +107,12 @@ The potential caveats with the `equals` method in inheritance hierarchies includ
 To delve deeper into these issues and learn best practices for implementing the `equals` method in inheritance hierarchies, refer to our comprehensive article on [equals and hashCode](/posts/java-equals-and-hashCode-contract/).
 
 
-## 4. Violation of encapsulation
+## 5. Violation of encapsulation
 
 Subclasses rely on the implementation details of their superclasses for correct operation. The implementation within a superclass may vary across different releases, potentially leading to a breakdown in the subclass, despite no changes to its own code.
 Consequently, a subclass necessitates co-evolution with its superclass, unless the superclass has been clearly designed and documented by its authors for the purpose of extension.
 
-## 5. Recommendations and Conclusion
+## 6. Recommendations and Conclusion
 
 In conclusion, while composition is generally favored over inheritance for its flexibility and code reuse benefits, there are situations where inheritance can be useful, especially for reducing code duplication in common parent classes. However, always approach inheritance with caution, taking into consideration the potential pitfalls of the `equals` method and other complexities it may introduce.
 

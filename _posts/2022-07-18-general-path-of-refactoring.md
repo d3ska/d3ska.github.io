@@ -7,11 +7,11 @@ tags:
   - Clean code
 ---
 
-### Introduce
+### Introduction
 
 When we hear refactoring we often think about legacy code, and the other way
 around. What is legacy then? Well, in our context I would say that it is a code where we
-feel fear of change. But it is not a sentence, and we may refactor real legacy system
+feel fear of change. But it is not a death sentence, and we may refactor real legacy system
 without feeling overwhelmed and without feeling fear, if we approach it properly.
 
 
@@ -48,11 +48,11 @@ However, upon checking the repository, we discover that the last change in that 
 
 ### Time for quick math
 
-Time to needed to understand the code before refactoring: **~30 min**
+Time needed to understand the code before refactoring: **~30 min**
 
 Time spent on refactoring: **1 work week = 40h = 2400 min**
 
-Time to needed to understand the code after refactoring: **~10 min**
+Time needed to understand the code after refactoring: **~10 min**
 
 Saved time on average: **~20 min**
 
@@ -148,8 +148,8 @@ public Double calculateDriverFee(Long journeyId) {
     } else {
         finalFee = journeyPrice * driverFee.getAmount() / 100;
     }
-        
-   return new Money(Math.max(finalFee, driverFee.getMin() == null ? 0 : driverFee.getMin()));
+
+   return Math.max(finalFee, driverFee.getMin() == null ? 0 : driverFee.getMin());
 }
 ```
 
@@ -222,3 +222,12 @@ Imagine that clients of the calculateDriverFee function, who further process the
 We changed the concept of money from Double to the Money object, and now Double is just an implementation detail. As a result, we can easily change the inner implementation to BigDecimal or any other type we want, since it's hidden behind a stable API and doesn't share its inner implementation. This approach would require modifications more or less in just one place - our Money class (besides the parts where we decided to cut off our changes, if there are any).
 
 Now, introducing the concept of currencies, decimal places, and so on becomes much easier, safer, and more pleasant 🙂. By using the Money object, we have established a more robust foundation for handling different monetary scenarios and adapting to new requirements. This refactoring not only improves the overall quality of the code but also increases the maintainability and flexibility of the system in the long run.
+
+
+### A note on large-scale refactoring: the Mikado Method
+
+When a refactoring effort spans many modules and the dependency chain becomes deep, the approach outlined above can still leave you stuck in a "reaction chain" where fixing one thing breaks three others. For situations like these, I find the **Mikado Method** invaluable.
+
+The idea is simple: you attempt the change you want, and when it breaks something, you write down the prerequisite that must be satisfied first. Then you revert your change, go solve that prerequisite, and repeat. Over time you build a directed graph of prerequisites -- a "Mikado graph" -- that naturally reveals the correct bottom-up order of changes. Each individual step is small, safe, and independently commitable.
+
+This technique is especially powerful for legacy systems where the full scope of a refactoring is hard to predict upfront. Instead of planning everything in advance, you let the codebase tell you what needs to happen first.

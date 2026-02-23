@@ -7,38 +7,38 @@ tags:
   - Parallelism
 ---
 
-Those two concepts are often misunderstood or used interchangeably, where they are completely different concepts.
+These two concepts are often misunderstood or used interchangeably, yet they are completely different.
 
->“In programming, concurrency is the composition of independently executing processes, while parallelism is the simultaneous execution of (possibly related) computations. Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once.”
+>"In programming, concurrency is the composition of independently executing processes, while parallelism is the simultaneous execution of (possibly related) computations. Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once."
 >
 >Source: blog.golang.org
 
-Let's take a look on visualization of processor with four cores.
+Let's take a look at a visualization of a processor with four cores.
 
 ![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/cpu-visualization.png)
 
 
 #### Parallelism
 
-Means that some processes can genuinely run simultaneously as they run on separate cores, in other words
-the amount of cores you have on your processor is the amount of things that can happen at the exact the same time.
+Parallelism means that multiple processes can genuinely run simultaneously because they execute on separate cores. In other words,
+the number of cores your processor has is the number of operations that can happen at the exact same time.
 
-So as on the image above we have four cores, that means at any point in time we can do at most four operations at the exact
-same time and these operations are really low-level computation operations.
+On the image above we have four cores. That means at any point in time we can perform at most four operations at the exact
+same time, and these operations are really low-level computation operations.
 
 <br>
-But as you can imagine, our computer do more than four operations... Its possible thanks to threads and multiprocessing.
+But as you can imagine, our computers do more than four operations. It is possible thanks to threads and multiprocessing.
 
 <br>
 <br>
 
 #### Threads
 
-Is essentially a one program, a set of operations that need to be processed.  
-Every thread is going to be assigned to one core, so each of cores will have a bunch of threads that they're 
-going to be executing and switching between which ones they perform operations on.
+A thread is essentially one program -- a set of operations that need to be processed.
+Every thread is assigned to one core, so each core will have a bunch of threads that it
+executes, switching between which ones it performs operations on.
 
-Let's take a look on analogy to concurrency and parallelism.
+Let's take a look at an analogy for concurrency and parallelism.
 <br>
 
 ![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/concurrency-vs-parallelism.png)
@@ -46,13 +46,59 @@ Let's take a look on analogy to concurrency and parallelism.
 <br>
 <br>
 
-Concurrency means that many threads are waiting to be processed by the CPU core, however, when the thread is being processed by the core, it doesn't mean that it will run until it finishes.
-I mean it may run on the same core and stop many times before it finished its job. Because the thread may hang, stop, or basically doesn't need to be executed at the current time, the processor core can execute another one when the previous one is waiting.
-<br>Its describes what **concurrency** means, not when things run in parallel at the same time but when we're doing things in different timing sequences, so we can have multiple threads running at the same time and our CPU core
-that we're running their threads on is switching between these threads in its execution chain.
+Concurrency means that many threads are waiting to be processed by a CPU core. However, when a thread is being processed, it does not necessarily run to completion. A thread may run on the same core and be paused many times before it finishes its job. Because the thread may block on I/O, sleep, or simply not need CPU time at that moment, the processor core can execute another thread while the previous one waits.
 
+This is what **concurrency** means: not running things in parallel at the same time, but interleaving the execution of multiple threads. A single CPU core switches between threads in its execution chain, giving the illusion that they all make progress simultaneously.
+
+Here is a simplified example of how a thread scheduler might interleave two threads on a single core:
+
+```
+Time -->
+Core 1: [Thread A: work] [Thread B: work] [Thread A: work] [Thread B: work] [Thread A: done] [Thread B: done]
+             |                 |                 |
+         A runs            A blocks,          B blocks,
+                          B gets CPU         A gets CPU
+```
+
+In Java, creating and running threads looks like this:
+
+```java
+public class SimpleThreadExample {
+
+    public static void main(String[] args) {
+        Thread threadA = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                System.out.println("Thread A - step " + i);
+                Thread.sleep(100); // simulates work, yields CPU
+            }
+        });
+
+        Thread threadB = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                System.out.println("Thread B - step " + i);
+                Thread.sleep(100);
+            }
+        });
+
+        threadA.start();
+        threadB.start();
+    }
+}
+```
+
+Even on a single core, the output of Thread A and Thread B will interleave because the scheduler switches between them whenever one sleeps or yields.
+
+#### Common Concurrency Hazards
+
+Working with multiple threads introduces several well-known hazards:
+
+- **Race condition** -- Two or more threads access shared mutable state at the same time, and the outcome depends on the order of execution. For example, two threads incrementing the same counter without synchronization can lose updates.
+- **Deadlock** -- Two or more threads each hold a resource the other needs, and neither can proceed. Thread A holds Lock 1 and waits for Lock 2, while Thread B holds Lock 2 and waits for Lock 1 -- both are stuck forever.
+- **Starvation** -- A thread is perpetually denied access to a resource it needs because other higher-priority threads keep consuming it. The starved thread is technically runnable but never gets scheduled.
+
+Understanding these hazards is essential for writing correct concurrent code. Solutions include proper locking strategies, lock ordering, using concurrent data structures, and preferring immutable state wherever possible.
 
 #### Clock speed
 
-There is also thing called clock speed of processor, e.g. 2.6-Ghz.
-So each core in processor can run with speed of 2.6-Ghz, which basically mean that each core  can run 2.6 billion instructions in a second.
+There is also a thing called clock speed of a processor, e.g. 2.6 GHz.
+Each core in the processor runs at a speed of 2.6 GHz, which means each core can perform 2.6 billion clock cycles per second.

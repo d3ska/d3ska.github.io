@@ -10,8 +10,8 @@ tags:
 
 #### What is CAP theorem?
 
-That statement is quite old, as it was formally introduced in 2000 by Eric Brewer,  on conference named 'Principles of Distributed Computing' and that presentation was named 'Towards robust distributed systems'.
-That's why it's alternative name is a Brewer theorem.
+That statement is quite old, as it was first presented as a conjecture in 2000 by Eric Brewer at a conference named 'Principles of Distributed Computing', where the presentation was titled 'Towards robust distributed systems'. Two years later, in 2002, Seth Gilbert and Nancy Lynch formally proved the conjecture, elevating it from an educated intuition to a proven theorem.
+That's why its alternative name is the Brewer theorem.
 The presentation can be found [here](https://people.eecs.berkeley.edu/~brewer/cs262b-2004/PODC-keynote.pdf).
 
 Generally, its statement sounds rather simple, namely every distributed system can guarantee two out of the following three characteristics. This is often misunderstood by people. So let's dive a bit deeper into each of them.
@@ -21,8 +21,8 @@ Generally, its statement sounds rather simple, namely every distributed system c
 
 <br>
 
-#### Consistency 
-In a system is not a binary concept; it's not simply a matter of a system being consistent or inconsistent. Instead, consistency exists along a spectrum ranging from more relaxed to stricter levels. The position of a system on this spectrum influences whether anomalies related to read and write operations may occur.
+#### Consistency
+Consistency in a distributed system is not a binary concept; it's not simply a matter of a system being consistent or inconsistent. Instead, consistency exists along a spectrum ranging from more relaxed to stricter levels. The position of a system on this spectrum influences whether anomalies related to read and write operations may occur.
 
 Thus, it's not just about strong and eventual consistency, as there are variations in between these two extremes.
 
@@ -31,22 +31,22 @@ In the context of the CAP theorem, the highest or strongest level of consistency
 In simpler terms, a distributed system achieves linearizability when it behaves, from the end user's perspective, as if it were running on a single instance. This means there is no network involvement and the complexities arising from network communication between different services are eliminated. When a system behaves in this manner, it is said to exhibit linearizability.
 
 
-An example may be replicated database, with the master slave/leader follower topology.
+An example may be a replicated database with the master-slave/leader-follower topology.
 
 Basically it works in the following way, we may read data from each replica but we can make writes just to the leader, and then
-based on the approach, leader in synchronized way waits until leaders update their state and i.e. return ACK, and then response to the client.
+based on the approach, the leader in a synchronized way waits until followers update their state, i.e. return ACK, and then responds to the client.
 
-The second approach is that we write to the leader that response us immedieatly and leaders are updated in the 'background' in async way, fire-forget we may say.
+The second approach is that we write to the leader, which responds to us immediately, and followers are updated in the 'background' in an async way -- fire-and-forget, we may say.
 Usually it would be updated in a moment, but as some obstacles may occur related to the network, user may see the stale data, in other words outdated.
 
 ![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consistency-bigger.png)
 
-similarly it may happen that different users would see different state of the system.
+Similarly, it may happen that different users would see different state of the system.
 
 ![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consistency-2-bigger.png)
 
 
-Keep in mind that not every system has to have linearizability/ the strongest level consistency, as it's quite expensive and entails certain sacrifices, and in reality
+Keep in mind that not every system has to have linearizability/the strongest level of consistency, as it's quite expensive and entails certain sacrifices, and in reality
 most of the systems don't need that level of consistency.
 
 
@@ -93,18 +93,34 @@ Imagine that our system operates using synchronized replication, and we assume t
 
 In the CA model, the focus is on maintaining both data consistency and system availability, assuming that network partitions are rare or non-existent. The system ensures that all nodes have the same, consistent data and remain accessible to clients. However, this model is not well-suited for handling partitioning events. If a network partition does occur, the system might become partially or fully unavailable, as it is not designed to handle such situations effectively.
 
-It is important to note that in distributed systems. The CA model prioritizes Consistency and Availability, sacrificing Partition Tolerance in the process.
+It is important to note that in distributed systems, the CA model prioritizes Consistency and Availability, sacrificing Partition Tolerance in the process.
 
 <br>
 
 #### Choose two out of three, right?
 
-I guess that most people would choose the CA (Consistency and Availability) model, assuming that partitioning events are rare. However, partitioning can and will likely happen eventually, and the chances of it occurring increase over time and with nodes number. In such cases, we might not know how to handle it effectively.
+I guess that most people would choose the CA (Consistency and Availability) model, assuming that partitioning events are rare. However, partitioning can and will likely happen eventually, and the chances of it occurring increase over time and with the number of nodes. In such cases, we might not know how to handle it effectively.
 
 The proper way to understand and think about the CAP theorem is by considering what we want to prioritize when a partition event has already occurred. We need to decide whether to sacrifice consistency to keep the system available or make the system unavailable to preserve consistency. In the end, we would always have a system that is either CP or AP. Of course, CA might still be fulfilled if we don't have network issues, and if there's only a 5% chance of failure and partitioning, then we still have a 95% chance that the system may be CA. However, it's not the same as simply choosing two out of three and forgetting about the third one, the network issues, as that would be a wrong assumption, which also results from [Fallacies of distributed computing](https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing).
 
 The choice depends on our specific use case and the type of system we're building. Does it always require consistent data? For example, consider likes on YouTube. It may happen that when we refresh the site, we see a different number of likes each time, not necessarily increasing. This could occur due to async replication and getting data from different nodes that may not have the updated data yet. In this case, the system is eventually consistent and does not have linearizability, but it's available as each request will get a response. For such a scenario, is it a significant issue that the likes counter may differ at some point but will eventually be consistent? Probably not.
 
 On the other hand, think about a software system that may have an impact on human lives, such as a medical application that schedules drug administration, injections, and so forth. Imagine a situation where a patient in a coma receives more doses of a drug than they should, or a dose that might be lethal. In this case, eventual consistency is not an option; it would be better to make the system unavailable and restart it rather than making decisions based on stale data.
+
+#### A Common Source of Confusion: CAP Consistency vs ACID Consistency
+
+It is worth noting that "Consistency" in the CAP theorem means something entirely different from "Consistency" in ACID (the database transaction guarantee). CAP Consistency refers to linearizability -- the guarantee that all nodes in a distributed system see the same data at the same time. ACID Consistency, on the other hand, refers to data integrity constraints -- the guarantee that a transaction brings the database from one valid state to another, honoring all defined rules, foreign keys, and invariants. Conflating these two leads to confusion, especially when evaluating databases that claim to be "consistent."
+
+<br>
+
+#### PACELC Theorem
+
+The CAP theorem focuses on what happens during a network partition, but it says nothing about the trade-offs a system faces during normal operation. The PACELC theorem, introduced by Daniel Abadi in 2012, extends CAP to address this gap. It states: if there is a **P**artition, choose between **A**vailability and **C**onsistency (just like CAP); **E**lse (when the system is running normally), choose between **L**atency and **C**onsistency.
+
+This captures a practical reality: even when no partition is occurring, enforcing strong consistency requires coordination between nodes (e.g., synchronous replication), which increases latency. Systems like DynamoDB and Cassandra favor availability during partitions and low latency during normal operation (PA/EL). Systems like Google Spanner or ZooKeeper favor consistency in both scenarios (PC/EC), accepting higher latency as the cost.
+
+PACELC provides a more nuanced framework for reasoning about distributed system design than CAP alone.
+
+<br>
 
 In summary, understanding the CAP theorem involves evaluating the trade-offs between consistency, availability, and partition tolerance based on the specific requirements and goals of the system. The choice will depend on the nature of the application and its tolerance for data inconsistency or unavailability during partition events.

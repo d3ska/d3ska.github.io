@@ -37,7 +37,7 @@ Key characteristics of the Request-Response model include:
 
 Publish-Subscribe, or Pub/Sub, is an alternative message communication pattern where publishers send messages without specifying receivers. Instead, messages are categorized into topics. Subscribers, on the other hand, express interest in one or more topics and only receive messages that are of interest to them. Think of it like a magazine subscription model; publishers release editions without knowing who'll read them, and subscribers receive only editions of magazines they've subscribed to.
 
-The system managing these subscriptions and dispatching messages is commonly referred to as the "message broker". It ensures that messages published to a topic are received by all subscribers to that topic.
+The system managing these subscriptions and dispatching messages is commonly referred to as the "message broker". It ensures that messages published to a topic are received by all subscribers to that topic. Popular message broker technologies include Apache Kafka, RabbitMQ, AWS SNS/SQS, Google Cloud Pub/Sub, and Redis Pub/Sub. Each offers different trade-offs in terms of throughput, durability, ordering guarantees, and operational complexity.
 
 1. **Dynamic Scalability:** New subscribers can be added dynamically without needing any changes in the publisher's configuration.
 2. **Decoupled Architecture:** Publishers and subscribers are loosely coupled, meaning that they have minimal knowledge about each other, promoting flexibility in system evolution.
@@ -56,7 +56,22 @@ The system managing these subscriptions and dispatching messages is commonly ref
 **Cons:**
 
 * Message delivery issues can lead to eventual consistency challenges.
-* Introduces complexity, e.g., managing back pressure, brokers storing messages, re-reading of topics, etc.
+* Introduces complexity, e.g., managing back pressure (a mechanism for consumers to signal producers to slow down when they cannot keep up with the incoming message rate), brokers storing messages, re-reading of topics, etc.
+
+
+### Message Ordering and Delivery Semantics
+
+When working with Pub/Sub systems, two important considerations are message ordering and delivery guarantees:
+
+**Message ordering** refers to whether messages are delivered to consumers in the same order they were published. Some brokers guarantee ordering within a single partition or queue (e.g., Kafka guarantees order within a partition), while others provide no ordering guarantees at all. Maintaining strict global ordering across all consumers is expensive and often unnecessary -- most systems settle for per-partition or per-key ordering.
+
+**Delivery semantics** describe how many times a message may be delivered to a consumer:
+
+* **At-most-once**: Messages may be lost but are never delivered more than once. This is the fastest option but risks data loss. It suits scenarios where occasional missed messages are acceptable, such as metrics collection.
+* **At-least-once**: Messages are guaranteed to be delivered but may arrive more than once. The consumer must handle duplicates, typically through idempotent processing. This is the most common choice in practice.
+* **Exactly-once**: Each message is delivered and processed exactly one time. This is the strongest guarantee but the hardest to achieve. Some systems like Kafka support exactly-once semantics through transactional producers and idempotent consumers, though it comes with a performance cost.
+
+Understanding these trade-offs is essential when designing a Pub/Sub system, as the right choice depends on whether your application can tolerate duplicates, lost messages, or the performance overhead of stronger guarantees.
 
 
 ### Summary

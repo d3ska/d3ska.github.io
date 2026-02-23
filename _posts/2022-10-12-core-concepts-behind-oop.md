@@ -5,36 +5,36 @@ categories:
 tags:
   - OOP
 ---
-  
-### What does mean object-oriented programming?
 
-In programming paradigm, in which we define objects with their behaviours and attributes, those objects are communicating with each other making our app working.
+### What does object-oriented programming mean?
+
+It is a programming paradigm in which we define objects with their behaviors and attributes. These objects communicate with each other, making our application work.
 
 
 ### Core concepts of Object-Oriented Programming
 
 ##### Polymorphism
 
-Is the ability of a class to provide different implementation of a method, based on the type of object that has been provided...
-In other words we can perform some action in multiple forms or ways.<br>
-Let's take a look on an example of code that use inheritance to achieve it:
+Polymorphism is the ability of a class to provide different implementations of a method, based on the type of object that has been provided.
+In other words, we can perform the same action in multiple forms or ways.<br>
+Let's take a look at an example of code that uses inheritance to achieve it:
 ``` java
 public abstract class Vehicle {
-    void drive();
+    abstract void drive();
 }
 
-public Car extends Vehicle {
+public class Car extends Vehicle {
 
     @Override
     public void drive(){
         // uses a classic engine
     }
 }
-public ElectricCar extends Vehicle {
+public class ElectricCar extends Vehicle {
 
     @Override
     public void drive(){
-        // uses a eletric drive
+        // uses an electric drive
     }
 }
 
@@ -42,25 +42,25 @@ public ElectricCar extends Vehicle {
 Vehicle car = new Car();
 Vehicle electricCar =  new ElectricCar();
 
-driveToTheChoosenPlace(Vehicle vehicle){
+driveToTheChosenPlace(Vehicle vehicle){
     ...
     vehicle.drive();
 }
 ```
 
-Notice that we can perform same action in different way, depending on the implementation, as long as they are both of the same type, either a Car and ElectricCar **IS-A** Vehicle.
-Clients of that code does not know anything about its inner implementation, and they don't really care.
+Notice that we can perform the same action in different ways depending on the implementation, as long as both types share a common parent -- both Car and ElectricCar **IS-A** Vehicle.
+Clients of that code do not know anything about the inner implementation, and they don't need to.
 
-The Car class is driving using a classic engine, where the EletricCar would use an electric drive.  
+The Car class drives using a classic engine, while the ElectricCar uses an electric drive.
 
-Worth to mention is the fact that in this case polymorphism is achieved with inheritance.
-In practice, inheritance and polymorphism are used together in java to achieve fast performance and readability of code.
+Worth mentioning is the fact that in this case polymorphism is achieved through inheritance.
+In practice, inheritance and polymorphism are used together in Java to achieve fast performance and readability of code.
 
-But polymorphism can be achieved without inheritance, for example by having same method name with different signatures and performing different actions.
+But polymorphism can be achieved without inheritance, for example by having the same method name with different signatures performing different actions.
 
-This type of polymorphism is **static or compile-time polymorphism, and it's basically a method overloading.**
+This type of polymorphism is **static or compile-time polymorphism, and it is basically method overloading.**
 ```java
-public boolean valdiate(){
+public boolean validate(){
     return ...;
 }
 
@@ -69,17 +69,17 @@ public boolean validate(Collection<Rule> rules){
 }
 ```
 
-There is also **runtime or dynamic polymorphism, which is achieved by the child class that overrides the parent's method:**
+There is also **runtime or dynamic polymorphism, which is achieved by a child class that overrides the parent's method:**
 ```java
 public class GenericFile {
-    
+
     public String getFileInfo() {
         return "Generic File Impl";
     }
 }
 
 public class ImageFile extends GenericFile {
-    
+
     @Override
     public String getFileInfo() {
         return "Image File Impl";
@@ -90,33 +90,33 @@ public class ImageFile extends GenericFile {
 
 ##### Inheritance
 
-Its mechanism that allows us to acquire fields and methods of another class by inheriting the class.
-By extending we are creating an IS-A relationship, Dog IS-A Animal.
-Thanks to it code is more reusable, and it reduces the length of the code in OOP.
+It is a mechanism that allows us to acquire fields and methods of another class by inheriting from it.
+By extending, we create an IS-A relationship: Dog IS-A Animal.
+Thanks to this, code becomes more reusable and shorter in OOP.
 
 ```java
 // base class
 class Car {
-    privte Propulsion propulsion;
+    private Propulsion propulsion;
     ...
-    
+
     public Car(Propulsion propulsion, ...){
         this.propulsion = propulsion;
         ...
     }
-    
+
     public boolean isReviewValid(){
         return ...;
     }
-    
+
 }
 
 class ElectricCar extends Car {
 
     // the ElectricCar subclass adds one more field
     private Battery battery;
-    
-    public Car(Propulsion propulsion, Battery battery){
+
+    public ElectricCar(Propulsion propulsion, Battery battery){
         super(propulsion, ...);
         this.battery = battery;
     }
@@ -132,15 +132,15 @@ class ElectricCar extends Car {
 
 ##### Encapsulation
 
-It's hiding the state and inner implementation of object from the clients of an API, and make its accessible only by publicly provided methods.  
-This allows to hide specific information and controlling access to internal implementation.
+Encapsulation hides the state and inner implementation of an object from the clients of an API, making it accessible only through publicly provided methods.
+This allows us to protect specific information and control access to internal implementation details.
 
-For, example, member fields in a class are hidden from other classes, and they/ they behaviours can be accessed only by the shared public methods.
+For example, member fields in a class are hidden from other classes, and their behaviors can be accessed only through the exposed public methods.
 ```java
 public class Car extends Vehicle {
-    privte Engine engine;
-    privte Gear engine;
-    
+    private Engine engine;
+    private Gear gear;
+
     public EngineType getEngineType(){
         return engine.getType();
     }
@@ -148,10 +148,45 @@ public class Car extends Vehicle {
 ```
 
 ##### Abstraction
-Abstraction is hiding complexities of implementation and exposing simpler interfaces. 
+Abstraction hides the complexities of implementation and exposes simpler interfaces.
 
-Imagine that you're driving a car, you only use a gas, stop, steering wheel and maybe few other things. 
-But in general you don't know what is happening 'under the hood', how gears are change, how engine is working and so on, its inner implementation that's hidden from the 'user'.
+Imagine that you are driving a car. You use the gas pedal, the brake, the steering wheel, and maybe a few other controls. But you don't know what is happening under the hood -- how gears are changed, how the engine works, and so on. That inner implementation is hidden from the driver.
 
-In OOP it means that we are hiding the complex implementation details and expose only the stable API, that's required to use the implementation. 
-In Java, it can be done by using interfaces and abstract classes.
+In OOP, we hide complex implementation details and expose only a stable API that consumers need in order to use the functionality.
+In Java, abstraction is commonly achieved through interfaces and abstract classes.
+
+Consider a payment processing system. The caller only sees a clean `PaymentProcessor` interface, while the complexities of communicating with external payment gateways, handling retries, and managing transaction state are hidden behind the implementation:
+
+```java
+public interface PaymentProcessor {
+    PaymentResult process(PaymentRequest request);
+}
+
+public class StripePaymentProcessor implements PaymentProcessor {
+
+    private final StripeClient stripeClient;
+    private final RetryPolicy retryPolicy;
+    private final TransactionLogger logger;
+
+    public StripePaymentProcessor(StripeClient stripeClient,
+                                   RetryPolicy retryPolicy,
+                                   TransactionLogger logger) {
+        this.stripeClient = stripeClient;
+        this.retryPolicy = retryPolicy;
+        this.logger = logger;
+    }
+
+    @Override
+    public PaymentResult process(PaymentRequest request) {
+        // All the complexity is hidden behind this simple method:
+        // - input validation
+        // - currency conversion
+        // - communication with Stripe API
+        // - retry logic on transient failures
+        // - transaction logging
+        return retryPolicy.execute(() -> stripeClient.charge(request));
+    }
+}
+```
+
+The caller simply invokes `processor.process(request)` without any knowledge of Stripe, retry policies, or logging. If we later switch to a different payment gateway, the calling code remains untouched -- we just provide a different implementation of `PaymentProcessor`.

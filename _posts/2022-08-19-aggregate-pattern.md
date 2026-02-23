@@ -9,36 +9,86 @@ tags:
   - DDD
 ---
 
-The Aggregate is one of the main pattern in Domain Driven Design (DDD) introduced by Martin Fowler.
+The Aggregate is one of the main patterns in Domain Driven Design (DDD), introduced by Eric Evans.
 
-How you may already deduce, it's aggregating, but what?
+As you may already deduce, it aggregates -- but what exactly?
 
-It’s a cluster of domain objects that can be treated as a single unit. So it's aggregating some part of business logic. <br>
-But be aware that it's not aggregating it from our 'contains' perspective, as people often perceive it. If client has addresses, and
-phone number or whatever, it does not mean that it should be stored in our aggregate.  
-It should store necessary data that will make it possible to make a consistent and independent decision about some part of bossiness.
-Like a black box that answer for some question without any external data. 
+An Aggregate is a cluster of domain objects that can be treated as a single unit, grouping together a cohesive slice of business logic. Importantly, an Aggregate does not simply group everything that "belongs to" an entity from a containment perspective -- a mistake people frequently make. If a `Customer` has addresses, phone numbers, and loyalty points, that alone does not mean all of those should live inside one Aggregate.
 
+An Aggregate should encapsulate the data necessary to make a consistent, independent decision about some part of the business domain. Think of it as a black box that answers a specific question without relying on any external data.
 
-Let’s take a look on characteristic of that and some example:
+### Key Characteristics
 
-- can make decisions and carry out a consistent change of a certain data set
-- it's root and stores in its interior a graph of other objects
-- has a clearly defined identity
-- its operation can be specified with the injected policy code e.g. using a strategy pattern.
-- it increases the readability of the code
-- there is a unit of consistent change in the system 
-- it can be tested in unit test
+Let's take a look at the characteristics of an Aggregate:
 
+- Can make decisions and carry out a consistent change of a certain data set.
+- Serves as a root that stores in its interior a graph of other objects.
+- Has a clearly defined identity.
+- Its operation can be customized with injected policy code, e.g. using a strategy pattern.
+- Increases the readability of the code.
+- Acts as a unit of consistent change in the system.
+- Can be verified through unit tests.
 
+An example of an Aggregate might be a shopping basket with products, an order with line items, or a hotel reservation with room allocations.
 
-An example of that may be a basket with products, order with line item, some kind of reservation and so on.
+### The Aggregate Root
 
-What does an Aggregate looks like ?
+Every Aggregate has exactly one **Aggregate Root** -- the single entity through which the outside world interacts with the Aggregate. All access to objects inside the Aggregate must go through the root. The root is responsible for enforcing all invariants across the entire Aggregate.
+
+For example, in an `Order` Aggregate, the `Order` entity is the root. External code never directly manipulates an `OrderLineItem`; instead, it calls methods on `Order` (such as `addItem` or `removeItem`), and the root ensures that business rules -- like "the total cannot exceed the credit limit" -- remain satisfied.
+
+```
+Order (Aggregate Root)
+  ├── OrderLineItem
+  ├── OrderLineItem
+  └── ShippingDetails
+```
+
+Key rules for the Aggregate Root:
+
+- **Global identity**: The root has a globally unique identifier. Entities inside the Aggregate need only local identity (unique within the Aggregate).
+- **Single entry point**: External objects may only hold references to the root. Internal objects are accessed exclusively through the root's methods.
+- **Invariant enforcement**: The root checks that all invariants are satisfied before and after every state change.
+
+### Transaction Boundaries
+
+An Aggregate defines a **transaction boundary**. Each transaction should modify exactly one Aggregate and persist it as a whole. This rule exists because the Aggregate guarantees internal consistency -- if you try to update multiple Aggregates atomically, you are fighting the design rather than working with it.
+
+In practice, this means:
+
+- A single repository `save()` call persists one Aggregate.
+- If a business operation needs to affect multiple Aggregates, use **eventual consistency** through domain events rather than stretching a single transaction across them.
+
+### Referencing Other Aggregates by ID
+
+Aggregates should reference other Aggregates **by identity (ID) only**, not by direct object reference. Holding a direct reference blurs the boundary, makes it tempting to reach across Aggregates within a single transaction, and creates tight coupling between them.
+
+```java
+// Correct: reference by ID
+public class Order {
+    private CustomerId customerId;
+    private List<OrderLineItem> lineItems;
+    // ...
+}
+
+// Avoid: direct object reference to another Aggregate
+public class Order {
+    private Customer customer; // breaks Aggregate boundary
+    // ...
+}
+```
+
+### What Does an Aggregate Look Like?
 
 ![img]({{site.url}}/assets/blog_images/2022-08-19-aggregate-pattern/aggregate-pattern-01.png)
 
-
 "The boundary defines the contents of the aggregate. It is also the barrier between the aggregate contents and the rest of the application. Nothing outside the boundary can keep a reference to anything inside the boundary."
 
+### Design Guidelines
 
+When designing Aggregates, keep these principles in mind:
+
+1. **Keep Aggregates small.** Large Aggregates lead to concurrency conflicts and performance issues. Favor smaller Aggregates that protect true invariants.
+2. **Protect true invariants.** The Aggregate boundary should enclose exactly the data that must be immediately consistent. Everything else can be eventually consistent.
+3. **Reference other Aggregates by ID.** This keeps boundaries clean and makes the system easier to scale and distribute.
+4. **Use domain events for cross-Aggregate coordination.** When one Aggregate's change needs to trigger a reaction in another, publish an event and let a handler update the second Aggregate in its own transaction.

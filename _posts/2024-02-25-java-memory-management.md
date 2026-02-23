@@ -1,5 +1,5 @@
 ---
-title: "Java Memory Models"
+title: "Java Memory Management"
 categories:
   - Blog
 tags:
@@ -7,12 +7,12 @@ tags:
   - JVM
 ---
 
-### Java Memory Models
+### Java Memory Management
 
 In this tutorial, we will delve into Java's memory models: Stack Memory and Heap Space. We will first discuss their main characteristics, followed by an explanation of how they are stored in RAM and their appropriate use cases. Finally, we will outline the key differences between the two memory models.
 
 ### Stack Memory in Java
-Java's Stack Memory is utilized for static memory allocation and thread execution. It holds primitive values specific to a method and object references that originate from the method and reside in the heap.
+Java's Stack Memory is utilized for storing local variables and method call frames during thread execution. It holds primitive values specific to a method and object references that originate from the method and point to objects residing in the heap.
 Stack Memory follows a Last-In-First-Out (LIFO) access order. When a new method is called, a new block is added to the stack's top, containing values specific to that method, such as primitive variables and object references.
 
 Upon completion of the method execution, the corresponding stack frame is removed, control returns to the calling method, and space becomes available for subsequent methods.
@@ -46,7 +46,7 @@ Heap space can be divided into smaller sections, known as generations, which inc
 #### 3.1. Key Features of Java Heap Memory
 Additional features of heap space include:
 
-* Access to this memory involves complex memory management techniques, including the Young Generation, Old or Tenured Generation, and Permanent Generation.
+* Access to this memory involves complex memory management techniques, including the Young Generation, Old or Tenured Generation, and Metaspace (Permanent Generation in Java 7 and earlier).
 * When heap space is full, Java throws a java.lang.OutOfMemoryError.
 * Access to heap memory is relatively slower compared to stack memory.
 * Memory deallocation in heap space is not automatic, requiring the Garbage Collector to free up unused objects to maintain memory usage efficiency.
@@ -56,4 +56,24 @@ Additional features of heap space include:
 
 #### Example
 
-![img]({{site.url}}/assets/blog_images/2023-03-25-java-memory-managment/java-heap-stack-diagram.png)
+![img]({{site.url}}/assets/blog_images/2023-03-25-java-memory-management/java-heap-stack-diagram.png)
+
+### JVM Memory Tuning Flags
+
+The JVM provides several flags to control memory allocation:
+
+* **`-Xms`** -- Sets the initial heap size (e.g., `-Xms256m`). Setting this equal to `-Xmx` avoids heap resizing at runtime.
+* **`-Xmx`** -- Sets the maximum heap size (e.g., `-Xmx2g`). If the application exceeds this limit, an `OutOfMemoryError` is thrown.
+* **`-Xss`** -- Sets the stack size per thread (e.g., `-Xss512k`). Increase this if your application uses deep recursion and encounters `StackOverflowError`.
+
+### Garbage Collection Algorithms
+
+The JVM ships with several garbage collection algorithms, each optimized for different workloads:
+
+* **Serial GC** (`-XX:+UseSerialGC`) -- A single-threaded collector suited for small applications with low memory footprints.
+* **Parallel GC** (`-XX:+UseParallelGC`) -- Uses multiple threads for garbage collection in the Young Generation, optimizing throughput for multi-core systems.
+* **G1 GC** (`-XX:+UseG1GC`) -- The default collector since Java 9. G1 divides the heap into equal-sized regions and collects the regions with the most garbage first, targeting both low pause times and high throughput. It is a solid general-purpose choice for most applications.
+* **ZGC** (`-XX:+UseZGC`) -- A low-latency collector designed to keep pause times under a few milliseconds, regardless of heap size. ZGC can handle multi-terabyte heaps and became production-ready in Java 15. It is ideal for latency-sensitive applications.
+* **Shenandoah GC** (`-XX:+UseShenandoahGC`) -- Another low-pause-time collector that performs concurrent compaction. Available in OpenJDK builds, it shares similar goals with ZGC but uses a different implementation approach.
+
+Choosing the right GC algorithm depends on the application's requirements -- throughput-oriented workloads may benefit from Parallel GC, while latency-critical services should consider G1, ZGC, or Shenandoah.

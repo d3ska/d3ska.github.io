@@ -7,7 +7,7 @@ tags:
   - Testing
 ---
 
-Many teams face a common challenge after introducing the practice of writing tests: builds take up to half an hour, refactoring tests prove to be difficult, and testing consumes too much of the team's time and energy. However, this problem can be solved by adhering to good testability practices.
+Many teams face a common challenge after introducing the practice of writing tests: builds take up to half an hour, test refactoring proves to be difficult, and testing consumes too much of the team's time and energy. However, this problem can be solved by adhering to good testability practices.
 
 ### The FIRST Principle
 
@@ -29,6 +29,7 @@ The FIRST principle is a set of criteria that good unit tests should meet:
 In the realm of software testing, readability and clarity are crucial to understanding the purpose of each test, the functionality being tested, and the expected outcome. Let's consider an initial version of a test that lacks these elements:
 
 ```java
+@Test
 void testVerification() throws IOException {
     Customer correctCustomer = CustomerBuilder.create().build();
     HttpPost httpPost = new HttpPost(LOAN_ORDERS_URI);
@@ -82,6 +83,8 @@ void testVerification() throws IOException {
 
 ```
 
+> **A note on the example above:** You may have noticed that this "refactored" test still contains two Given-When-Then cycles (POST then GET) within a single test method. In a stricter application of the pattern, each cycle would be its own test. Here, I kept both cycles together intentionally because this is an end-to-end integration test where the GET depends on the result of the POST -- splitting them would require sharing state between tests, which violates the Independence principle from FIRST. In practice, this is a reasonable trade-off, but it is worth being aware of.
+
 In the realm of software testing, readability and clarity are crucial elements. By breaking down tests into smaller, well-named methods and adhering to the Given-When-Then pattern, we significantly improve the readability and maintenance of our code. This pattern is very effective in breaking down the test into clear, understandable stages. The test itself becomes more focused, making it easier to understand the functionality that's being tested, the initial state, the operation being tested, and the expected outcome.
 
 However, the **Given-When-Then (Arrange-Act-Assert)** approach is just one of many techniques we can use to improve our tests. Other testing patterns and methodologies can provide additional clarity and efficiency, and they are worth considering as part of a robust testing strategy. Here are a few worth mentioning:
@@ -112,7 +115,7 @@ Maintaining consistent naming conventions isn't just about cleanliness—it's ab
 
 ### Avoiding False Negatives in Testing
 
-While clarity in tests is key, it's equally important to trust our tests. False negatives can lead to missed bugs and give a false sense of confidence. This is often due to poorly constructed tests or those that pass without the correct logic.
+While clarity in tests is key, it is equally important to trust our tests. In testing terminology, a **false negative** occurs when a test *passes* even though the code under test is actually broken -- in other words, the test fails to detect a real bug. (This follows the convention where a "negative" test result means "no bug found." A *false* negative therefore means the "no bug found" signal is wrong.) False negatives can lead to missed bugs and give a false sense of confidence. This is often due to poorly constructed tests or those that pass without the correct logic.
 
 To counter this, we must ensure our tests pass only when the right logic is in place and all assertions hold true. This not only improves readability, but also enhances test reliability, reinforcing our confidence in the test results.
 
@@ -182,7 +185,7 @@ public void process(User user, Order order) {
 
 ```
 
-This piece of code has a cyclomatic complexity of 4 because there are four potential paths through the code. This is not only hard to read, but also hard to test because we need to create tests for each of these paths.
+This piece of code has a cyclomatic complexity of 5 because there are five potential paths through the code (one for each condition being false, plus one where all conditions are true). This is not only hard to read, but also hard to test because we need to create tests for each of these paths.
 
 We can reduce the cyclomatic complexity by inverting the conditions and returning early, like so:
 
