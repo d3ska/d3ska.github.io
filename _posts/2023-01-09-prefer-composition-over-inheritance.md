@@ -102,7 +102,7 @@ The potential caveats with the `equals` method in inheritance hierarchies includ
 
 - **Complexity and Consistency:** Inheritance hierarchies can introduce complexity in determining which attributes and criteria should be considered for equality comparison. Ensuring that the `equals` method is consistent across all classes in the hierarchy can be challenging.
 
-To delve deeper into these issues and learn best practices for implementing the `equals` method in inheritance hierarchies, refer to our comprehensive article on [equals and hashCode](/posts/java-equals-and-hashcode-contract/).
+To delve deeper into these issues and learn best practices for implementing the `equals` method in inheritance hierarchies, refer to our comprehensive article on [equals and hashCode](/posts/java-equals-and-hashCode-contract/).
 
 
 ## 4. Violation of encapsulation
