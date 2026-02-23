@@ -10,7 +10,7 @@ tags:
 There exist two major methodologies when it comes to unit testing. These methodologies guide how much to use mocks, stubs, and the special test implementations known as test doubles. The two prominent schools of thought are the Classic School, also known as the "Detroit School" or the "Classical School," and the London School. These schools primarily differ in the way they define the concept of isolation.
 
 ### Classic School
-In the Classic School, isolation signifies the separation of individual tests from each other. This school emphasizes running tests in parallel and in-memory, ensuring no shared state, such as databases, where individual tests could affect the state. The use of mocks, stubs, and test doubles should be minimal in this school. They're only employed for dependencies that might introduce a shared state and disrupt this kind of isolation.
+In the Classic School, isolation refers to keeping individual tests independent from each other -- not isolating the code under test from its collaborators. This school emphasizes running tests in parallel and in-memory, ensuring no shared state (such as databases) where one test could affect the outcome of another. The use of mocks, stubs, and test doubles should be minimal in this school. They are only employed for dependencies that might introduce shared state and disrupt this kind of isolation.
 
 The aim here is to use production code wherever possible. For these tests, a unit is defined as a class or even a set of classes. Therefore, we want to test an aggregate collectively without overutilizing mocks, stubs, and test doubles, restricting their usage to dependencies that would change the state.
 
@@ -41,4 +41,57 @@ Both schools come with their distinct advantages and disadvantages. Here are the
 
 Jakub Pilimon proposed a heuristic in [his presentation "Testing – Love, Hate, Love"](https://www.youtube.com/watch?v=GjKYLmimGeE) that may be useful in this context. He recommends examining the class being tested and considering if the dependencies are separate merely for better code readability or if they introduce different responsibilities and layers. If it's solely a matter of readability, using the actual object is preferable. However, if multiple responsibilities and layers emerge, it's better to use a mock.
 
-In conclusion, the key is to avoid being purists. Depending on the complexity of the collaborators' graph and the difficulty of setting up the tests, both schools can be employed. However, caution with mocks is advised. As noted by the authors of the Mockito mocking library, if everything is mocked, are we truly testing the production code at all? They advocate for a mixed approach, underscoring the need for balance and judgment in choosing the right testing strategy.
+### A Quick Comparison in Pseudocode
+
+To illustrate the difference, consider testing an `OrderService` that depends on an `InventoryService` and a `PaymentGateway`.
+
+**Classic (Detroit) style** -- use the real collaborators, only fake the external boundary:
+
+```java
+@Test
+void shouldCompleteOrder() {
+    // Given - real objects, only the database is replaced with an in-memory variant
+    InventoryService inventory = new InventoryService(inMemoryInventoryRepo);
+    PaymentGateway payment = new PaymentGateway(inMemoryPaymentRepo);
+    OrderService orderService = new OrderService(inventory, payment);
+
+    // When
+    OrderResult result = orderService.placeOrder(sampleOrder());
+
+    // Then
+    assertThat(result.isSuccessful()).isTrue();
+    assertThat(inMemoryInventoryRepo.stockOf("ITEM-1")).isEqualTo(9);
+}
+```
+
+**London style** -- mock all collaborators, verify interactions:
+
+```java
+@Test
+void shouldCompleteOrder() {
+    // Given - all collaborators are mocked
+    InventoryService inventory = mock(InventoryService.class);
+    PaymentGateway payment = mock(PaymentGateway.class);
+    when(inventory.reserve("ITEM-1", 1)).thenReturn(true);
+    when(payment.charge(any())).thenReturn(PaymentResult.success());
+    OrderService orderService = new OrderService(inventory, payment);
+
+    // When
+    OrderResult result = orderService.placeOrder(sampleOrder());
+
+    // Then
+    assertThat(result.isSuccessful()).isTrue();
+    verify(inventory).reserve("ITEM-1", 1);
+    verify(payment).charge(any());
+}
+```
+
+Notice how the Classic test asserts on the resulting **state** (stock count decreased), while the London test verifies the **interactions** (correct methods called with correct arguments).
+
+### Sociable vs. Solitary Tests
+
+Martin Fowler uses a complementary vocabulary to describe the same spectrum. He calls Classic-style tests **"sociable"** because the unit under test collaborates with its real dependencies. London-style tests are **"solitary"** because every collaborator is replaced with a test double. This terminology is useful because it focuses on the characteristic of the test itself rather than on a school of thought, and it reminds us that the choice is a sliding scale rather than a binary one.
+
+### Final Thoughts
+
+The key is to avoid dogmatic purism. Depending on the complexity of the collaborators' graph and the difficulty of setting up the tests, both schools can be employed. However, caution with mocks is advised. As noted by the authors of the Mockito mocking library, if everything is mocked, are we truly testing the production code at all? They advocate for a mixed approach, underscoring the need for balance and judgment in choosing the right testing strategy.

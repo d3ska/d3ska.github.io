@@ -1,0 +1,16 @@
+<style>
+  /* Dark mode: dim images and add soft framing */
+  html[data-mode="dark"] .content img {
+    border-radius: 8px;
+    filter: brightness(0.88) saturate(1.1);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:not([data-mode]) .content img {
+      border-radius: 8px;
+      filter: brightness(0.88) saturate(1.1);
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+    }
+  }
+</style>

@@ -28,7 +28,7 @@ not (A or B) = (not A) and (not B)
 not (A and B) = (not A) or (not B)
 
 
-**The negation modifies each conditional as shown below**
+**Additionally, when negating compound conditions, each comparison operator is also negated:**
 
 * < becomes >=
 
@@ -45,7 +45,7 @@ not (A and B) = (not A) or (not B)
 
 **Why it is useful during programming?**
 
-It could help us and others to more easily read the if statements, and it's also useful to refactor some if's monsters (if u know what I mean).
+It could help us and others to more easily read the if statements, and it's also useful to refactor some if's monsters (if you know what I mean).
 
 **Examples**
 
@@ -53,16 +53,50 @@ It could help us and others to more easily read the if statements, and it's also
 
 after change: 
 
-* !(a \|\| b \|\| c), by using the second method, we can simply read this as “at least one of these is required.”
+* !(a \|\| b \|\| c), by using the second law, we can simply read this as "at least one of these is required."
 
 <br/>
 <br/>
 
-* (!a \|\| !b \|\| !c),after while we see that all requirements must be met
+* (!a \|\| !b \|\| !c), after a while we see that all requirements must be met.
 
 after change:
 
 * !(a && b && c), now we see it immediately
+
+<br/>
+
+**Practical Refactoring Example**
+
+Let's say I have a method that checks whether a user should be denied access:
+
+```java
+// Before: a chain of negations -- hard to parse at a glance
+if (!user.isActive() || !user.hasValidSubscription() || !user.isEmailVerified()) {
+    denyAccess();
+}
+```
+
+Applying De Morgan's first law (`!A || !B || !C` equals `!(A && B && C)`), we can rewrite it as:
+
+```java
+// After: one negation wrapping positive conditions -- reads naturally
+if (!(user.isActive() && user.hasValidSubscription() && user.isEmailVerified())) {
+    denyAccess();
+}
+```
+
+Now the intent is clear: deny access unless **all three** conditions are satisfied. We could even extract the inner expression into a helper method for maximum readability:
+
+```java
+private boolean isFullyAuthorized(User user) {
+    return user.isActive() && user.hasValidSubscription() && user.isEmailVerified();
+}
+
+if (!isFullyAuthorized(user)) {
+    denyAccess();
+}
+```
 
 <br/>
 

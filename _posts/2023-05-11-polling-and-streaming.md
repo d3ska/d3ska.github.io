@@ -19,6 +19,12 @@ Consider an online chat platform such as Facebook or WhatsApp, where instant mes
 For a single client, issuing 10 requests per second might seem manageable. However, when you scale this to thousands or potentially even millions of users, each issuing 10 requests per second, it results in a tremendous load on the server. That's precisely where the concept of streaming becomes relevant.
 
 
+### Long Polling
+
+Long polling is an improvement over standard polling that significantly reduces unnecessary network traffic. In regular polling, the client sends a request and the server responds immediately, even if there is no new data -- resulting in many empty responses. With long polling, the client sends a request and the server holds the connection open until new data becomes available or a predefined timeout is reached. Once the server responds (either with new data or a timeout), the client immediately issues a new request, and the cycle repeats.
+
+This approach drastically reduces the number of round trips compared to frequent short polling while still providing near-real-time updates. Long polling was widely used before WebSockets became mainstream, and it remains a solid choice for systems where the infrastructure does not support persistent connections. However, long polling still has drawbacks: each held connection consumes server resources, and under high concurrency the number of open connections can become a bottleneck.
+
 
 ### Streaming
 
@@ -28,5 +34,24 @@ In the context of networking, streaming generally refers to continuously receivi
 
 Streaming is achieved via sockets, a fascinating subject worth learning more about. In simple terms, sockets are akin to files that your computer can read from and write to over an ongoing connection with another machine. This connection remains open until one of the machines terminates it.
 
-In essence, polling and streaming are two different approaches to client-server communication. While polling is about periodic data requests, streaming involves maintaining an open connection for continuous data transfer. The choice between the two depends on the specific requirements and constraints of your system.
+#### WebSockets
+
+WebSockets are the primary technology for full-duplex, bidirectional communication between a client and a server over a single, long-lived TCP connection. The connection starts as a standard HTTP request and is then upgraded to a WebSocket connection via a protocol handshake. Once established, both the client and the server can send messages to each other at any time without the overhead of HTTP headers on every message. This makes WebSockets ideal for use cases like chat applications, live dashboards, multiplayer games, and collaborative editing tools.
+
+#### Server-Sent Events (SSE)
+
+Server-Sent Events (SSE) provide a simpler alternative to WebSockets when communication only needs to flow in one direction -- from server to client. With SSE, the client opens a standard HTTP connection, and the server pushes updates through it as they become available. The browser natively supports SSE through the `EventSource` API, which also handles automatic reconnection if the connection drops. SSE works well for scenarios like live news feeds, stock tickers, and notification streams where the client does not need to send data back to the server over the same channel.
+
+
+### When to Use What
+
+Choosing the right approach depends on the nature of the communication your system requires:
+
+* **Polling** works best for simple use cases with low-frequency updates where near-real-time delivery is not critical. For example, checking for new email every 30 seconds or refreshing a dashboard periodically. It is the easiest to implement and works with any HTTP infrastructure.
+
+* **Long polling** suits scenarios with moderate real-time requirements where WebSocket support may not be available. It reduces wasted requests compared to regular polling and provides a reasonable approximation of push-based communication. It was the go-to technique for real-time web apps before WebSockets gained broad adoption.
+
+* **Server-Sent Events (SSE)** are a great fit when you only need the server to push updates to the client. They are simpler to set up than WebSockets, work over standard HTTP, and benefit from built-in browser reconnection logic. A live score feed or a deployment log stream are good examples.
+
+* **WebSockets** are the right choice when you need full-duplex, low-latency, bidirectional communication. Chat applications, real-time collaborative editors, and multiplayer games all benefit from the persistent, two-way channel that WebSockets provide. The trade-off is increased complexity in connection management, scaling (since each client holds an open connection), and handling reconnections gracefully.
 

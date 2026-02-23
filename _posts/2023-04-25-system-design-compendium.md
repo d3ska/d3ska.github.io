@@ -1,9 +1,9 @@
 ---
 title: "System Design Compendium"
 categories:
-  - Data Structures
+  - System Design
 tags:
-  - Data Structures
+  - System Design
 ---
 
 System design is a part of the system development process, focusing on the creation of a comprehensive blueprint for a system to satisfy specified requirements. It includes the specification of the system's architecture, modules, interfaces and data necessary to satisfy a set of requirements.
@@ -25,8 +25,11 @@ Here are the topics that merit your focused attention and comprehension:
 * [Hashing](https://matthewonsoftware.com/system%20design/hashing/)
 * [SQL vs NoSQL Databases](https://matthewonsoftware.com/system%20design/sql-vs-no-sql-databases/)
 * [Specialized Storage Paradigms](https://matthewonsoftware.com/system%20design/specialized-storage-paradigms/)
-* [Replication ANd Sharding](https://matthewonsoftware.com/system%20design/replication-and-sharding/)
+* [Replication And Sharding](https://matthewonsoftware.com/system%20design/replication-and-sharding/)
 * [Leader Election](https://matthewonsoftware.com/system%20design/leader-election/)
 * [Peer-To-Peer Networks](https://matthewonsoftware.com/system%20design/peer-to-peer-networks/)
-* [Polling-And-Streaming](https://matthewonsoftware.com/system%20design/polling-and-streaming/)
+* [Polling And Streaming](https://matthewonsoftware.com/system%20design/polling-and-streaming/)
+* [Rate Limiting](https://matthewonsoftware.com/system%20design/rate-limiting/)
+* [Microservices vs Monolith](https://matthewonsoftware.com/blog/microservices-vs-monolith/)
+* [Request-Response vs Publish-Subscribe](https://matthewonsoftware.com/blog/request-response-vs-publish-subscribe/)
 

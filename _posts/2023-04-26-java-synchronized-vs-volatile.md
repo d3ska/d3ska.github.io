@@ -109,13 +109,25 @@ public class TaskStatus {
     }
 }
 ```
-By declaring the taskCompleted variable as volatile, we ensure that all reads and writes to it happen directly in main memory, and any changes are immediately visible to all threads. This ensures proper memory visibility but does not protect from race conditions.
+By declaring the taskCompleted variable as volatile, we ensure that all reads and writes establish a happens-before relationship, and any changes are visible to all threads. The common description of volatile as "reading/writing directly to main memory" is a useful simplification, but what the JVM actually guarantees is the happens-before ordering defined in the Java Memory Model -- the actual implementation may involve cache coherence protocols rather than literal main memory access. Regardless, the practical effect is the same: volatile ensures proper memory visibility but does not protect from race conditions.
+
+It is also worth noting that `synchronized` provides memory visibility guarantees in addition to mutual exclusion. When a thread exits a synchronized block, all writes performed inside that block are guaranteed to be visible to any thread that subsequently enters a synchronized block on the same monitor. So if your code already uses `synchronized` for execution control, you get memory visibility for free.
 
 
 
 ### Atomic Classes
 
-In addition to using 'synchronized' and 'volatile', Java provides a set of atomic classes in the 'java.util.concurrent.atomic' package, which can be used as an alternative to manage shared variables in a more efficient way. These classes, such as AtomicInteger, AtomicLong, and AtomicReference, use low-level, lock-free operations to provide atomicity
+In addition to using 'synchronized' and 'volatile', Java provides a set of atomic classes in the 'java.util.concurrent.atomic' package, which can be used as an alternative to manage shared variables in a more efficient way. These classes, such as AtomicInteger, AtomicLong, and AtomicReference, use low-level, lock-free operations (typically CAS -- Compare-And-Swap) to provide atomicity.
+
+```java
+AtomicInteger counter = new AtomicInteger(0);
+
+// Thread-safe increment without synchronized
+counter.incrementAndGet(); // atomically increments and returns the new value
+
+// Compare-and-swap: only updates if the current value matches the expected value
+boolean updated = counter.compareAndSet(1, 10); // sets to 10 only if current value is 1
+```
 
 
 
@@ -125,7 +137,7 @@ When designing thread-safe applications, it's crucial to choose the appropriate 
 
 * **Synchronized**: Use 'synchronized' when you need to enforce mutual exclusion (i.e., only one thread can access the shared resource at a time) or when you need to ensure that a sequence of operations is atomic (i.e., executed without interruption). This is suitable for scenarios where multiple threads need to modify a shared variable, and the order of execution is critical. Examples include managing access to shared data structures, such as lists or maps, and implementing complex operations like depositing and withdrawing money from a bank account.
 
-* **Volatile**: Use 'volatile' when you want to guarantee memory visibility of a shared variable, ensuring that all threads see the most recent value of the variable. However, 'volatile' does not provide any guarantee on the order of execution, so it is not suitable for scenarios where race conditions could arise. An example use case for volatile is a simple flag that indicates the completion of a task, where one thread updates the flag, and others only read it.
+* **Volatile**: Use 'volatile' when you want to guarantee memory visibility of a shared variable, ensuring that all threads see the most recent value of the variable. Volatile does provide ordering guarantees through the happens-before relationship (a write to a volatile variable happens-before every subsequent read of that variable), but it does not provide mutual exclusion or compound atomicity, so it is not suitable for scenarios where race conditions could arise from read-modify-write sequences. An example use case for volatile is a simple flag that indicates the completion of a task, where one thread updates the flag, and others only read it.
 
 * **Atomic Classes**: Atomic classes, such as 'AtomicInteger', 'AtomicLong', and 'AtomicReference', are a more efficient alternative to using 'synchronized' for managing shared variables. These classes provide atomic operations (e.g., 'getAndSet', 'compareAndSet') that guarantee both execution control and memory visibility. Use atomic classes when you need to perform atomic operations on shared variables without the overhead of synchronization.
 

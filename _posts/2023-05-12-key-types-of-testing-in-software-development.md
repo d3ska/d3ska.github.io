@@ -11,7 +11,7 @@ Software testing is an integral part of the development process. Each type of te
 
 ### Unit Tests
 
-Unit tests operate at the lowest level, targeting individual methods, classes, components, and modules without any integration with other modules or involving any database communication or simulated HTTP traffic. These are considered "small tests" according to Google's scale and involve a single process.
+Unit tests operate at the lowest level, targeting individual methods, classes, components, and modules. They run without any integration with other modules, without database communication, and without simulated HTTP traffic. These are considered "small tests" according to Google's scale and involve a single process.
 
 Unit tests are quick to execute and involve simple objects, structures, stubs, and mocks, without the need for setting up and running application frameworks.
 
@@ -72,9 +72,21 @@ Performance tests verify the system's performance under a given load. Specialize
 
 User tests are performed by potential end-users who carry out specific tasks or processes in the application. These tests are monitored by a UX specialist to identify problematic areas from a user experience perspective.
 
-### Conclusion
+### Other Notable Test Types
 
-Remember, each type of testing serves its purpose, and their collective use ensures the development of a robust, user-friendly, and efficient software system.
+Beyond the categories above, several other test types deserve mention:
+
+* **Smoke Tests:** A quick, shallow pass over the most critical functionality to verify that the system starts up and responds at all. Think of them as a sanity check before running the full suite.
+
+* **Regression Tests:** Tests specifically designed to confirm that previously working functionality has not been broken by recent changes. In practice, any test suite that runs on every build acts as a regression safety net.
+
+* **Security Tests:** These verify that the system is resilient against common attack vectors such as SQL injection, cross-site scripting (XSS), and unauthorized access. Tools like OWASP ZAP or Burp Suite are commonly used here.
+
+* **Contract Tests:** Particularly relevant in microservice architectures, contract tests verify that the communication between a consumer and a provider adheres to a shared agreement (the contract). Frameworks like Pact or Spring Cloud Contract help automate this.
+
+Each type of testing serves its purpose, and their collective use ensures the development of a robust, user-friendly, and efficient software system.
+
+With these test types established, let us now look at the different **testing approaches** -- the strategies we use within these tests to verify correctness.
 
 ---
 
@@ -147,14 +159,15 @@ Consider the following example:
 
 
 ```java
-@Test
+@BeforeEach
 void setUp() {
     customer = buildCustomer();
     eventEmitter = mock(EventEmitter.class);
     customerVerifier = new CustomerVerifier(buildVerifications(eventEmitter));
+}
 
 @Test
-void shouldAddManagerPromo() {
+void shouldEmitVerificationEvents() {
     customerVerifier.verify(customer);
 
     verify(eventEmitter, times(3)).emit(argThat(VerificationEvent::passed));

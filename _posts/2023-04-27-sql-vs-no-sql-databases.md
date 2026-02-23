@@ -19,7 +19,7 @@ explore their pros and cons, and provide guidance on when to choose each.
 
 SQL databases are characterized by their relational schema and adherence to the ACID (Atomicity, Consistency, Isolation,
 and Durability) properties. They organize data into tables with predefined structures and relations, allowing for
-powerful queries that can join multiple tables and retrieve complex information efficiently.
+powerful queries that can join multiple tables and retrieve complex information efficiently. Well-known SQL databases include **PostgreSQL**, **MySQL**, **Oracle**, and **SQL Server**.
 
 Some advantages of SQL databases include:
 
@@ -32,15 +32,20 @@ However, SQL databases come with their own set of drawbacks:
 * **Rigid schema**: Changing the structure of the data can be cumbersome and time-consuming.
 * **Scalability issues**: SQL databases can struggle to scale horizontally, especially in large-scale distributed
   systems.
-* **Slower performance**: Complex queries and indexing can lead to slower performance in some cases.
+* **Lower write throughput at extreme scale**: Under very high write loads or massive data volumes, SQL databases may face throughput bottlenecks compared to horizontally-scaled NoSQL alternatives. With proper indexing and query optimization, SQL databases perform excellently for the vast majority of workloads.
 
 <br>
 
 #### NoSQL Databases: Flexibility and Performance
 
-NoSQL databases, on the other hand, do not enforce a specific schema or relational structure. They come in a variety of
-types, including document, graph, and key-value databases. This flexibility allows them to accommodate a wide range of
-data models and use cases.
+NoSQL databases, on the other hand, do not enforce a specific schema or relational structure. They come in several distinct subtypes, each optimized for different access patterns:
+
+* **Document stores** (e.g., MongoDB, CouchDB) -- store data as flexible JSON-like documents, ideal for content management and catalogs.
+* **Key-value stores** (e.g., Redis, DynamoDB) -- offer simple get/put operations with extremely low latency, well-suited for caching and session management.
+* **Column-family stores** (e.g., Cassandra, HBase) -- organize data by columns rather than rows, excelling at write-heavy workloads and time-series data at scale.
+* **Graph databases** (e.g., Neo4j, Amazon Neptune) -- model data as nodes and edges, making them the natural choice for highly connected data like social networks and recommendation engines.
+
+This flexibility allows NoSQL databases to accommodate a wide range of data models and use cases.
 
 Some advantages of NoSQL databases include:
 
@@ -52,8 +57,8 @@ Some advantages of NoSQL databases include:
 
 However, NoSQL databases also have some drawbacks:
 
-* **Weaker consistency**: Most NoSQL databases do not adhere to the strict ACID properties, which can result in less
-  consistent data.
+* **Weaker consistency**: Many NoSQL databases do not adhere to the strict ACID properties by default, which can result in less
+  consistent data. That said, some NoSQL databases have added ACID support over time -- MongoDB 4.0+ supports multi-document ACID transactions, and Google Spanner provides globally distributed strong consistency.
 * **Limited query capabilities**: The query languages for NoSQL databases may not be as powerful as SQL, making certain
   data manipulations more difficult.
 * **Complexity**: The diversity of NoSQL database types can lead to confusion and difficulty in choosing the right
@@ -75,6 +80,10 @@ When deciding between SQL and NoSQL databases, consider the following factors:
 * **Scalability**: If you need to handle large-scale data and accommodate rapid growth, a NoSQL database might be more
   appropriate due to its scalability capabilities.
 
+
+#### A Note on NewSQL
+
+It is worth mentioning **NewSQL** databases, which aim to bridge the gap between SQL and NoSQL. Databases like **CockroachDB**, **Google Spanner**, and **TiDB** provide the familiar SQL interface and ACID guarantees while supporting horizontal scalability traditionally associated with NoSQL systems. If your application demands both strong consistency and the ability to scale out across many nodes, NewSQL can be a compelling option.
 
 **Conclusion**
 

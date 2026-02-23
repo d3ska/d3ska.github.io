@@ -11,7 +11,7 @@ tags:
 #### Inversion of Control and Dependency Injection
 
 I believe that many of you, like me, also learn the fastest through examples. <br>
-Let's consider a simple example. Imagine a program that is managing songs, you can search them, read/ add details, and some interesting facts about each. <br>
+Let's consider a simple example. Imagine a program that is managing songs, you can search them, read/add details, and some interesting facts about each. <br>
 There would probably be a class that would search for those songs in some repository or asks some external providers for example.
 
 ```java
@@ -24,7 +24,7 @@ class SongLister {
     }
 }
 ```
-But the above implementation is pretty naive. Why it's so?
+But the above implementation is pretty naive. Why is that?
 We are using concrete implementation of some finder to get songs.
 In its current state, it's highly coupled, and it's not good.
 
@@ -54,12 +54,12 @@ class SongLister {
     }
 }
 ```
-Now it is configurabish at most I would say, as now we depend on both, the concrete implementation and a SongsProvider interface.
+Now it is somewhat configurable at most I would say, as now we depend on both the concrete implementation and the SongsProvider interface.
 
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/conrete-impl-constructor-initializing.jpg)
 
 The desired situation is where we would depend just on the interface.
-It's highly possible that we would have several SongsProvider implementations which we would like to use but independent of the MovieLister class.
+It's highly possible that we would have several SongsProvider implementations which we would like to use but independent of the SongLister class.
 
 There are chances, that we would want to use a different source of songs, for example, we would like to take songs from some hosted file, for purpose of the local development.
 
@@ -81,6 +81,8 @@ This gives a few advantages such as:
 
 IoC can be achieved in a few ways, so actually IoC is a concept that is implemented by mechanisms such as Strategy design pattern, Factory pattern, Service Locator pattern, and finally Dependency Injection (DI).
 
+Worth noting: while the Service Locator pattern technically achieves IoC, it is widely considered an anti-pattern in modern applications. The key issue is that it hides class dependencies instead of making them explicit, which makes the code harder to reason about and test. With a Service Locator, you cannot tell from a class's constructor what it depends on -- you only discover missing dependencies at runtime. Dependency Injection, by contrast, makes every dependency visible and explicit.
+
 <br>
 
 ### Dependency Injection
@@ -94,7 +96,7 @@ Dependency diagram with our songs example:
 <br>
 
 Our code should look like below. Now we are expecting a provider in a constructor, or rather a SongsProvider interface, not a concrete implementation as you noticed. <br>
-What are the pros of that? This gives us a huge possibility to use different providers without breaking changes, thanks to the fact that it's decoupled. <br>
+What are the benefits? This gives us a huge possibility to use different providers without breaking changes, thanks to the fact that it's decoupled. <br>
 For me, personally more suitable name would be Configurable Dependency rather than Dependency Injection.
 
 ```java
@@ -118,7 +120,7 @@ class SongLister {
 
 1. Constructor-Based Dependency Injection
    The container will invoke a constructor with an argument representing a dependency we want to set.
-   An example of that approach is above, it's recommended for mandatory dependencies, but to be honest it is used most of the time.
+   An example of that approach is above, it's recommended for mandatory dependencies, but to be honest it is used most of the time. Since Spring 4.3, if a class has a single constructor, the `@Autowired` annotation is no longer required -- Spring will use that constructor for injection automatically. This further reinforces constructor-based injection as the idiomatic default in Spring applications.
 
 2. Setter-Based Dependency Injection
    The container will call the setter method after initiating a bean by invoking a no-argument constructor or no-argument static factory method.
@@ -127,8 +129,8 @@ class SongLister {
 3. Field-Based Dependency Injection
    If there is no constructor or setter method to inject the Item bean, the container will use reflection to inject our desired dependency.
    It's not recommended to use this approach because of the following reasons:
-   * It's bound us highly with the Spring framework
-   * This is done by reflection, which violates Java, and it is costlier than constructor-based or setter-based injection and is also a reason for the first point.
+   * It binds us tightly to the Spring framework
+   * This is done by reflection, which bypasses Java's access control mechanisms, and it is costlier than constructor-based or setter-based injection and is also a reason for the first point.
    * It's harder to test.
    * Fields can not be final as the final field has to be initialized through the constructor, but Field-Based Injection is performed after constructing an object.
    * It's easy to add more and more dependencies, especially when using this approach, and violate SRP. Constructor/setter-based injections would make us think earlier that we have too many dependencies.
@@ -142,5 +144,5 @@ Baeldung:
 * [Intro to Inversion of Control and Dependency Injection with Spring](https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring)
 
 Martin Fowler's articles:
-* [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/bliki/InversionOfControl.html)
-* [Inversion of Control](https://martinfowler.com/articles/injection.html) 
+* [Inversion of Control](https://martinfowler.com/bliki/InversionOfControl.html)
+* [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)

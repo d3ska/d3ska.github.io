@@ -20,11 +20,17 @@ There are two ways to keep replicas updated: synchronous and asynchronous. Both 
 
 ### Sharding
 
-Also known as data partitioning, sharding involves splitting a database into two or more pieces called shards. This is typically done to increase the throughput of your database. Popular sharding strategies include:
+Also known as data partitioning, sharding involves splitting a database into two or more pieces called shards. This is typically done to increase the throughput of your database.
 
-* Sharding based on a client's region
-* Sharding based on the type of data being stored (e.g., user data is stored in one shard, payment data in another)
-* Sharding based on the hash of a column (only for structured data)
+#### Sharding Strategies
+
+There are several well-established strategies for distributing data across shards:
+
+* **Range-based sharding** -- partitions data by contiguous ranges of a key (e.g., users A-M on shard 1, N-Z on shard 2). This approach supports efficient range queries but can lead to uneven load if the data distribution is skewed.
+* **Hash-based sharding** -- applies a hash function to a chosen key and assigns the result to a shard. This produces a more uniform distribution but makes range queries across shards expensive.
+* **Directory-based sharding** -- maintains a lookup table that maps each key to its shard. This offers maximum flexibility (any key can go anywhere) at the cost of the lookup table becoming a single point of failure and a potential bottleneck.
+* **Geographic sharding** -- partitions data based on a client's region, keeping data close to the users who access it most frequently.
+* **Functional sharding** -- splits data based on the type of data being stored (e.g., user data is stored in one shard, payment data in another).
 
 
 #### Hot Spot and Load Balancers
@@ -35,15 +41,19 @@ Load balancers can be used to distribute traffic across replicas or shards, help
 
 
 
-### Replicas and Shards in Real-World Scenarios
+### Sharding in Practice
 
-Large-scale web applications, e-commerce platforms, and social media networks often require both replication and sharding to maintain performance and reliability. Replication and sharding serve different purposes but can complement each other to create a more robust and efficient system.
+Sharding focuses on partitioning the database into smaller segments (shards) that can be distributed across multiple servers. This allows for horizontal scaling and increases the overall throughput of the system, enabling it to handle a higher volume of concurrent requests. Sharding can also help to reduce contention and resource utilization on individual servers.
 
-#### Replication: Redundancy, Fault Tolerance, and Read Throughput
+Consider an e-commerce platform as an example: sharding can be employed to split the database based on product categories, user locations, or other factors. This partitioning approach enables the platform to handle a higher volume of concurrent requests, as each server only manages a subset of the data. This is particularly beneficial for write-heavy applications or scenarios where data growth requires efficient distribution and management.
 
-Replication focuses on creating redundant copies of data across multiple servers to ensure fault tolerance and improved read throughput. While replication is focused on creating redundant copies of data across multiple servers to ensure fault tolerance and improved read throughput, sharding partitions the database into smaller segments (shards) distributed across multiple servers to enable horizontal scaling and increased write performance.
 
-Here is a summary of the main differences between replication and sharding:
+
+### Replication vs Sharding: A Comparison
+
+Large-scale web applications, e-commerce platforms, and social media networks often require both replication and sharding to maintain performance and reliability. While they serve different purposes, they complement each other to create a more robust and efficient system.
+
+Here is a summary of the main differences:
 
 
 * **Data Redundancy**: Replication creates multiple identical copies of the entire database, while sharding divides the database into smaller, unique partitions.
@@ -54,20 +64,14 @@ Here is a summary of the main differences between replication and sharding:
 
 * **Write Performance and Scalability**: Sharding enhances write performance and scalability by distributing the data and workload across multiple servers. Replication, on the other hand, may introduce performance overhead for write-heavy applications, as each write operation must be propagated to all replicas to maintain consistency.
 
-In summary, replication and sharding serve different purposes in real-world scenarios but complement each other to create a more robust and efficient system. By implementing these techniques effectively, large-scale applications can achieve enhanced performance and reliability. Combining replication and sharding offers the best of both worlds, providing the fault tolerance and read throughput benefits of replication and the increased write performance, throughput, and scalability of sharding.
 
 
-#### Sharding: Throughput, Scalability, and Write Performance
+### Conclusion
 
-Sharding focuses on partitioning the database into smaller segments (shards) that can be distributed across multiple servers. This allows for horizontal scaling and increases the overall throughput of the system, enabling it to handle a higher volume of concurrent requests. Sharding can also help to reduce contention and resource utilization on individual servers.
+In practice, the decision between replication and sharding comes down to your system's dominant bottleneck:
 
-Using the e-commerce platform example, sharding can be employed to split the database based on product categories, user locations, or other factors. This partitioning approach enables the platform to handle a higher volume of concurrent requests, as each server only manages a subset of the data. This is particularly beneficial for write-heavy applications or scenarios where data growth requires efficient distribution and management.
+* **Choose replication** when your primary concerns are fault tolerance, high availability, and read-heavy workloads. Replication is simpler to set up and reason about, and it keeps your operational complexity low.
+* **Choose sharding** when you are hitting the storage or write-throughput limits of a single machine. Sharding unlocks horizontal scaling but introduces complexity around cross-shard queries, rebalancing, and data locality.
+* **Combine both** when your system demands high availability *and* horizontal write scalability -- which is the norm for large-scale production systems. A common pattern is to shard the database for write distribution and then replicate each shard for redundancy, so that losing a single node does not cause data loss or downtime.
 
-
-
-### Conclusion 
-
-Replication and sharding can be combined to further enhance the performance and resilience of a system. For instance, a sharded system can implement replication within each shard, creating multiple copies of the partitioned data. This combination provides the fault tolerance and read throughput benefits offered by replication and the increased write performance, throughput, and scalability of sharding.
-
-In summary, replicas and shards serve different purposes in real-world scenarios but complement each other to create a more robust and efficient system.
-Replication ensures data redundancy, fault tolerance, and improved read throughput, while sharding enhances write performance, throughput, and distributes data more efficiently. By implementing these techniques effectively, large-scale applications can achieve enhanced performance and reliability.
+The key takeaway is that replication and sharding are not competing techniques. They address orthogonal concerns -- data redundancy versus data distribution -- and the most resilient architectures leverage both in tandem.

@@ -30,7 +30,25 @@ Load balancers are highly beneficial as they prevent resources, such as single o
 
 Often, load balancers can be considered a type of reverse proxy, as they sit between clients and servers and typically act on behalf of the servers.
 
-Load balancing can occur at various points within a system. For example, a load balancer might be placed between clients and servers, between servers and databases, or even at the DNS layer when dealing with websites. 
+Load balancing can occur at various points within a system. For example, a load balancer might be placed between clients and servers, between servers and databases, or even at the DNS layer when dealing with websites.
+
+#### Layer 4 vs Layer 7 Load Balancing
+
+Load balancers operate at different layers of the OSI model, and the layer at which they operate determines what information they can use to make routing decisions:
+
+* **Layer 4 (Transport layer)** load balancers make routing decisions based on TCP/UDP connection data -- specifically the source and destination IP addresses and port numbers. They do not inspect the contents of the packets. Because they work at a lower level, Layer 4 load balancers are extremely fast and efficient, but they cannot make decisions based on application-level details like URL paths, HTTP headers, or cookies.
+
+* **Layer 7 (Application layer)** load balancers inspect the full content of HTTP requests, including the URL path, headers, cookies, and even the request body. This allows for much more intelligent routing. For example, a Layer 7 load balancer can route all `/api` requests to one pool of servers and all `/static` requests to another. It can also perform SSL termination, header manipulation, and content-based health checks. The trade-off is that Layer 7 load balancing requires more processing power since each request must be fully parsed.
+
+In practice, many architectures use both: a Layer 4 load balancer at the edge for raw performance and a Layer 7 load balancer behind it for application-aware routing.
+
+#### Health Checks
+
+A load balancer must know which backend servers are healthy and able to serve traffic. To determine this, load balancers perform **health checks** -- periodic probes sent to each server to verify that it is responsive and functioning correctly.
+
+Health checks can be as simple as a TCP connection attempt (verifying the server is listening on the expected port) or as thorough as an HTTP request to a dedicated health endpoint (e.g., `GET /health`) that verifies the application is running, database connections are active, and downstream dependencies are reachable.
+
+If a server fails a configurable number of consecutive health checks, the load balancer marks it as unhealthy and stops routing new traffic to it. Once the server begins passing health checks again, the load balancer reintroduces it into the rotation. This mechanism is essential for maintaining system availability, as it ensures that clients are never routed to a server that cannot serve their requests.
 
 ![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/lb-example.jpg)
 
@@ -38,7 +56,7 @@ Load balancing can occur at various points within a system. For example, a load 
 
 #### Server-Selection Strategy
 
-How a **load balancer** chooses servers when distributing traffic amongst multiple servers?
+A **load balancer** uses a server-selection strategy to decide how to distribute traffic among multiple servers.
 
 Firstly it's essential to recognize that there are different types of load balancers, such as software load balancers and hardware load balancers.
 
@@ -54,7 +72,7 @@ Software load balancers use various algorithms to distribute incoming client req
 
 * **Performance-Based**: In a performance-based approach, the load balancer continuously monitors the performance of the available servers and distributes incoming requests based on each server's current performance metrics. The load balancer may consider factors such as CPU usage, memory usage, [network latency](https://matthewonsoftware.com/system%20design/latency-and-throughput/#latency), or how much traffic a server is handling at any given time when making its decision.
 
-* **IP Hash**: The client's IP address is used to determine which server will handle the request. This method ensures that a specific client will always connect to the same server, as long as the server is available. The IP hash technique may be very useful when the server caches the results of requests, as the same clients will connect to the same servers the cache hits will be maximized, leading to improved performance and reduced [latency](https://matthewonsoftware.com/system%20design/latency-and-throughput/#latency).
+* **IP Hash**: The client's IP address is used to determine which server will handle the request. This method ensures that a specific client will always connect to the same server, as long as the server is available. The IP hash technique is particularly useful when servers cache the results of requests. Because the same clients consistently connect to the same servers, cache hits are maximized, leading to improved performance and reduced [latency](https://matthewonsoftware.com/system%20design/latency-and-throughput/#latency).
 
 * **Path-Based**: The URL path or specific segments of a request's path are used to determine which server will handle the request. This method allows for efficient distribution of traffic among multiple servers based on the type of content or service being requested. 
         
@@ -70,7 +88,7 @@ For example, clients may hit a load balancer, which will distribute the load usi
 
 #### Hot Spot
 
-When distributing a workload across a set of servers, the workload might be allocated unevenly. This imbalance can occur if your **sharding key** or **hashing function** is suboptimal, or if the workload is inherently skewed. As a result, some servers may experience significantly higher traffic than others, leading to the creation of "hot spots."
+Even with a load balancer in place, perfectly even traffic distribution is not always achievable. When distributing a workload across a set of servers, the workload might be allocated unevenly. This imbalance can occur if your **sharding key** or **hashing function** is suboptimal, or if the workload is inherently skewed. As a result, some servers may experience significantly higher traffic than others, leading to the creation of "hot spots."
 
 
 
