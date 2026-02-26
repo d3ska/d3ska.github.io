@@ -80,9 +80,18 @@ public class Order {
 
 ### What Does an Aggregate Look Like?
 
-![img]({{site.url}}/assets/blog_images/2022-08-19-aggregate-pattern/aggregate-pattern-01.png)
+![img]({{site.url}}/assets/blog_images/2022-08-19-aggregate-pattern/aggregate-pattern-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2022-08-19-aggregate-pattern/aggregate-pattern-dark.png){: .dark }
 
-"The boundary defines the contents of the aggregate. It is also the barrier between the aggregate contents and the rest of the application. Nothing outside the boundary can keep a reference to anything inside the boundary."
+An Aggregate consists of two fundamental structural elements: the **Boundary (B)** and the **Aggregate Root (AR)**.
+
+The **Boundary (B)** encapsulates everything that belongs to the Aggregate. It acts as a protective barrier separating the Aggregate's internals from the rest of the application. No external object is allowed to hold a direct reference to anything that lives inside the boundary.
+
+The **Aggregate Root (AR)** is the sole entry point to the Aggregate's contents. It is the only object within the boundary that outside code may reference directly. The root maintains references to everything inside, but it never exposes them for direct manipulation. Instead of retrieving an internal object and operating on it yourself, you ask the Aggregate (A) to perform the operation on your behalf -- you may not even be aware which internal objects are involved. This is what keeps the invariants safe.
+
+The internals of an Aggregate are composed of the core DDD building blocks: **Entities (E)**, **Value Objects (VO)**, and potentially other nested **Aggregates (A)**. A single Entity with no children is itself a valid Aggregate.
+
+The primary purpose of an Aggregate is to preserve consistency within the domain model. It centralizes business rules and is always persisted atomically -- regardless of how many child Entities and Value Objects reside within the root, they are all saved as a single unit of work.
 
 ### Design Guidelines
 

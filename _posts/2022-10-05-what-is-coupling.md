@@ -20,7 +20,8 @@ The phone represents tight coupling -- the battery is sealed inside, inseparable
 <br>
 <br>
 
-![img]({{site.url}}/assets/blog_images/2022-10-05-what-is-coupling/coupling-ilustration.png)
+![img]({{site.url}}/assets/blog_images/2022-10-05-what-is-coupling/coupling-ilustration-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2022-10-05-what-is-coupling/coupling-ilustration-dark.png){: .dark }
 
 <br>
 

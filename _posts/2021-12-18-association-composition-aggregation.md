@@ -31,7 +31,8 @@ So class could not exist without a school.
 
 **UML**
 
-![img]({{site.url}}/assets/blog_images/2021-12-18-association-composition-aggregation/composition.png)
+![img]({{site.url}}/assets/blog_images/2021-12-18-association-composition-aggregation/composition-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2021-12-18-association-composition-aggregation/composition-dark.png){: .dark }
 
 
 **Code**
@@ -55,7 +56,8 @@ It is used to assemble the parts to a bigger construct, which is capable of more
     
 **UML**
 
-![img]({{site.url}}/assets/blog_images/2021-12-18-association-composition-aggregation/aggregation.png)
+![img]({{site.url}}/assets/blog_images/2021-12-18-association-composition-aggregation/aggregation-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2021-12-18-association-composition-aggregation/aggregation-dark.png){: .dark }
 
 **Code**
 ```java
@@ -77,7 +79,8 @@ It is the weakest of those three relationships; none of the objects belong to an
 
 **UML**
 
-![img]({{site.url}}/assets/blog_images/2021-12-18-association-composition-aggregation/association.png)
+![img]({{site.url}}/assets/blog_images/2021-12-18-association-composition-aggregation/association-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2021-12-18-association-composition-aggregation/association-dark.png){: .dark }
 
 **Code**
 ```java
