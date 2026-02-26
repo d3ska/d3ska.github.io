@@ -16,7 +16,8 @@ The presentation can be found [here](https://people.eecs.berkeley.edu/~brewer/cs
 
 Generally, its statement sounds rather simple, namely every distributed system can guarantee two out of the following three characteristics. This is often misunderstood by people. So let's dive a bit deeper into each of them.
 
-![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/venn-diagram-cap.png)
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/venn-diagram-cap-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/venn-diagram-cap-dark.png){: .dark }
 
 
 <br>
@@ -39,11 +40,13 @@ based on the approach, the leader in a synchronized way waits until followers up
 The second approach is that we write to the leader, which responds to us immediately, and followers are updated in the 'background' in an async way -- fire-and-forget, we may say.
 Usually it would be updated in a moment, but as some obstacles may occur related to the network, user may see the stale data, in other words outdated.
 
-![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consistency-bigger.png)
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consistency-1-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consistency-1-dark.png){: .dark }
 
 Similarly, it may happen that different users would see different state of the system.
 
-![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consistency-2-bigger.png)
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consistency-2-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/eventual-consistency-2-dark.png){: .dark }
 
 
 Keep in mind that not every system has to have linearizability/the strongest level of consistency, as it's quite expensive and entails certain sacrifices, and in reality
@@ -69,7 +72,8 @@ Regardless of which node receives the request, the returned data will be consist
 
 If partitioning occurs between the leader and follower nodes in this model, the follower will not receive the request sent by the leader to update its data. As a result, the leader node will not receive the acknowledgment from the follower, which is a part of the replication process. The leader node will eventually rollback the transaction and return a response indicating that the operation failed.
 
-![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/partitioning-example.png)
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/partitioning-example-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/partitioning-example-dark.png){: .dark }
 
 From the perspective of the CAP theorem, this model guarantees consistency, as the transaction was not committed. When requesting data from either the leader or follower nodes, the data will be consistent and have the same nickname. The model also guarantees partitioning tolerance, as the system remains operational even if the connection between the leader and follower nodes is lost. However, the model does not guarantee availability, as even though the node is operational, it returns an error. Therefore, from a CAP perspective, this model guarantees CP (consistency and partition tolerance).
 
