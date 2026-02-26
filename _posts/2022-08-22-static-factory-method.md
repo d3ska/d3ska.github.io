@@ -51,7 +51,8 @@ The most representative example of static factory methods in the JDK is, in my o
 
 A few examples of Collections static factory methods:
 
-![img]({{site.url}}/assets/blog_images/2022-08-22-static-factory-method/collections-method.png)
+![img]({{site.url}}/assets/blog_images/2022-08-22-static-factory-method/collections-method-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2022-08-22-static-factory-method/collections-method-dark.png){: .dark }
 
 If you want to check some method of Collections class, you can find it [here](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html).
 

@@ -15,7 +15,8 @@ These two concepts are often misunderstood or used interchangeably, yet they are
 
 Let's take a look at a visualization of a processor with four cores.
 
-![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/cpu-visualization.png)
+![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/cpu-visualization-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/cpu-visualization-dark.png){: .dark }
 
 
 #### Parallelism
@@ -41,7 +42,8 @@ executes, switching between which ones it performs operations on.
 Let's take a look at an analogy for concurrency and parallelism.
 <br>
 
-![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/concurrency-vs-parallelism.png)
+![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/concurrency-vs-parallelism-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2022-10-12-concurrency-and-parallelism/concurrency-vs-parallelism-dark.png){: .dark }
 
 <br>
 <br>
@@ -53,12 +55,17 @@ This is what **concurrency** means: not running things in parallel at the same t
 Here is a simplified example of how a thread scheduler might interleave two threads on a single core:
 
 ```
-Time -->
-Core 1: [Thread A: work] [Thread B: work] [Thread A: work] [Thread B: work] [Thread A: done] [Thread B: done]
-             |                 |                 |
-         A runs            A blocks,          B blocks,
-                          B gets CPU         A gets CPU
+Time   Core 1           Event
+────   ───────────────   ──────────────────────────────
+ t0    Thread A: work    A starts running
+ t1    Thread B: work    A blocks on I/O → scheduler picks B
+ t2    Thread A: work    B blocks on I/O → scheduler picks A
+ t3    Thread B: work    A blocks again  → scheduler picks B
+ t4    Thread A: done    A gets CPU back, finishes
+ t5    Thread B: done    B gets CPU back, finishes
 ```
+
+Neither thread ran in parallel -- they shared the same core. But because the scheduler interleaved their execution, both made progress.
 
 In Java, creating and running threads looks like this:
 

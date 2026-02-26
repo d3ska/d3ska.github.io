@@ -16,7 +16,8 @@ Do I really need tests? Isn't it a waste of time? These are questions you might 
 
 Test-Driven Development (TDD) is a software development process that relies on software requirements being converted into test cases before the software is fully developed. First, write tests that fail, then code to cover them and make the tests pass, and finally refactor the code if needed.
 
-![img ]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/test-driven-development-TDD.png)
+![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/test-driven-development-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/test-driven-development-dark.png){: .dark }
 
 TDD naturally reinforces every benefit listed below. By writing tests first, I am forced to think about design upfront, which leads to cleaner interfaces. The tests themselves become living documentation of the intended behavior. And because TDD catches issues the moment they are introduced, it amplifies the cost savings of shift-left testing.
 
@@ -30,7 +31,8 @@ TDD naturally reinforces every benefit listed below. By writing tests first, I a
 
 * **Save project costs in the long run**: At first, it may seem like tests are a waste of time because they take time to write. However, investing time in testing reduces the chances of future bugs and issues during software development. If issues do occur, they will be discovered more quickly, saving both time and money, and potentially preventing more costly bugs. This approach is called "Shift-left testing," and it allows teams to find and prevent defects early in the software delivery process. A bug caught during development might take minutes to fix, while the same bug found in production can require hours of debugging, hotfix deployments, and customer communication.
 
-![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/shif-left-testing.png)
+![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/shift-left-testing-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/shift-left-testing-dark.png){: .dark }
 
 In conclusion, tests are not a waste of time but rather a crucial aspect of software development that leads to better design, documentation, flexibility, and cost savings.
 
