@@ -18,7 +18,8 @@ The following are examples of common complexities and their Big O notations, ord
 - Quadratic: O(n<sup>2</sup>)
 - Factorial: O(n!)
 
-![img]({{site.url}}/assets/blog_images/2022-08-01-big-o-notation/big-o-notation-complexity-visualization.png)
+![img]({{site.url}}/assets/blog_images/2022-08-01-big-o-notation/big-o-notation-complexity-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2022-08-01-big-o-notation/big-o-notation-complexity-dark.png){: .dark }
 
 Sometimes there may be best/average/worst case scenarios depending on the input data, how they're structured and so on, so in other words it depends on the algorithm (quick sort for example) but Big O usually refers to the worst case scenario.
 
