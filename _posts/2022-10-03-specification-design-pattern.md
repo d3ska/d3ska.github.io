@@ -1,10 +1,12 @@
 ---
 title: "Specification Design Pattern"
 categories:
-- Blog
+- Design Patterns
 tags:
 - Design Patterns
-- Specification Design Pattern
+- Specification Pattern
+- Behavioral Patterns
+- DDD
 
 ---
 

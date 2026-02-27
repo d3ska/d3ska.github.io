@@ -1,9 +1,12 @@
 ---
 title: "Strategy Design Pattern"
 categories:
-  - Design patterns
+  - Design Patterns
 tags:
-  - Strategy pattern
+  - Design Patterns
+  - Strategy Pattern
+  - Behavioral Patterns
+  - SOLID
 ---
 
 

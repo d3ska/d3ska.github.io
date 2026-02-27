@@ -1,11 +1,13 @@
 ---
 title: "Comparable and Comparator Interfaces"
 categories:
-  - Blog
+  - Java
 tags:
   - Comparator
   - Comparable
   - Sorting
+  - Java
+  - Interfaces
 ---
 
 ### Comparable

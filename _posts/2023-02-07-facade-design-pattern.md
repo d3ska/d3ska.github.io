@@ -1,10 +1,11 @@
 ---
 title: "Facade Design Pattern"
 categories:
-  - Blog
+  - Design Patterns
 tags:
-  - Design patterns
-  - Facade design pattern
+  - Design Patterns
+  - Facade Pattern
+  - Structural Patterns
   - SOLID
 ---
 

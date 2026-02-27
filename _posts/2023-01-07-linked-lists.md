@@ -1,7 +1,7 @@
 ---
 title: "Linked Lists"
 categories:
-  - Blog
+  - Data Structures
 tags:
   - Data Structures
   - Complexity Analysis

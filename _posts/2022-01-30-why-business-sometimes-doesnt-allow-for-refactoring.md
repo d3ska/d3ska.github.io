@@ -1,11 +1,12 @@
 ---
 title: "Why business is not eager for refactoring?"
 categories:
-  - Blog
+  - Software Design
 tags:
   - Refactoring
   - Communication
-  - Business
+  - Technical Debt
+  - Software Engineering
 ---
 
 ### Refactoring in a Business Context

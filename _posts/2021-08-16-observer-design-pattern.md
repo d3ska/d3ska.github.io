@@ -1,10 +1,11 @@
 ---
 title: "Observer Design Pattern"
 categories:
-  - Blog
+  - Design Patterns
 tags:
-  - Design patterns
-  - Observer pattern
+  - Design Patterns
+  - Observer Pattern
+  - Behavioral Patterns
   - SOLID
 ---
 

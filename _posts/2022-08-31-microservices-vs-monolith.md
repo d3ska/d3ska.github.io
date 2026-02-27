@@ -1,11 +1,12 @@
 ---
 title: "Microservices vs Monolith vs Modular Monolith architecture"
 categories:
-  - Blog
+  - Software Design
 tags:
-  - Architecture
+  - Software Architecture
   - Monolith
   - Microservices
+  - Modular Monolith
 ---
 
 #### Introduction

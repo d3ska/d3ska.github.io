@@ -4,6 +4,9 @@ categories:
   - System Design
 tags:
   - Rate Limiting
+  - API Security
+  - DoS
+  - DDoS
 ---
 
 Rate limiting is a pivotal technique employed to manage and control the number of incoming and outgoing requests

@@ -1,12 +1,12 @@
 ---
 title: "Spring Bean Scopes"
 categories:
-  - Blog
+  - Java
 tags:
   - Spring
   - Spring Bean
-  - Context
   - Bean Scopes
+  - Java
 ---
 
 #### Bean Scopes Define the Runtime Context Availability

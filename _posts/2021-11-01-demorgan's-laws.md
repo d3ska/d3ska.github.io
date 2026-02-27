@@ -1,10 +1,11 @@
 ---
 title: "DeMorgan’s Laws"
 categories:
-  - Blog
+  - Software Design
 tags:
   - DeMorgan's Laws
-  - Logical conditions
+  - Boolean Logic
+  - Clean Code
 ---
 
 ### DeMorgan's Laws

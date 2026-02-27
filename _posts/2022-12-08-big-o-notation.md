@@ -1,10 +1,13 @@
 ---
 title: "Big O Notation"
 categories:
-  - Blog
+  - Data Structures
 tags:
   - Data Structures
   - Big O Notation
+  - Complexity Analysis
+  - Algorithms
+  - Time Complexity
 ---
 
 The Big O Notation is a mathematical, asymptotic notation that describes time complexity and space complexity of algorithms/functions when the argument tends towards a particular value of infinity.<br>

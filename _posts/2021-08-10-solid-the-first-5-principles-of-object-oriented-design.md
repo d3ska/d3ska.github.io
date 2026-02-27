@@ -1,10 +1,12 @@
 ---
 title: "SOLID: The First 5 Principles of Object Oriented Design"
 categories:
-  - Principles
+  - Software Design
 tags:
   - SOLID
   - OOP
+  - Design Principles
+  - Clean Code
 ---
 
 #### SOLID is an acronym for the first five object-oriented design (OOD) principles by Robert C. Martin (also known as Uncle Bob).

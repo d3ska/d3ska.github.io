@@ -2,9 +2,12 @@
 title: "Unraveling the Schools of Unit Testing: The Classic and London Approaches"
 categories:
   - Testing
-  - System Quality
 tags:
   - Testing
+  - Unit Testing
+  - London School
+  - Classical School
+  - Mocks
 ---
 
 There exist two major methodologies when it comes to unit testing. These methodologies guide how much to use mocks, stubs, and the special test implementations known as test doubles. The two prominent schools of thought are the Classic School, also known as the "Detroit School" or the "Classical School," and the London School. These schools primarily differ in the way they define the concept of isolation.

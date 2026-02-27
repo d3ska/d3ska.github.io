@@ -4,7 +4,10 @@ categories:
   - System Design
 tags:
   - Databases
-  - CAP
+  - CAP Theorem
+  - Distributed Systems
+  - Consistency
+  - Availability
 ---
 
 

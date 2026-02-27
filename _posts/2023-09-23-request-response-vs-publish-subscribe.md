@@ -1,11 +1,13 @@
 ---
 title: "Request-Response vs Publish-Subscribe Architecture"
 categories:
-  - Blog
+  - System Design
 tags:
   - Request Response
   - Pub-Sub
-  - Communication styles
+  - Messaging
+  - Software Architecture
+  - Communication Patterns
 ---
 
 ### Request-Response Architecture

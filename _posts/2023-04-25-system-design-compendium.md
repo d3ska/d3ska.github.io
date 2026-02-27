@@ -4,6 +4,8 @@ categories:
   - System Design
 tags:
   - System Design
+  - Software Architecture
+  - Distributed Systems
 ---
 
 System design is a part of the system development process, focusing on the creation of a comprehensive blueprint for a system to satisfy specified requirements. It includes the specification of the system's architecture, modules, interfaces and data necessary to satisfy a set of requirements.

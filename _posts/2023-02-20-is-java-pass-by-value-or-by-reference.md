@@ -1,10 +1,12 @@
 ---
 title: "Is Java Pass by Value or by Reference?"
 categories:
-  - Blog
+  - Java
 tags:
   - Java
   - Memory
+  - JVM
+  - Pass by Value
 ---
 
 Let me answer that question right away, Java is **ALWAYS** pass by value.

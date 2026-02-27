@@ -1,10 +1,12 @@
 ---
 title: "Java equals and hashCode contract"
 categories:
-  - Blog
-tags:
-  - equals hashCode contract
   - Java
+tags:
+  - Equals
+  - HashCode
+  - Java
+  - Effective Java
 ---
 
 

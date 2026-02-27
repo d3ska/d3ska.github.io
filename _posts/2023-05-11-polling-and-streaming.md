@@ -3,7 +3,10 @@ title: "Polling And Streaming"
 categories:
   - System Design
 tags:
-  - Polling And Streaming
+  - Polling
+  - Streaming
+  - Real-time
+  - Communication Patterns
 ---
 
 In computing systems, the interaction between clients and servers is fundamental. This interaction often revolves around the client sending requests, and the server responding with the requested data. The frequency at which this data is updated can vary, and this largely depends on the system's requirements and purpose. Two fundamental concepts often used in this context are polling and streaming.

@@ -4,6 +4,11 @@ categories:
   - System Design
 tags:
   - Databases
+  - Blob Store
+  - Time Series
+  - Graph Database
+  - Spatial Database
+  - Quadtree
 ---
 
 In addition to widely known SQL and NoSQL databases, such as document or key-value stores, there are specialized storage

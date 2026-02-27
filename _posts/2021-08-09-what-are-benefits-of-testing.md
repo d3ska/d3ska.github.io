@@ -1,11 +1,12 @@
 ---
 title: "What are benefits of testing?"
 categories:
-  - Blog
+  - Testing
 tags:
-  - Test
+  - Testing
   - Test Driven Development
   - TDD
+  - Software Quality
 ---
 
 Do I really need tests? Isn't it a waste of time? These are questions you might have asked once or still find yourself asking. However, the answer is that tests are not a waste of time, and they provide numerous benefits. Let me explain why.

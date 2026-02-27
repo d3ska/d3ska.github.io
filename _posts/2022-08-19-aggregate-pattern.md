@@ -1,10 +1,10 @@
 ---
 title: "Aggregate Pattern"
 categories:
-  - Blog
+  - Design Patterns
 tags:
   - Aggregate
-  - Patterns
+  - Design Patterns
   - Domain Driven Design
   - DDD
 ---

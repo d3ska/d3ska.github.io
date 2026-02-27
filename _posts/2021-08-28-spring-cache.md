@@ -1,11 +1,12 @@
 ---
 title: "Spring Cache"
 categories:
- - Blog
+ - Java
 tags:
- - Cache
+ - Caching
  - Spring
  - Spring Cache
+ - Java
 ---
 
 ### What is Spring Cache? How to configure it in your project and how to use it? How does Spring Cache work? How to add an external provider that allows flexible management of our cache?

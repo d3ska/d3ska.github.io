@@ -3,8 +3,11 @@ title: "Network Protocols"
 categories:
   - System Design
 tags:
-  - Network
+  - Networking
   - Protocols
+  - TCP
+  - HTTP
+  - IP
 ---
 
 ### What is a protocol?

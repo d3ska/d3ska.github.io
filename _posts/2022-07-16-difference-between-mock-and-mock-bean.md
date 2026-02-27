@@ -1,10 +1,13 @@
 ---
 title: "Difference between @Mock and @MockBean"
 categories:
-  - Blog
+  - Testing
 tags:
   - Testing
   - Mocks
+  - Mockito
+  - Spring
+  - Java
 ---
 
 #### Introduction

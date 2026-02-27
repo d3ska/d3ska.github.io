@@ -4,6 +4,8 @@ categories:
   - Data Structures
 tags:
   - Data Structures
+  - Algorithms
+  - Complexity Analysis
 ---
 
 Data structures can be seen as instrumental tools used to address a wide array of problems. They frequently encompass complex and mathematical concepts and can often be rather intricate. However, it's not essential to have an all-encompassing knowledge of every data structure. Instead, it's more crucial to gain a profound understanding of certain fundamental concepts and be skilled at applying them effectively.

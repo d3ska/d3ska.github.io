@@ -1,12 +1,14 @@
 ---
 title: "Custom Assertions with AssertJ"
 categories:
-  - Blog
+  - Testing
 tags:
-  - Test
+  - Testing
+  - AssertJ
   - Custom Assertions
   - Domain Driven Design
   - DDD
+  - Java
 ---
 
 You might have encountered tests that are difficult to read, especially when the failure messages are unclear. In such cases, consider creating your own specific assertions using the domain model vocabulary. This approach not only makes them easier to read but also helps apply Domain Driven Design's ubiquitous language in tests.

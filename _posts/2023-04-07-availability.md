@@ -4,6 +4,9 @@ categories:
   - System Design
 tags:
   - Availability
+  - Reliability
+  - SLA
+  - Redundancy
 ---
 
 #### What is availability?

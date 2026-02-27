@@ -1,9 +1,13 @@
 ---
 title: "Core concepts behind OOP"
 categories:
-  - Blog
+  - Software Design
 tags:
   - OOP
+  - Abstraction
+  - Encapsulation
+  - Inheritance
+  - Polymorphism
 ---
 
 ### What does object-oriented programming mean?

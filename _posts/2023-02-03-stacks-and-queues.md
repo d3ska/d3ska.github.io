@@ -1,12 +1,14 @@
 ---
 title: "Stacks and Queues"
 categories:
-  - Blog
+  - Data Structures
 tags:
   - Data Structures
   - Complexity Analysis
   - Stacks
   - Queues
+  - LIFO
+  - FIFO
 ---
 
 #### Stacks

@@ -3,7 +3,9 @@ title: "Latency And Throughput"
 categories:
   - System Design
 tags:
-  - Latency and Throughput
+  - Latency
+  - Throughput
+  - Performance
 ---
 
 #### Latency and throughput are the two most important measures of the performance of a system. 

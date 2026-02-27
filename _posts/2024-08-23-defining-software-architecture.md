@@ -5,6 +5,7 @@ categories:
 tags:
   - System Design
   - Software Architecture
+  - Design Principles
 ---
 
 The software community has been engaged in a longstanding debate over how to define "architecture." Some believe it refers to the underlying structure of a system or how the most important components are interconnected at a high level.
