@@ -8,7 +8,8 @@ tags:
 
 A load balancer can be better understood through a simple use case. Consider a basic client-server architecture where a client sends requests to a server, which processes them and returns a response. Now, imagine the system expanding with multiple clients (two, three, four, and so on) sending requests to a single server. Clients might issue multiple requests as well.
 
-![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/client-server.jpg)
+![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/client-server-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/client-server-dark.png){: .dark }
 
 The single server has limited resources and can only handle a certain number of requests within a given time, thus limiting the system's [throughput](https://matthewonsoftware.com/system%20design/latency-and-throughput/#throughput). The more requests the server receives from various clients, the more likely it is to become overloaded, potentially leading to system failure or slow performance.
 
@@ -50,7 +51,8 @@ Health checks can be as simple as a TCP connection attempt (verifying the server
 
 If a server fails a configurable number of consecutive health checks, the load balancer marks it as unhealthy and stops routing new traffic to it. Once the server begins passing health checks again, the load balancer reintroduces it into the rotation. This mechanism is essential for maintaining system availability, as it ensures that clients are never routed to a server that cannot serve their requests.
 
-![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/lb-example.jpg)
+![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/lb-example-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/lb-example-dark.png){: .dark }
 
 <br>
 
@@ -82,7 +84,8 @@ When you're going to be designing systems, you're going to want to pick server s
 
 For example, clients may hit a load balancer, which will distribute the load using IP hash selection strategy to the next load balancers which might use Round Robin strategy.
 
-![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/two-load-balancers.jpg)
+![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/two-load-balancers-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-04-19-load-balancers/two-load-balancers-dark.png){: .dark }
 
 <br>
 

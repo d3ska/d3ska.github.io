@@ -56,7 +56,8 @@ Additional features of heap space include:
 
 #### Example
 
-![img]({{site.url}}/assets/blog_images/2023-03-25-java-memory-management/java-heap-stack-diagram.png)
+![img]({{site.url}}/assets/blog_images/2023-03-25-java-memory-management/java-heap-stack-management-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-03-25-java-memory-management/java-heap-stack-management-dark.png){: .dark }
 
 ### JVM Memory Tuning Flags
 

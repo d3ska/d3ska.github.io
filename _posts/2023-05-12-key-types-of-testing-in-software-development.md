@@ -98,7 +98,8 @@ In addition to the various types of testing, such as unit testing, integration t
 
 One approach to testing involves verifying the results returned by a component after processing specific input data. This type of test focuses on the output of the code and does not require verifying the internal state of the component or any side effects it may have. By validating the returned result against expected values, we can ensure that the component behaves as intended.
 
-![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/result-verfication.png)
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/result-verification-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/result-verification-dark.png){: .dark }
 
 Consider the following example:
 
@@ -124,7 +125,8 @@ This approach to testing focuses on the effectiveness of the tests by directly c
 
 Another testing approach involves verifying the state of the system after the completion of an operation. This type of test focuses on the state of the tested component, its collaborators, or external dependencies (e.g., in integration tests). By checking the state of relevant objects, we can ensure that the desired changes have occurred.
 
-![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/state-verfications.png)
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/state-verificaiton-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/state-verificaiton-dark.png){: .dark }
 
 Consider the following example:
 
@@ -153,7 +155,8 @@ This approach is useful when testing methods that return void and when it is nec
 
 The third testing approach involves verifying the communication between objects. This includes checking the messages sent to other objects or using mocks to verify interactions. By capturing and verifying the expected communication, we can ensure that the correct messages are being exchanged.
 
-![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verification.png)
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verificaiton-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verificaiton-dark.png){: .dark }
 
 Consider the following example:
 

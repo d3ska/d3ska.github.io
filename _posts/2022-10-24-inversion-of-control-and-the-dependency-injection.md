@@ -56,7 +56,8 @@ class SongLister {
 ```
 Now it is somewhat configurable at most I would say, as now we depend on both the concrete implementation and the SongsProvider interface.
 
-![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/conrete-impl-constructor-initializing.jpg)
+![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/concrete-implementation-constructor-initializing-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/concrete-implementation-constructor-initializing-dark.png){: .dark }
 
 The desired situation is where we would depend just on the interface.
 It's highly possible that we would have several SongsProvider implementations which we would like to use but independent of the SongLister class.
@@ -90,7 +91,8 @@ Worth noting: while the Service Locator pattern technically achieves IoC, it is 
 One of the most known implementations of IoC is based on the idea to have a separate object, an assembler, which is responsible for connecting objects with each other, or rather "injecting" them into other objects.
 
 Dependency diagram with our songs example:
-![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/di-architecture.jpg)
+![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/di-architecture-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/di-architecture-dark.png){: .dark }
 
 
 <br>

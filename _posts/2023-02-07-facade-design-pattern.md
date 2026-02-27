@@ -17,7 +17,8 @@ So it's good to be aware of it and eventually when we notice it, it may be a gre
 
 With facade, it's easy to make changes such as refactoring or modifying domain, subsystem objects without causing conflicts with the clients that use them.
 
-![img]({{site.url}}/assets/blog_images/2023-02-07-facade-design-pattern/facade-uml.png)
+![img]({{site.url}}/assets/blog_images/2023-02-07-facade-design-pattern/facad=uml-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-02-07-facade-design-pattern/facad-uml-dark.png){: .dark }
 
 
 The implementation itself is pretty easy, let's take a look.

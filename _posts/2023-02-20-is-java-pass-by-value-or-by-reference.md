@@ -51,7 +51,8 @@ Because it copies that value, memory address, 'givenPoint' variable ends up poin
 That's why Java sometimes may look like it's pass by reference, because it seems like we were passing reference to that object but what it's actually doing 
 is passing in the value of the memory address of that object.
 
-![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-1.jpg)
+![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-1-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-1-dark.png){: .dark }
 
 <br> 
 
@@ -87,7 +88,8 @@ givenPoint = new Point(0, 0);
 The key difference is that we're setting 'givenPoint' variable to be a brand-new Point object. 
 So when the method starts, the 'givenPoint' variable has exactly the same address in memory as the 'point' variable. But when we reassign a new object to this variable, it starts pointing to a new object in memory, meaning the variable will have a different address value.
 
-![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-2.jpg)
+![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-2-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-2-dark.png){: .dark }
 
 <br>
 

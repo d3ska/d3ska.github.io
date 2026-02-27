@@ -71,4 +71,5 @@ and their data entries are distributed among the children. Quadtrees are well-su
 can be represented as a grid filled with rectangles that are recursively subdivided into four sub-rectangles. Each
 quadtree node corresponds to a rectangle, and each rectangle represents a spatial region.
 
-![img]({{site.url}}/assets/blog_images/2023-04-28-specialized-storage-paradigms/quadtree-example.png)
+![img]({{site.url}}/assets/blog_images/2023-04-28-specialized-storage-paradigms/quadtree-exmaple-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-04-28-specialized-storage-paradigms/quadtree-exmaple-dark.png){: .dark }

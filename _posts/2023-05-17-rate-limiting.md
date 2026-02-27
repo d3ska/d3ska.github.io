@@ -64,7 +64,8 @@ Denial-of-service attack, abbreviated as DoS attack, is a malevolent endeavor wh
 unavailable to its users. This is usually achieved by overloading the system with excessive traffic. Although rate
 limiting can prevent certain types of DoS attacks, others might be considerably more challenging to counter.
 
-![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/dos.png)
+![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/dos-lighty-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/dos-lighty-dark.png){: .dark }
 
 
 ### DDoS Attack
@@ -73,7 +74,8 @@ A distributed denial-of-service attack, or DDoS attack, is a more complex form o
 overwhelming traffic directed at the target system originates from numerous sources—potentially thousands of
 machines—making it significantly more difficult to prevent or mitigate.
 
-![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/ddos.png)
+![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/ddos-lighty.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/ddos-lighty-dark.png){: .dark }
 
 
 ### Examples and Analogies
