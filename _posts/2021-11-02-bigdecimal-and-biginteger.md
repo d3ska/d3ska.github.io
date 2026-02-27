@@ -1,10 +1,12 @@
 ---
 title: "BigDecimal and BigInteger in Java"
 categories:
-  - Blog
+  - Java
 tags:
-  - BigDecimal and BigInteger
-  - Precise numbers
+  - BigDecimal
+  - BigInteger
+  - Java
+  - Precision
 ---
 
 ### BigDecimal

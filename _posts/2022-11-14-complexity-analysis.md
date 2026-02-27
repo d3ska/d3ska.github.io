@@ -1,10 +1,13 @@
 ---
 title: "Complexity Analysis"
 categories:
-  - Blog
+  - Data Structures
 tags:
   - Complexity Analysis
   - Big O
+  - Algorithms
+  - Time Complexity
+  - Space Complexity
 ---
 
 

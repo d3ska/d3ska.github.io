@@ -1,10 +1,13 @@
 ---
 title: "Depth First Search in Java"
 categories:
-  - Blog
+  - Data Structures
 tags:
   - Algorithms
   - Java
+  - DFS
+  - Graph Traversal
+  - Trees
 ---
 
 ### Depth First Search \[DFS]

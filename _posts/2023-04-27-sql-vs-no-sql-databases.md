@@ -6,6 +6,8 @@ tags:
   - Databases
   - SQL
   - NoSQL
+  - Relational Databases
+  - Document Stores
 ---
 
 ### SQL vs NoSQL Databases: Understanding the Difference and When to Choose Each

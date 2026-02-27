@@ -1,11 +1,12 @@
 ---
 title: "Inversion of Control and Dependency Injection"
 categories:
-  - Blog
+  - Software Design
 tags:
-  - IoC and DI
-  - Design 
-  - Application Architecture
+  - IoC
+  - Dependency Injection
+  - Design Principles
+  - Software Architecture
 ---
 
 #### Inversion of Control and Dependency Injection

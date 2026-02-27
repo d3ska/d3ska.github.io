@@ -1,10 +1,12 @@
 ---
 title: "Logarithm"
 categories:
-  - Blog
+  - Data Structures
 tags:
   - Data Structures
   - Complexity Analysis
+  - Algorithms
+  - Mathematics
 ---
 
 It's a mathematical concept which is very often used in Computer Science in the context of algorithm complexity — it even sounds similar!

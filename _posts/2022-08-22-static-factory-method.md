@@ -1,10 +1,13 @@
 ---
 title: "Static Factory Method"
 categories:
-  - Blog
+  - Design Patterns
 tags:
   - Effective Java
-  - Clean code
+  - Clean Code
+  - Creational Patterns
+  - Java
+  - Design Patterns
 ---
 
 In an object-oriented language like Java, what could be wrong with constructors? Overall, nothing. Even so, the famous Joshua Bloch's Effective Java Item 1 clearly states:

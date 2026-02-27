@@ -1,10 +1,14 @@
 ---
 title: "Java Memory Management"
 categories:
-  - Blog
+  - Java
 tags:
-  - Memory models
+  - Memory Management
   - JVM
+  - Java
+  - Heap
+  - Stack
+  - Garbage Collection
 ---
 
 ### Java Memory Management

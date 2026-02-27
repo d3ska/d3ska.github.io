@@ -2,9 +2,11 @@
 title: "Key Types of Testing in Software Development"
 categories:
   - Testing
-  - System Quality
 tags:
   - Testing
+  - Unit Testing
+  - Integration Testing
+  - E2E Testing
 ---
 
 Software testing is an integral part of the development process. Each type of testing has its specific purpose and helps ensure the highest quality of the final product. Here are the most crucial types of tests used in software development.

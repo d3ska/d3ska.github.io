@@ -1,11 +1,11 @@
 ---
 title: "What is coupling?"
 categories:
-  - Blog
+  - Software Design
 tags:
-  - Metrics
-  - Design
   - Coupling
+  - Modularity
+  - Software Architecture
 ---
 
 In the object-oriented paradigm, coupling refers to the degree of direct knowledge that one element has of another. We generally divide coupling into **tight** and **loose**.

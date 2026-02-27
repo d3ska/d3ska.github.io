@@ -2,9 +2,11 @@
 title: "Best Practices for Writing Effective and Reliable Tests"
 categories:
   - Testing
-  - System Quality
 tags:
   - Testing
+  - Best Practices
+  - Test Quality
+  - Clean Code
 ---
 
 Many teams face a common challenge after introducing the practice of writing tests: builds take up to half an hour, test refactoring proves to be difficult, and testing consumes too much of the team's time and energy. However, this problem can be solved by adhering to good testability practices.

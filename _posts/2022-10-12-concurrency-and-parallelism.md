@@ -1,10 +1,11 @@
 ---
 title: "Concurrency, Threading and Parallelism"
 categories:
-  - Blog
+  - Concurrency
 tags:
   - Concurrency
   - Parallelism
+  - Multithreading
 ---
 
 These two concepts are often misunderstood or used interchangeably, yet they are completely different.

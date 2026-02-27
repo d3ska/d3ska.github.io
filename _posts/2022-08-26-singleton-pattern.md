@@ -1,11 +1,11 @@
 ---
 title: "Singleton Pattern"
 categories:
-  - Blog
+  - Design Patterns
 tags:
   - Singleton
-  - Patterns
-  - Design patterns
+  - Design Patterns
+  - Creational Patterns
 ---
 
 #### Singleton

@@ -1,11 +1,12 @@
 ---
 title: "Hash Tables"
 categories:
-  - Blog
+  - Data Structures
 tags:
   - Data Structures
   - Complexity Analysis
   - Hash Tables
+  - HashMap
 ---
 
 A data structure that stores data in key-value pairs and provides fast insertion, deletion and searching.

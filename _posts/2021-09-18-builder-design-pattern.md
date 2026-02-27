@@ -1,10 +1,11 @@
 ---
 title: "Builder Design Pattern"
 categories:
-  - Blog
+  - Design Patterns
 tags:
-  - Design patterns
-  - Builder pattern
+  - Design Patterns
+  - Builder Pattern
+  - Creational Patterns
   - SOLID
 ---
 

@@ -4,6 +4,10 @@ categories:
   - System Design
 tags:
   - Databases
+  - Replication
+  - Sharding
+  - Scalability
+  - Distributed Systems
 ---
 
 The performance of a system often depends on the efficiency of its database. By optimizing the database, the system's performance can be significantly improved. In this article, we will discuss how data redundancy and data partitioning techniques can be employed to enhance a system's fault tolerance, throughput, and overall reliability, with a focus on real-world scenarios and the role of load balancers.

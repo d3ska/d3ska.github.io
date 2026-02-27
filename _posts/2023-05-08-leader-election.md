@@ -4,6 +4,9 @@ categories:
   - System Design
 tags:
   - Leader Election
+  - Distributed Systems
+  - Consensus
+  - Fault Tolerance
 ---
 
 In most societies, citizens elect their leaders through a voting system. Similarly, in a distributed system, servers utilize a set of algorithms to select a leader node. This process, known as "leader election," forms a critical part of many systems.

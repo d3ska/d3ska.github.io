@@ -2,9 +2,11 @@
 title: "The Economics of Software Testing"
 categories:
   - Testing
-  - System Quality
 tags:
   - Testing
+  - Software Quality
+  - ROI
+  - Test Strategy
 ---
 
 ### The Importance of Software Testing in Business

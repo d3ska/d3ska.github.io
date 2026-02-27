@@ -1,10 +1,11 @@
 ---
 title: "How to think and approach refactoring?"
 categories:
-  - Blog
+  - Software Design
 tags:
   - Refactoring
-  - Clean code
+  - Clean Code
+  - Code Quality
 ---
 
 ### Introduction

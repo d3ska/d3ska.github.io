@@ -1,11 +1,12 @@
 ---
 title: "Prefer Composition over Inheritance"
 categories:
-  - Blog
+  - Software Design
 tags:
   - Inheritance
   - OOP
   - Composition
+  - Design Principles
 ---
 
 # Prefer Composition over Inheritance

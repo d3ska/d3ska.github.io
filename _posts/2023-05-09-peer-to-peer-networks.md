@@ -4,6 +4,9 @@ categories:
   - System Design
 tags:
   - Peer-To-Peer Networks
+  - P2P
+  - Distributed Systems
+  - Networking
 ---
 
 ### Introduction to Peer-To-Peer Networks

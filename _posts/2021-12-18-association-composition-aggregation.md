@@ -1,12 +1,13 @@
 ---
 title: "Composition, Aggregation and Association"
 categories:
-  - Blog
+  - Software Design
 tags:
   - Composition
   - Association
   - Aggregation
   - OOP
+  - Object Relationships
 ---
 
 #### Introduction
