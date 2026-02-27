@@ -1,5 +1,5 @@
 ---
-title: "Logarithm"
+title: "Logarithms in Algorithm Complexity"
 categories:
   - Data Structures
 tags:

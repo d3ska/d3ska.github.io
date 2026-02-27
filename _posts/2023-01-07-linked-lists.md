@@ -1,5 +1,5 @@
 ---
-title: "Linked Lists"
+title: "Linked Lists: Singly and Doubly Linked"
 categories:
   - Data Structures
 tags:
