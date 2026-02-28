@@ -198,6 +198,85 @@ void shouldBeAbleToChangeDestinationWhenPackageIsShippedButClientHasNotChangedIt
 }
 ```
 
+### Data-Driven Specifications
+
+The class-per-rule approach works well when rules are known at compile time. But in some systems, business rules change frequently: a new vendor is onboarded, a regulatory constraint is added for a specific market, or a promotion introduces temporary shipping conditions. Redeploying the application for every rule change is impractical.
+
+Because the Specification pattern separates the rule definition from the evaluation, we can define rules as data and interpret them at runtime. Consider a JSON format where each node is either a composite (`AND`, `OR`, `NOT`) or a leaf rule with a field, operator, and expected values:
+
+```json
+{
+  "type": "AND",
+  "specs": [
+    {
+      "field": "status",
+      "operator": "IN",
+      "values": ["IN_PREPARATION", "IN_WAREHOUSE"]
+    },
+    {
+      "field": "historyActions",
+      "operator": "NONE_MATCH",
+      "values": ["CHANGE_DESTINATION"]
+    }
+  ]
+}
+```
+
+This JSON encodes the same logic as `NotShippedYet` and `NotChangedDestinationBefore` composed with `AndSpecification`. A parser walks the tree and builds the corresponding specification objects:
+
+```java
+class SpecificationParser {
+
+    public Specification<ShipmentDetails> parse(JsonNode node) {
+        String type = node.get("type").asText();
+
+        return switch (type) {
+            case "AND" -> new AndSpecification<>(parseChildren(node));
+            case "OR" -> new OrSpecification<>(parseChildren(node));
+            case "NOT" -> new NotSpecification<>(parse(node.get("spec")));
+            default -> new FieldSpecification(
+                    node.get("field").asText(),
+                    node.get("operator").asText(),
+                    parseValues(node.get("values"))
+            );
+        };
+    }
+
+    // parseChildren iterates node.get("specs") and calls parse on each
+    // parseValues collects the JSON array into a Set<String>
+}
+```
+
+The leaf nodes become `FieldSpecification` objects that resolve a field from the candidate and evaluate it against the operator:
+
+```java
+class FieldSpecification implements Specification<ShipmentDetails> {
+
+    private final String field;
+    private final String operator;
+    private final Set<String> values;
+
+    FieldSpecification(String field, String operator, Set<String> values) {
+        this.field = field;
+        this.operator = operator;
+        this.values = values;
+    }
+
+    @Override
+    public boolean isSatisfiedBy(ShipmentDetails candidate) {
+        Object fieldValue = resolveField(candidate, field);
+        return evaluate(operator, fieldValue, values);
+    }
+
+    // resolveField maps "status" -> candidate.getStatus().name(), etc.
+    // evaluate applies the operator (IN, NONE_MATCH, EQUALS) to the resolved value
+}
+```
+
+The key insight is that `AndSpecification`, `OrSpecification`, and `NotSpecification` are reused as-is. The parser simply constructs them from data instead of code. Rules can now live in a database, a configuration file, or an external service. When a business analyst adds a new rule or changes an existing one, the application picks it up without redeployment.
+
+This approach does trade compile-time safety for runtime flexibility. Field names and operators become strings, so typos and invalid configurations surface at runtime rather than compile time. In practice, validation at load time and thorough integration tests help mitigate that risk.
+
 ### When to Use the Specification Pattern
 
 The Specification pattern earns its place when business rules are a first-class domain concept that varies across contexts. If different vendors, regions, or customer tiers each have their own set of conditions, encoding those conditions as interchangeable specification objects keeps the code flexible without scattering conditional logic across the codebase. It is particularly valuable when rules need to be composed dynamically, such as requiring both "not shipped yet" and "no prior destination change" for one vendor while another vendor only needs one of those conditions. The pattern also fits naturally in systems where rules might be configured externally or swapped at runtime.
