@@ -10,76 +10,63 @@ tags:
 
 The software community has been engaged in a longstanding debate over how to define "architecture." Some believe it refers to the underlying structure of a system or how the most important components are interconnected at a high level.
 
-Martin Fowler shared the details of the conversation with Ralph Johnson.
+Martin Fowler shared the details of a conversation with Ralph Johnson:
+
 > ... who questioned this phrasing, arguing that there was no objective way to define what was fundamental, or high level and that a better view of architecture was the shared understanding that the expert developers have of the system design.
-> A second common style of definition for architecture is that it's “the design decisions that need to be made early in a project”, but Ralph complained about this too, saying that it was more like the decisions you wish you could get right early in a project.
+> A second common style of definition for architecture is that it's "the design decisions that need to be made early in a project", but Ralph complained about this too, saying that it was more like the decisions you wish you could get right early in a project.
 > His conclusion was that "Architecture is about the important stuff. Whatever that is."
-> <br>
-> <cite>The article can be found [here](https://martinfowler.com/architecture/).</cite>
+>
+> <cite>Martin Fowler, [Architecture](https://martinfowler.com/architecture/)</cite>
 
-
-However, we can try to make this topic less abstract and define what a software architecture consists of. <br>
-Architecture consists of the structure combined with architecture characteristics ("-ilities"), architecture decisions, and design principles.
-<br>
+"The important stuff, whatever that is" may sound vague, but it captures something real: architecture is the set of decisions that are expensive to change later. What counts as "important" depends on the system. We can make this more concrete by breaking architecture into four components: structure, characteristics, decisions, and design principles.
 
 ### Structure
 
-The term "architecture" in software development refers to the particular style or styles of architecture utilized in a system, such as microservices, monolith, layered, or microkernel. 
-However, solely describing the architecture in terms of its structure does not provide a complete understanding of it. 
-For instance, if someone states that a system is built on a microservices architecture, they are only referring to the system's structure, rather than its entire architecture, which encompasses also factors such as architecture characteristics, design principles, and architecture decisions. 
-A full understanding of a system's architecture requires knowledge of these additional elements.
-<br>
+Structure refers to the architectural style (or styles) a system uses: microservices, monolith, layered, microkernel, event-driven, and so on. But naming the style alone does not describe the architecture. Saying "we use microservices" tells you something about how the system is decomposed, but nothing about its quality attributes, constraints, or trade-offs. A full picture requires the remaining three components.
 
-### Architecture characteristics 
+### Architecture Characteristics
 
-Another way to define software architecture is through non-functional requirements, known as architecture characteristics. 
-These characteristics outline the criteria for the success of a system, which are independent of its functionality. 
-Notably, the characteristics do not rely on knowledge of the system's functionality but are essential for its proper operation. 
-Examples of architecture characteristics include:
-- Availability 
+Architecture characteristics (often called the "-ilities") are the non-functional requirements that define what success looks like for a system, independent of its features. A payment system and a social media feed might have the same features at a high level ("process data, return results"), but their architecture characteristics differ dramatically: one prioritizes consistency and auditability, the other prioritizes latency and availability.
+
+Common architecture characteristics include:
+
+- Availability
 - Reliability
 - Testability
 - Scalability
 - Security
-- Agility
 - Fault Tolerance
-- Elasticity 
-- Recoverability
+- Elasticity
 - Performance
 - Deployability
-- Learnability
 
-So basically the "-ilities".
-<br>
+Not every characteristic matters equally for every system. Part of the architect's job is identifying which characteristics are critical and which are acceptable to trade off.
 
-### Architecture decisions
+### Architecture Decisions
 
-Architecture decisions establish the guidelines for constructing a system. An architect may, for instance, specify that only the business and services layers in a layered architecture can access the database or mandate specific data formats. 
-These decisions impose limitations on the system and guide development teams on what is permissible and what is not.
-Nonetheless, a variance mechanism exists that allows for the deviation from a particular architecture decision if it cannot be implemented in a certain part of the system due to various constraints or conditions.
+Architecture decisions establish the rules and constraints for how a system is built. An architect might decide that only the service layer can access the database directly, or that all inter-service communication must use asynchronous messaging, or that a specific data format is required at system boundaries. These decisions guide development teams on what is permissible and what is not.
 
-A proven way to capture and communicate architecture decisions is through **Architecture Decision Records (ADRs)**. An ADR is a short document that records a single decision: the context, the decision itself, the alternatives considered, and the consequences. Over time, ADRs form a decision log that gives any team member -- current or future -- a clear trail of *why* the architecture looks the way it does. Tools like [adr-tools](https://github.com/npryce/adr-tools) or simply a folder of Markdown files in the repository make ADRs lightweight to maintain.
-<br>
+When a particular decision cannot be followed in some part of the system due to practical constraints, a **variance** is granted: a documented exception with a clear rationale.
 
-### Design principles
+A proven way to capture and communicate these decisions is through **Architecture Decision Records (ADRs)**. An ADR is a short document that records a single decision: the context, the decision itself, the alternatives considered, and the consequences. Over time, ADRs form a decision log that gives any team member (current or future) a clear trail of *why* the architecture looks the way it does. Tools like [adr-tools](https://github.com/npryce/adr-tools) or simply a folder of Markdown files in the repository make ADRs lightweight to maintain.
 
-Design principles are not as strict as architecture decisions, as they serve as guidelines rather than strict rules. 
-A design principle might recommend that development teams use asynchronous messaging to improve performance when implementing microservices architecture. 
-In contrast, architecture decisions (rules) cannot possibly account for every circumstance or possibility when communicating between services, so a design principles can provide guidance on the preferred approach, enabling developers to make more informed decisions.
-<br>
+### Design Principles
 
-### Architecture governance: fitness functions
+Design principles are softer than architecture decisions. They are guidelines rather than hard rules. A design principle might recommend that development teams prefer asynchronous messaging over synchronous calls between microservices to improve resilience and decoupling. Unlike a strict architecture decision, a design principle acknowledges that exceptions will occur, but establishes a preferred direction.
 
-Defining architecture characteristics and decisions is only half the battle -- enforcing them over time is the other half. This is where **architecture fitness functions** come in. A fitness function is any mechanism that provides an objective assessment of whether a particular architecture characteristic is being maintained. Fitness functions can take many forms:
+### Architecture Governance: Fitness Functions
+
+Defining characteristics and decisions is only half the battle. Enforcing them over time is the other half. This is where **architecture fitness functions** come in. A fitness function is any mechanism that provides an objective assessment of whether a particular architecture characteristic is being maintained:
 
 - **Automated tests** that verify layering rules (e.g., ArchUnit tests ensuring the persistence layer never imports from the presentation layer)
-- **Metrics thresholds** for performance, such as "95th percentile response time must stay below 200ms"
+- **Metrics thresholds** such as "95th percentile response time must stay below 200ms"
 - **Static analysis rules** that flag cyclic dependencies between modules
 - **Deployment pipeline gates** that enforce code coverage or security scan results
 
-By embedding fitness functions in your CI/CD pipeline, you turn architecture decisions from documentation into living, enforceable constraints. Architecture drift -- where the implemented system gradually diverges from the intended design -- becomes detectable and preventable.
+By embedding fitness functions in your CI/CD pipeline, you turn architecture decisions from documentation into enforceable constraints. Architecture drift, where the implemented system gradually diverges from the intended design, becomes detectable and preventable.
 
-<br>
+### References
 
-The topics described above have been comprehensively covered in the book
-**"Fundamentals of Software Architecture by Mark Richards and Neal Ford (O'Reilly)."** The concept of fitness functions is explored further in their follow-up work, **"Building Evolutionary Architectures."**
+* Mark Richards and Neal Ford, *Fundamentals of Software Architecture* (O'Reilly)
+* Mark Richards and Neal Ford, *Building Evolutionary Architectures* (O'Reilly)
+* Martin Fowler, [Architecture](https://martinfowler.com/architecture/)

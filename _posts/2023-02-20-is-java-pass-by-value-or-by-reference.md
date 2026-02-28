@@ -9,16 +9,13 @@ tags:
   - Pass by Value
 ---
 
-Let me answer that question right away, Java is **ALWAYS** pass by value.
-<br>
+Java is **always** pass by value. No exceptions.
 
-The reason for the confusion about these terms is typically related to the concept of object reference in Java. Technically speaking, Java always uses pass-by-value, because although a variable can hold a reference to an object, that reference is actually a value that indicates the object's memory location. Therefore, object references are passed by value in Java.
-<br>
+The confusion arises because when you pass an object to a method, what gets passed is the *value* of the reference (the memory address of the object), not the object itself. The method receives its own copy of that reference. Both the original variable and the parameter point to the same object in memory, which makes it look like pass by reference, but it is not.
 
-It may sound a bit confusing, but let's take a look at the example.
+### Modifying an Object Through a Copied Reference
 
 ```java
-
 class Point {
     int x;
     int y;
@@ -29,90 +26,104 @@ class Point {
     }
 }
 ```
+
 ```java
 class Test {
     public static void main(String[] args) {
         Point point = new Point(2, 2);
-        changePointCoordinatesTo(3, point);
-        System.out.println(String.format("X: %d", point.x));
+        changeX(3, point);
+        System.out.println("X: " + point.x);
     }
-    
-    public static void changePointCoordinatesTo(int x, Point givenPoint){
+
+    public static void changeX(int x, Point givenPoint) {
         givenPoint.x = x;
     }
 }
 ```
 
-What do you think the output will be?
-```console
- X: 3
+Output:
+
+```
+X: 3
 ```
 
-Since Java uses pass-by-value and the value of this 'point' variable is the address of a certain object in memory, what it does is copy that value, which is the memory address.
-Because it copies that value, memory address, 'givenPoint' variable ends up pointing to the exact same Point object in memory as 'point' variable.
-That's why Java sometimes may look like it's pass by reference, because it seems like we were passing reference to that object but what it's actually doing 
-is passing in the value of the memory address of that object.
+The method `changeX` receives a copy of the reference that `point` holds. Both `point` and `givenPoint` point to the same `Point` object in memory, so modifying `givenPoint.x` changes the same object the caller sees.
 
 ![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-1-light.png){: .light }
 ![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-1-dark.png){: .dark }
 
-<br> 
-
-But what would happen in the example below? 
+### Reassigning the Reference Inside a Method
 
 ```java
 class Test {
     public static void main(String[] args) {
         Point point = new Point(2, 2);
-        changeXToGivenValue(5, point);
-        System.out.println(String.format("X: %d", point.x));
+        replaceAndChangeX(5, point);
+        System.out.println("X: " + point.x);
     }
 
-    public static void changeXToGivenValue(int x, Point givenPoint){
+    public static void replaceAndChangeX(int x, Point givenPoint) {
         givenPoint = new Point(0, 0);
         givenPoint.x = x;
     }
 }
 ```
 
-Based on the previous example you may think that the output of the example above will be 5... but actually it will not. 
+You might expect the output to be 5, but it is:
 
-```console
- X: 2
+```
+X: 2
 ```
 
-The way the variable is passed in is still exactly the same as in the previous example. It's still passing value of the address in memory. 
-
-```console
-givenPoint = new Point(0, 0);
-```
-
-The key difference is that we're setting 'givenPoint' variable to be a brand-new Point object. 
-So when the method starts, the 'givenPoint' variable has exactly the same address in memory as the 'point' variable. But when we reassign a new object to this variable, it starts pointing to a new object in memory, meaning the variable will have a different address value.
+When the method starts, `givenPoint` holds the same address as `point`. But the line `givenPoint = new Point(0, 0)` reassigns the local copy to a brand-new object. From that point on, `givenPoint` and `point` refer to different objects. Setting `givenPoint.x = 5` modifies the new object, which the caller never sees.
 
 ![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-2-light.png){: .light }
 ![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-2-dark.png){: .dark }
 
-<br>
+This is the definitive proof that Java is pass by value. If it were pass by reference, reassigning `givenPoint` inside the method would also change `point` in the caller. It does not.
 
-In the case of primitive types, variables do not store a memory reference but the values themselves, so what happens is simply copying the given value.
+### Primitives
 
-#### What About Arrays?
+For primitive types (`int`, `double`, `boolean`, etc.), the situation is simpler. Variables hold the values directly, not references. Passing a primitive to a method copies the value itself. Changes inside the method have no effect on the caller's variable:
 
-The same pass-by-value rule applies to arrays. When you pass an array to a method, Java copies the reference to the array -- not the array itself. This means the method receives its own copy of the reference, but that reference still points to the same array object in memory. Any modifications to the array's elements inside the method will be visible to the caller:
+```java
+public static void tryToChange(int x) {
+    x = 99;
+}
+
+public static void main(String[] args) {
+    int value = 10;
+    tryToChange(value);
+    System.out.println(value); // 10
+}
+```
+
+### Arrays
+
+The same pass-by-value rule applies to arrays. When you pass an array to a method, Java copies the reference to the array, not the array itself. The method can modify the array's elements (because both references point to the same array object), but reassigning the parameter to a new array will not affect the original:
 
 ```java
 public static void modifyArray(int[] arr) {
     arr[0] = 99;
 }
 
+public static void replaceArray(int[] arr) {
+    arr = new int[] {10, 20, 30};
+}
+
 public static void main(String[] args) {
     int[] numbers = {1, 2, 3};
     modifyArray(numbers);
-    System.out.println(numbers[0]); // 99
+    System.out.println(numbers[0]); // 99 (same array object was modified)
+
+    replaceArray(numbers);
+    System.out.println(numbers[0]); // 99 (reassignment inside the method had no effect)
 }
 ```
 
-However, reassigning the parameter to a new array inside the method will not affect the original reference, just like with any other object reference.
+### Summary
 
-
+| What is passed | What gets copied | Can the method modify the original? |
+|---|---|---|
+| Primitive | The value itself | No |
+| Object reference | The address (reference value) | It can modify the object's fields, but it cannot make the caller's variable point to a different object |
