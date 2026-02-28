@@ -8,190 +8,229 @@ tags:
   - Creational Patterns
 ---
 
-#### Singleton
+### The Problem
 
-It is one of the most well-known design patterns. To be more particular, it is a creational design pattern that ensures a class has just one instance.
-All clients of that class reuse that instance, which is why it is called a singleton.
+Some resources should exist exactly once in an application. A database connection pool, a thread-safe cache, or a logging configuration are examples where creating a second instance would be wasteful or actively harmful. Two connection pools mean double the connections. Two caches mean stale data in one of them.
 
-You may wonder why someone would want to have a single instance of some class.
-Imagine a shared resource, like a class with a database connection, or some service class, or any other class that should
-have just a single instance available to all clients.
+The **Singleton** is a creational design pattern that restricts a class to a single instance and provides a global access point to it. The idea is straightforward: make the constructor private so nobody else can call it, and expose the one instance through a static method or field.
 
-Please note that we cannot obtain that object through a classic constructor, since by definition a constructor requires returning a new instance.
-There are several ways to implement the singleton pattern, like:
+There are several ways to implement this in Java, each with different trade-offs around thread safety, lazy initialization, and resilience to attacks.
 
-##### Singleton With Public Static Final Field
+### Eager Initialization
+
+The simplest approach creates the instance when the class is loaded:
 
 ```java
-public class Singleton {
+public class ConnectionPool {
 
-    public static final Singleton INSTANCE = new Singleton();
+    public static final ConnectionPool INSTANCE = new ConnectionPool();
 
-    private Singleton() {}
-
+    private ConnectionPool() {
+        // initialize pool
+    }
 }
 ```
 
-<br>
-
-##### Singleton With Public Static Factory Method
+A variation hides the field behind a static factory method, which gives you the flexibility to change the implementation later without changing the API:
 
 ```java
-public class Singleton {
+public class ConnectionPool {
 
-    private static final Singleton INSTANCE = new Singleton();
+    private static final ConnectionPool INSTANCE = new ConnectionPool();
 
-    private Singleton() {}
+    private ConnectionPool() {}
 
-    public static Singleton getInstance(){
+    public static ConnectionPool getInstance() {
         return INSTANCE;
     }
-
 }
 ```
 
-<br>
+Both approaches are thread-safe because the JVM guarantees that static fields are initialized exactly once during class loading. The private constructor is required even though it is empty, because without it the compiler generates a public default constructor, defeating the entire purpose.
 
-##### Singleton With Lazy Initialization
+The downside is that the instance is created even if the application never uses it. For lightweight objects this is irrelevant, but for expensive resources it can matter.
+
+### Lazy Initialization with Double-Checked Locking
+
+If construction is expensive and you want to defer it until the first call, you need lazy initialization. The naive approach (check if null, then create) is not thread-safe: two threads could both see `null` and each create an instance. The standard solution is double-checked locking:
 
 ```java
-public class Singleton {
+public class ConnectionPool {
 
-    private static volatile Singleton INSTANCE = null;
+    private static volatile ConnectionPool instance;
 
-    private Singleton() {}
+    private ConnectionPool() {}
 
-    public static Singleton getInstance() {
-        if (INSTANCE == null) {
-            synchronized (Singleton.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new Singleton();
+    public static ConnectionPool getInstance() {
+        if (instance == null) {
+            synchronized (ConnectionPool.class) {
+                if (instance == null) {
+                    instance = new ConnectionPool();
                 }
             }
         }
-        return INSTANCE;
+        return instance;
     }
-
 }
 ```
 
-<br>
+The `volatile` keyword is essential here, and the reason is subtle. Without it, the JVM is allowed to reorder the steps of object construction. Thread A might write the reference to `instance` before the constructor body has fully executed. Thread B would then see a non-null reference (skipping the synchronized block entirely) and use a partially constructed object. The `volatile` modifier establishes a happens-before relationship: it guarantees that all writes performed during construction are visible to any thread that subsequently reads the field.
 
-##### Bill Pugh Singleton (Initialization-on-Demand Holder)
+The outer null check avoids the cost of synchronization after the instance has been created. The inner null check prevents the race condition where two threads enter the synchronized block before the instance exists.
 
-The Bill Pugh approach, also known as the initialization-on-demand holder idiom, combines the benefits of lazy initialization with the simplicity of the static final field approach. It relies on the JLS guarantee that a nested class is not loaded until it is referenced for the first time.
+### Bill Pugh Singleton (Initialization-on-Demand Holder)
+
+This idiom achieves lazy initialization and thread safety without `volatile` or `synchronized`:
 
 ```java
-public class Singleton {
+public class ConnectionPool {
 
-    private Singleton() {}
+    private ConnectionPool() {}
 
-    private static class SingletonHolder {
-        private static final Singleton INSTANCE = new Singleton();
+    private static class Holder {
+        private static final ConnectionPool INSTANCE = new ConnectionPool();
     }
 
-    public static Singleton getInstance() {
-        return SingletonHolder.INSTANCE;
+    public static ConnectionPool getInstance() {
+        return Holder.INSTANCE;
     }
-
 }
 ```
 
-Because the JVM loads `SingletonHolder` only when `getInstance()` is called, the singleton instance is created lazily. At the same time, class loading is inherently thread-safe, so there is no need for `synchronized` blocks or `volatile` fields. This makes the Bill Pugh approach one of the cleanest lazy singleton implementations in Java.
+This works because the Java Language Specification (JLS 12.4) guarantees that a class is not initialized until it is first referenced. The `Holder` class is only referenced when `getInstance()` is called, so the instance is created lazily. Class initialization is also inherently thread-safe: the JVM acquires an internal lock during class loading, so no explicit synchronization is needed.
 
-##### Advantages and disadvantages of those methods
+This makes the Bill Pugh approach one of the cleanest singleton implementations in Java.
 
-First of all, each of these approaches ensures non-instantiability by defining a private constructor explicitly.
-This explicit constructor is required even though it is empty, because without it the compiler generates a default constructor with the same access modifier as the class itself. A public class would therefore receive a public default constructor, defeating the entire purpose of the singleton.
-<br>
-The next thing to consider is when the singleton instance gets created.
-The first and second proposed methods do not have any performance difference.
-A minor advantage of the second approach is that it hides its implementation behind a [static factory method](https://matthewonsoftware.com/blog/static-factory-method/), so we have the possibility to change the implementation without changing the API.
+### Enum Singleton
 
-<br>
-<br>
-
-Static fields are initialized at class loading time. So the advantage of the lazy initialization method (and the Bill Pugh approach) is the fact that the instance is not created until we actually need it at runtime.
-In the eager approaches we create an object at class loading time, with the possibility that we might not use it later.
-This is not a big issue as long as creating the instance is not too expensive.
-<br>
-Are those methods the safest option?
-
-Let's answer the question. Are there any other ways to create an instance of a class other than the constructor?
-The answer is yes! There is the possibility of initializing an object using **serialization and deserialization** or **reflection**.
-
-
-To make a class serializable we need to implement the Serializable interface.
-But that alone is not enough to ensure that our class would not be instantiated twice.
-
-The solution is that we have to implement the readResolve method, which is called when preparing the deserialized object before returning it to the caller.
+Joshua Bloch (Effective Java, Item 3) recommends using an enum:
 
 ```java
-public class Singleton implements Serializable{
-
-    public static final Singleton INSTANCE = new Singleton();
-
-    private Singleton() {
-    }
-
-    protected Object readResolve() {
-        return INSTANCE;
-    }
-
-}
-```
-
-
-Our second issue is with **reflection**, because when a non-accessible private constructor becomes accessible, then the whole idea of making the class a singleton breaks.
-
-
-<br>
-
-##### Singleton with Enum
-
-All the mentioned possible issues and others are resolved out of the box by Enum.
-
-
-Enums are inherently serializable, so we don't have to worry about it.<br>
-The reflection problem is also not there. <br>
-Creation of Enum instance is also thread-safe, so we don't need to worry about double-checked locking.<br>
-Thus, this method is recommended as **the best method of making singletons in Java.**
-
-**Example:**
-
-```java
-public enum SingletonEnum {
+public enum ConnectionPool {
     INSTANCE;
 
-    String value;
+    private final List<Connection> connections = new ArrayList<>();
 
-    public String getValue() {
-        return value;
+    public Connection acquire() {
+        // ...
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void release(Connection connection) {
+        // ...
     }
 }
 ```
 
-**The disadvantage** is that when serializing an Enum, field variables are not getting serialized.
-For example, if we serialize and deserialize the SingletonEnum class, we will lose the value of the String value field.
-<br>
-<br>
-There are also some **constraints** with enums. In regular classes, there are things that can be achieved but are prohibited in enum classes.
-For example, accessing a static field in a constructor. Additionally, enum singletons cannot extend other classes, since every enum implicitly extends `java.lang.Enum`. If the singleton needs to inherit from a specific base class, the enum approach is not an option.
+Enums are inherently serializable, reflection-proof, and thread-safe. The JVM guarantees that enum values are instantiated exactly once. This eliminates entire categories of problems that the other approaches must handle manually.
 
-<br>
+The trade-off is that enums cannot extend other classes (every enum implicitly extends `java.lang.Enum`). If your singleton needs to inherit from a specific base class, the enum approach will not work. Additionally, when serializing an enum, field values are not preserved. If you serialize and deserialize the `ConnectionPool` above, the `connections` list will be empty on the other side.
 
-##### Singleton as an Anti-Pattern
+### Vulnerabilities: Serialization and Reflection
 
-I should mention that the singleton pattern is a frequent subject of debate. Many experienced developers consider it an anti-pattern, and for good reason.
+The non-enum approaches are vulnerable to two attacks that can break the singleton guarantee.
 
-**Global mutable state.** A singleton is essentially a global variable dressed in object-oriented clothing. Any part of the codebase can access and mutate its state, making it difficult to reason about data flow and introducing hidden coupling between otherwise unrelated components.
+**Serialization** creates a new instance during deserialization, bypassing the private constructor:
 
-**Testing difficulty.** Singletons make unit testing painful. Because the instance is shared across the entire application, tests cannot easily replace it with a mock or stub. One test can silently affect another through the singleton's state, leading to flaky and order-dependent test suites.
+```java
+// Serialize
+ConnectionPool original = ConnectionPool.getInstance();
+ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("pool.ser"));
+out.writeObject(original);
+out.close();
 
-**Tight coupling.** Classes that call `Singleton.getInstance()` directly are tightly coupled to both the singleton class and its lifecycle. This makes it harder to swap implementations, apply the dependency inversion principle, or reuse those classes in a different context.
+// Deserialize — creates a SECOND instance
+ObjectInputStream in = new ObjectInputStream(new FileInputStream("pool.ser"));
+ConnectionPool deserialized = (ConnectionPool) in.readObject();
+in.close();
 
-In modern applications, dependency injection frameworks (Spring, Guice, CDI) manage object lifecycles and scoping. They provide singleton-scoped beans without the drawbacks of the classic singleton pattern -- the container controls creation and wiring, while each class simply declares its dependencies. If I need a single shared instance, I reach for DI container scoping rather than the pattern described above.
+System.out.println(original == deserialized); // false
+```
+
+The fix is to implement `readResolve`, which tells the serialization framework to substitute the deserialized object with the existing instance:
+
+```java
+private Object readResolve() {
+    return getInstance();
+}
+```
+
+**Reflection** can also break the singleton by making the private constructor accessible:
+
+```java
+Constructor<ConnectionPool> constructor = ConnectionPool.class.getDeclaredConstructor();
+constructor.setAccessible(true);
+ConnectionPool second = constructor.newInstance(); // second instance created
+```
+
+There is no clean way to prevent this in a regular class. You can throw an exception from the constructor if the instance already exists, but this is fragile. The enum approach sidesteps both problems entirely because the JVM enforces enum instantiation rules at a level that reflection cannot bypass.
+
+### Comparison
+
+| Approach | Thread-safe | Lazy | Serialization-safe | Reflection-safe |
+|---|---|---|---|---|
+| Public static final field | Yes | No | No | No |
+| Static factory method | Yes | No | No | No |
+| Double-checked locking | Yes | Yes | No | No |
+| Bill Pugh (holder idiom) | Yes | Yes | No | No |
+| Enum | Yes | No | Yes | Yes |
+
+### Why Singleton Is Often an Anti-Pattern
+
+Knowing how to implement a singleton is useful. Knowing when not to use one is more important.
+
+**Global mutable state.** A singleton is a global variable in object-oriented clothing. Any part of the codebase can access and mutate its state, which makes data flow hard to trace and introduces hidden coupling between components that should be independent.
+
+**Testing difficulty.** Because the instance is shared across the entire application, tests cannot easily replace it with a test double. One test can silently affect another through the singleton's state, leading to flaky and order-dependent test suites.
+
+**Tight coupling.** Classes that call `ConnectionPool.getInstance()` are coupled to both the singleton class and its lifecycle. This makes it harder to swap implementations, apply the [dependency inversion principle](/posts/solid-the-first-5-principles-of-object-oriented-design/), or reuse those classes in a different context.
+
+### The Modern Alternative: Dependency Injection
+
+Dependency injection frameworks manage object lifecycles without the drawbacks of the classic singleton pattern. Spring, for example, makes every bean a singleton by default:
+
+```java
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public ConnectionPool connectionPool() {
+        return new ConnectionPool(dataSource, poolSize);
+    }
+}
+```
+
+```java
+@Service
+public class OrderService {
+
+    private final ConnectionPool connectionPool;
+
+    public OrderService(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
+    }
+}
+```
+
+The container creates exactly one `ConnectionPool` and injects it wherever needed. `OrderService` does not know or care that only one instance exists. It declares a dependency and receives it through the constructor. Testing becomes trivial: just pass a different `ConnectionPool` (or a mock) in the test.
+
+If you need a different scope (one instance per HTTP request, per session, or per thread), you change the scope annotation on the bean definition, not the class itself:
+
+```java
+@Bean
+@Scope("request")
+public ShoppingCart shoppingCart() {
+    return new ShoppingCart();
+}
+```
+
+### When Singleton Is Still Appropriate
+
+Despite its drawbacks, the classic singleton pattern has legitimate uses. The key condition is that the class is **stateless** or holds **read-only configuration** that is truly global:
+
+- **JDK utility singletons** like `Runtime.getRuntime()` and `Collections.EMPTY_LIST`.
+- **Logging facades** that delegate to a configured backend.
+- **Read-only configuration** loaded once at startup and never modified.
+
+If the singleton carries mutable state, manages a resource lifecycle, or needs to be swapped during testing, a DI container is almost always a better fit.
+
+> **Related posts**: [Static Factory Method](/posts/static-factory-method/), [Inversion of Control and Dependency Injection](/posts/inversion-of-control-and-the-dependency-injection/)
