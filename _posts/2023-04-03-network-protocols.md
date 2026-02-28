@@ -6,124 +6,132 @@ tags:
   - Networking
   - Protocols
   - TCP
+  - UDP
   - HTTP
   - IP
 ---
 
-### What is a protocol?
+When two machines communicate over a network, they need to agree on the rules: how to find each other, how to structure the data, and what to do when something goes wrong. These agreed-upon rules are **network protocols**. Every request your browser makes, every API call your backend sends, and every message a chat app delivers depends on a stack of protocols working together.
 
-Protocol can be defined as an agreed-upon set of rules that govern an interaction between two or more parties. In our daily lives, we use protocols when interacting with people we meet, such as greeting them with a friendly "Hello, how are you doing?" and shaking hands. Similarly, when machines interact with each other, they also follow specific network protocols.
-These protocols ensure that communication between machines is standardized and efficient, just like how human protocols facilitate smooth interactions between individuals. For example, the Transmission Control Protocol (TCP) is a network protocol used for communication between machines on the internet. It provides a reliable, ordered, and error-checked delivery of data between applications running on different hosts.
+The most important ones to understand for system design are IP, TCP, UDP, and HTTP. Each builds on the layer below it and solves a different set of problems.
 
+### IP: Addressing and Routing
 
-### Prerequisites 
-#### IP Address
+The **Internet Protocol (IP)** is the foundation of the stack. It handles two things: addressing (every machine gets an IP address) and routing (getting data from source to destination across intermediate networks).
 
-An address given to each machine connected to the public internet. IPv4 addresses consist of four numbers separated by dots:
-**a.b.c.d** where all four numbers are between 0 and 255. Special values include:
-* **127.0.0.1**: Your own local machine. Also referred to as **localhost**.
-* **192.168.x.y**: Your private network. For instance, your machine and all machines on your private wifi network will usually have the **192.168** prefix
+An **IP address** identifies a machine on the network. IPv4 addresses look like `192.168.1.42`, where each of the four numbers ranges from 0 to 255. Two special ranges are worth knowing:
 
-#### Port
-In order for multiple programs to listen for new network connections to the same machine without colliding, they pick a **port** to listen on. 
-A port is an integer between 0 and 65,535 (2<sup>16</sup> ports total).
+- `127.0.0.1` (also called **localhost**) always refers to the machine you are on.
+- `192.168.x.y` addresses are reserved for private networks, such as a home Wi-Fi or office LAN.
 
-Typically, ports 0-1023 are reserved for system ports (also called well-known ports) and shouldn't be used by user-level processes. 
-Certain ports have pre-defined uses, and although you usually won't be required to have them memorized, they can sometimes come in handy. 
-Below are some examples:
-* 22: Secure Shell
-* 53: DNS lookup
-* 80: HTTP
-* 443: HTTPS
+A **port** is a number between 0 and 65,535 that identifies a specific application on a machine. Without ports, only one program per machine could listen for network traffic. Some ports are conventionally assigned: 22 for SSH, 53 for DNS, 80 for HTTP, 443 for HTTPS.
 
-#### IP Packet
-Sometimes more broadly referred to as just a (network) **packet**, an IP packet is effectively the smallest unit used to describe data
-being sent over **IP**, aside from bytes. An IP packet consists of:
-* an **IP header**, which contains the source and destination **IP addresses** as well as other information related to the network
-* a **payload**, which is just the data being sent over the network
+Data travels as **IP packets**, each consisting of a header (source address, destination address, metadata) and a payload (the actual data). A single packet can carry at most 65,535 bytes. Anything larger must be split across multiple packets.
 
+IP alone makes no promises. Packets may arrive out of order, arrive duplicated, or not arrive at all. It is a best-effort delivery system. The protocols built on top of IP exist precisely to address these limitations.
 
-<br>
+### TCP: Reliable, Ordered Delivery
 
-### IP
+The **Transmission Control Protocol (TCP)** adds reliability on top of IP. Before any data is exchanged, the client and server perform a [three-way handshake](https://developer.mozilla.org/en-US/docs/Glossary/TCP_handshake) to establish a connection. Once the connection is open, TCP guarantees that:
 
-Stands for **Internet Protocol**. This network protocol outlines how almost all machine-to-machine communications should happen in the world. 
-Other protocols like **TCP**, **UDP** and **HTTP** are built on top of IP. The modern internet effectively operates following the Internet Protocol. When a machine or client tries to interact with another machine or server, the data is sent in the form of what is known as an IP packet.
+- **All data arrives** at the destination. Lost packets are detected and retransmitted.
+- **Data arrives in order.** Each segment carries a sequence number, and the receiver reassembles them correctly.
+- **Corrupted data is detected.** Each segment includes a checksum. If verification fails, the segment is discarded and retransmitted.
 
+This makes TCP suitable for any communication where correctness matters: web pages, API calls, file transfers, database queries, and email.
 
-They have a maximum size limit of only 65,535 bytes, which may not be sufficient for transmitting large files or data. When sending data that exceeds this limit, the information is split into multiple IP packets.
+The trade-off is overhead. The handshake adds latency to connection setup. Acknowledgments and retransmissions add latency during transfer. And because TCP enforces in-order delivery, a single lost packet stalls all packets behind it, a problem known as **head-of-line blocking**.
 
-However, if the only protocol used is the Internet Protocol, there is no guarantee that all the packets will be received or that they will be received in the correct order. Some packets may get lost, leading to incomplete data transmission. In addition, the order in which packets are received and interpreted may not be as intended.
+TCP is implemented in the operating system kernel and exposed to applications through **sockets**. Here is a minimal TCP echo server and client in Java:
 
-<br>
+```java
+// Server: listens on port 8080 and echoes back whatever it receives
+try (ServerSocket server = new ServerSocket(8080)) {
+    try (Socket client = server.accept()) {
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(client.getInputStream()));
+        PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
-### TCP 
-The Transmission Control Protocol (TCP) is designed to address the issues mentioned earlier and is built on top of the Internet Protocol (IP). Its purpose is to send IP packets in an ordered, reliable, and error-checked manner. Note that "error-checked" means TCP detects corrupted or missing data and requests retransmission; it does not prevent errors from occurring during transmission. This means that the order in which packets are read by the destination machine is guaranteed, and if any packets fail to reach their destination or get corrupted during transmission, the sender is informed so that the packets can be resent without corruption.
-
-TCP is used in almost all web applications, allowing for the transmission of arbitrarily long pieces of data between machines. It achieves this by creating a connection [handshake](https://developer.mozilla.org/en-US/docs/Glossary/TCP_handshake) between the sender and receiver, ensuring the reliability of data transmission.
-
-TCP is typically implemented in the kernel and exposes sockets to applications. Applications can use these sockets to stream data through an open connection, ensuring the data is transmitted reliably and accurately.
-
-So basically it's a more powerful and more functional wrapper around IP, around the Internet Protocol. But still what it lacks is a really robust framework
-that developers, software engineers can use to really define meaningful and easy-to-use communication channels for clients and servers in the system.
-
-
-<br>
-
-### UDP
-
-The User Datagram Protocol (UDP) is another protocol built on top of IP. Unlike TCP, UDP does not establish a connection before sending data and provides no guarantees regarding ordering, reliability, or delivery. There is no handshake, no acknowledgment of received packets, and no automatic retransmission of lost data.
-
-This lack of overhead makes UDP significantly faster and more lightweight than TCP. Because it skips the connection setup and does not wait for acknowledgments, UDP achieves lower latency per packet.
-
-UDP is well suited for use cases where speed matters more than perfect reliability:
-* **Video streaming and video calls**: A few dropped frames are acceptable; waiting for retransmissions would cause noticeable lag.
-* **Online gaming**: Players need real-time updates; outdated retransmitted packets are less useful than fresh data.
-* **DNS lookups**: A single request-response exchange benefits from minimal overhead. If the response is lost, the client simply retries.
-* **Voice over IP (VoIP)**: Similar to video, slight data loss is preferable to the delays introduced by retransmission.
-
-UDP uses the same addressing model as TCP (IP address plus port number), and each UDP message is called a **datagram**. Since there is no connection state to maintain, a single UDP socket can send datagrams to many different destinations and receive datagrams from many different sources.
-
-In short, TCP and UDP represent two fundamentally different trade-offs: TCP prioritizes reliability and correctness at the cost of additional latency and overhead, while UDP prioritizes speed and simplicity at the cost of guaranteed delivery.
-
-
-<br>
-
-### HTTP
-The **H**yper**T**ext **T**ransfer **P**rotocol is very common network protocol implemented on top of TCP, it provides a higher level of abstraction above TCP and IP through the request and response paradigm. This enables machines to communicate with each other by following a set of rules that govern the exchange of requests and responses.
-
-HTTP's request and response paradigm, along with its accompanying rules, makes it easy for developers to create robust and maintainable systems. This is why most of the modern-day systems rely on the HTTP protocol for communication.
-
-With HTTP, developers can focus solely on HTTP requests and responses, without worrying about the underlying details of IP packets and TCP.
-
-This abstraction makes development faster, more efficient, and less error-prone, as developers can focus solely on building the functionality that their application requires.
-
-Requests typically have the following schema:
-
-``` 
-host: string (example: matthewonsoftware.com)
-port: integer (example: 80 or 443)
-method: string (example: GET, PUT, POST, DELETE, OPTIONS or PATCH)
-headers: pair list (example: "Content-Type": "application/json")
-body: opaque sequence of bytes
+        String message = in.readLine();
+        out.println("Echo: " + message);
+    }
+}
 ```
 
-Responses typically have the following schema:
+```java
+// Client: connects, sends a message, reads the response
+try (Socket socket = new Socket("localhost", 8080)) {
+    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+    BufferedReader in = new BufferedReader(
+            new InputStreamReader(socket.getInputStream()));
+
+    out.println("Hello, server");
+    String response = in.readLine(); // "Echo: Hello, server"
+}
+```
+
+The developer works with streams (readers and writers), not raw packets. TCP handles segmentation, ordering, retransmission, and reassembly behind the scenes.
+
+### UDP: Fast, Unordered Delivery
+
+The **User Datagram Protocol (UDP)** also sits on top of IP but takes the opposite approach from TCP. There is no connection, no handshake, no acknowledgment, and no guaranteed ordering. You send a **datagram** (a self-contained message) and hope it arrives.
+
+This sounds reckless, but the lack of overhead makes UDP significantly faster than TCP. It is the right choice when speed matters more than perfect delivery:
+
+- **Video streaming and calls.** A few dropped frames are imperceptible. Waiting for retransmissions would cause visible lag.
+- **Online gaming.** Players need real-time position updates. A retransmitted packet from 200ms ago is useless because the player has already moved.
+- **DNS lookups.** A single request-response exchange. If the response is lost, the client simply asks again.
+- **Voice over IP.** Slight audio loss is preferable to the pauses that retransmission would introduce.
+
+UDP uses the same addressing model as TCP (IP address plus port). Since there is no connection state to maintain, a single UDP socket can send datagrams to many different destinations and receive from many different sources.
+
+### TCP vs UDP at a Glance
+
+| | TCP | UDP |
+|---|---|---|
+| Connection | Three-way handshake | None |
+| Delivery guarantee | Yes (retransmission) | No |
+| Ordering guarantee | Yes (sequence numbers) | No |
+| Error detection | Checksum + retransmit | Checksum only |
+| Overhead | Higher | Lower |
+| Latency | Higher | Lower |
+| Typical use | Web, APIs, file transfer, email | Streaming, gaming, DNS, VoIP |
+
+In short, TCP and UDP represent two fundamentally different trade-offs. TCP prioritizes correctness at the cost of overhead. UDP prioritizes speed at the cost of guaranteed delivery. Choosing between them depends entirely on whether your application can tolerate lost data.
+
+### HTTP: The Application-Layer Protocol
+
+TCP solves the transport problem, but it says nothing about the meaning of the data being sent. The **HyperText Transfer Protocol (HTTP)** adds structure on top of TCP through a request-response model. A client sends a request with a method, path, headers, and optional body. The server responds with a status code, headers, and optional body.
+
+A request looks like this:
 
 ```
-status code: integer (example: 200, 401)
-headers: pair list (example: "Content-Length": 1238)
-body: opaque sequence of bytes
+GET /api/orders/42 HTTP/1.1
+Host: api.example.com
+Accept: application/json
+Authorization: Bearer eyJhbGci...
 ```
+
+A response looks like this:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 127
+
+{"id": 42, "status": "PLACED", "total": "59.98"}
+```
+
+This simple structure is the foundation of virtually every web application and REST API. Developers work with HTTP methods (`GET`, `POST`, `PUT`, `DELETE`), status codes (`200 OK`, `404 Not Found`, `500 Internal Server Error`), and headers, without thinking about TCP segments or IP packets underneath.
 
 #### HTTP Versions
 
-HTTP has evolved significantly over the years, and understanding the key versions helps when reasoning about system performance:
+HTTP has evolved significantly, and the differences matter for system performance:
 
-* **HTTP/1.1** introduced persistent connections (keep-alive) so that multiple requests could share a single TCP connection. However, it still suffers from head-of-line blocking: each request on a connection must wait for the previous response before being sent.
+**HTTP/1.1** introduced persistent connections (keep-alive), allowing multiple requests to reuse a single TCP connection. However, requests on a connection are processed sequentially: request 1 must complete before request 2 can begin. This is **head-of-line blocking** at the application layer. Browsers work around it by opening multiple TCP connections per domain (typically six), but this wastes resources.
 
-* **HTTP/2** solved the head-of-line blocking problem at the application layer by introducing **multiplexing**, which allows multiple requests and responses to be interleaved over a single TCP connection simultaneously. It also added header compression (HPACK) and server push capabilities.
+**HTTP/2** solved application-layer head-of-line blocking with **multiplexing**: multiple requests and responses are interleaved as binary frames over a single TCP connection. It also introduced **header compression** (HPACK), which significantly reduces overhead when the same headers are sent repeatedly, and **server push**, which allows the server to send resources proactively before the client requests them. In practice, HTTP/2 reduces page load times noticeably for sites that serve many small resources (scripts, stylesheets, images).
 
-* **HTTP/3** takes this a step further by replacing TCP entirely with **QUIC**, a protocol built on top of UDP. QUIC provides its own reliability, ordering, and congestion control mechanisms while eliminating TCP-level head-of-line blocking. Because QUIC handles each stream independently, a lost packet in one stream does not stall other streams. HTTP/3 also offers faster connection establishment, often completing the handshake in a single round trip.
+**HTTP/3** replaces TCP entirely with **QUIC**, a transport protocol built on UDP. QUIC provides its own reliability and congestion control while handling each stream independently. If a packet belonging to one stream is lost, other streams continue unaffected, which eliminates TCP-level head-of-line blocking. QUIC also establishes connections faster (often in a single round trip, compared to TCP's three-way handshake plus the TLS handshake), which makes a noticeable difference on mobile networks with high latency. Major platforms including Google, Cloudflare, and Meta have adopted HTTP/3 at scale, and it is the default for most modern browsers.
 
-
+> **Related posts**: [Latency and Throughput](/posts/latency-and-throughput/), [Caching](/posts/caching/), [Load Balancers](/posts/load-balancers/)
