@@ -105,6 +105,9 @@ a graph with multiple levels of relationships, such as social networks.
 
 However, graph databases are not the right choice for every scenario. For simple relational data with well-defined schemas and straightforward join patterns, a traditional SQL database will typically outperform a graph database and be easier to maintain. Graph databases can also struggle with high-write, bulk-ingest workloads, as maintaining index structures for edges and nodes adds overhead compared to row-oriented or column-oriented stores.
 
+![img]({{site.url}}/assets/blog_images/2023-04-28-specialized-storage-paradigms/graphdb-example-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-04-28-specialized-storage-paradigms/graphdb-example-dark.png){: .dark }
+
 #### Cypher
 
 Cypher is a graph query language originally developed for the Neo4j graph database but has since been standardized for
