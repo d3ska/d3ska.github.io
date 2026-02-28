@@ -9,103 +9,112 @@ tags:
   - Software Architecture
 ---
 
-#### Inversion of Control and Dependency Injection
+Consider a program that manages songs: you can search them, read details, and discover interesting facts about each. There would probably be a class that searches for those songs by asking some external provider.
 
-I believe that many of you, like me, also learn the fastest through examples. <br>
-Let's consider a simple example. Imagine a program that is managing songs, you can search them, read/add details, and some interesting facts about each. <br>
-There would probably be a class that would search for those songs in some repository or asks some external providers for example.
+### The Problem: Hidden Dependencies
+
+A first attempt might look like this:
 
 ```java
 class SongLister {
-    
-    public final SpotifySongsProvider provider;
-    
-    public Collection<Song> songsByArtist(String artistName){
-       return provider.findSongsByArtist(artistName);
+
+    public final SpotifySongsProvider provider = new SpotifySongsProvider();
+
+    public Collection<Song> songsByArtist(String artistName) {
+        return provider.findSongsByArtist(artistName);
     }
 }
 ```
-But the above implementation is pretty naive. Why is that?
-We are using concrete implementation of some finder to get songs.
-In its current state, it's highly coupled, and it's not good.
 
-I want the method songsByArtist to be completely independent of the provider.
-In other words, 'WHAT' should not be limited by 'HOW' we are doing something.
-It should be just an inner implementation detail, an abstraction.
+This implementation has several problems. The field is `public`, so anyone can replace or misuse the provider directly. It uses a concrete class (`SpotifySongsProvider`) instead of an abstraction, so the lister is tightly coupled to Spotify. And the provider is instantiated inline, so there is no way to swap it for a different implementation or a test double without modifying the class.
 
-To achieve it, I will extract the interface, which defined the proper API contract.
+I want `songsByArtist` to be completely independent of the provider. In other words, *what* we do should not be limited by *how* we do it. The source of songs should be an implementation detail behind an abstraction.
 
-```java 
+The first step is extracting an interface that defines the contract:
+
+```java
 public interface SongsProvider {
     List<Song> findSongsByArtist(String artistName);
 }
 ```
 
-Now it is maybe decoupled, thanks to the interface.
-But still, we need to somehow make a concrete implementation to work with SongLister class.
-Firstly let's try with creating a concrete implementation in the constructor of SongLister class.
+Now let's try using the interface, but still creating the concrete implementation inside the constructor:
 
 ```java
 class SongLister {
 
-    private SongsProvider provider;
+    private final SongsProvider provider;
 
     public SongLister() {
-        provider = new SpotifyProvider();
+        this.provider = new SpotifyProvider();
     }
 }
 ```
-Now it is somewhat configurable at most I would say, as now we depend on both the concrete implementation and the SongsProvider interface.
 
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/concrete-implementation-constructor-initializing-light.png){: .light }
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/concrete-implementation-constructor-initializing-dark.png){: .dark }
 
-The desired situation is where we would depend just on the interface.
-It's highly possible that we would have several SongsProvider implementations which we would like to use but independent of the SongLister class.
+This is better, but `SongLister` still depends on `SpotifyProvider`. If we want to use a different source of songs (say, a local file for development or a different streaming service in production), we have to change the class. We would like providers to be interchangeable plugins, but by directly instantiating one, we lose that flexibility.
 
-There are chances, that we would want to use a different source of songs, for example, we would like to take songs from some hosted file, for purpose of the local development.
+### What Is Inversion of Control?
 
-We would like to have them just be dependencies/ plugins. But by direct instantiating it we are losing the possibility, to have finder as a dependency/ plugin.
+**Inversion of Control** (IoC) is a principle that transfers control over object creation and wiring from the objects themselves to an external entity: a framework, a container, or simply the calling code.
 
-<br>
+Without IoC, the `SongLister` decides which provider to create. With IoC, something outside the `SongLister` makes that decision and supplies the provider. The key advantages:
 
-#### What is Inversion of Control?
+* Decoupling between *what* a class does and *how* its dependencies are provided
+* Components become configurable and easily extendable
+* Easier testing (dependencies can be replaced with test doubles)
+* Greater modularity and separation of concerns
 
-Inversion of Control is a principle in software engineering that transfers the control of objects or portions of a program to a container or framework.
-This gives a few advantages such as:
+IoC is a broad concept. It can be achieved through several mechanisms: the Strategy pattern, the Factory pattern, the Service Locator pattern, and Dependency Injection (DI).
 
-* Decoupling Between 'WHAT' and 'HOW' Something Is Achieved
-* Configurable components makes application easily extendable
-* Easier Testing
-* Separation of Concerns
-* Greater Modularity of a Program
-
-
-IoC can be achieved in a few ways, so actually IoC is a concept that is implemented by mechanisms such as Strategy design pattern, Factory pattern, Service Locator pattern, and finally Dependency Injection (DI).
-
-Worth noting: while the Service Locator pattern technically achieves IoC, it is widely considered an anti-pattern in modern applications. The key issue is that it hides class dependencies instead of making them explicit, which makes the code harder to reason about and test. With a Service Locator, you cannot tell from a class's constructor what it depends on -- you only discover missing dependencies at runtime. Dependency Injection, by contrast, makes every dependency visible and explicit.
-
-<br>
+Worth noting: while the Service Locator pattern technically achieves IoC, it is widely considered an anti-pattern in modern applications. The key issue is that it hides class dependencies instead of making them explicit, which makes the code harder to reason about and test. With a Service Locator, you cannot tell from a class's constructor what it depends on. You only discover missing dependencies at runtime. Dependency Injection, by contrast, makes every dependency visible and explicit.
 
 ### Dependency Injection
 
-One of the most known implementations of IoC is based on the idea to have a separate object, an assembler, which is responsible for connecting objects with each other, or rather "injecting" them into other objects.
+**Dependency Injection** is the most widely used form of IoC. Instead of a class creating or locating its own dependencies, an external assembler "injects" them. The class declares what it needs (through a constructor parameter, a setter, or a field), and someone else provides it.
 
-Dependency diagram with our songs example:
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/di-architecture-light.png){: .light }
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/di-architecture-dark.png){: .dark }
 
-
-<br>
-
-Our code should look like below. Now we are expecting a provider in a constructor, or rather a SongsProvider interface, not a concrete implementation as you noticed. <br>
-What are the benefits? This gives us a huge possibility to use different providers without breaking changes, thanks to the fact that it's decoupled. <br>
-For me, personally more suitable name would be Configurable Dependency rather than Dependency Injection.
+Applied to our example, the `SongLister` now expects a `SongsProvider` in its constructor instead of creating one:
 
 ```java
 class SongLister {
 
-    private SongsProvider provider;
+    private final SongsProvider provider;
+
+    public SongLister(SongsProvider provider) {
+        this.provider = provider;
+    }
+
+    public Collection<Song> songsByArtist(String artistName) {
+        return provider.findSongsByArtist(artistName);
+    }
+}
+```
+
+The caller decides which implementation to use:
+
+```java
+SongLister lister = new SongLister(new SpotifyProvider());
+// or for local development:
+SongLister lister = new SongLister(new LocalFileProvider());
+```
+
+This gives us the flexibility to swap providers without any changes to `SongLister`. For me, a more descriptive name for this concept would be "configurable dependency" rather than "dependency injection."
+
+### Types of Dependency Injection
+
+There are three common ways to inject dependencies.
+
+**Constructor injection** passes dependencies through the constructor. This is the recommended approach for required dependencies because it makes them explicit, enforces that the object is fully initialized before use, and allows fields to be `final`.
+
+```java
+class SongLister {
+
+    private final SongsProvider provider;
 
     public SongLister(SongsProvider provider) {
         this.provider = provider;
@@ -113,39 +122,87 @@ class SongLister {
 }
 ```
 
+**Setter injection** provides dependencies through setter methods after construction. This is suitable for optional dependencies that have reasonable defaults.
 
-<br> 
+```java
+class SongLister {
 
-#### Types of Dependency Injection
+    private SongsProvider provider = new DefaultProvider();
 
-**Dependency Injection in Spring can be done through constructors, setters, or fields.**
+    public void setProvider(SongsProvider provider) {
+        this.provider = provider;
+    }
+}
+```
 
+**Field injection** sets dependencies directly on fields, typically using reflection. This approach is generally discouraged outside of tests for several reasons:
 
-1. Constructor-Based Dependency Injection
-   The container will invoke a constructor with an argument representing a dependency we want to set.
-   An example of that approach is above, it's recommended for mandatory dependencies, but to be honest it is used most of the time. Since Spring 4.3, if a class has a single constructor, the `@Autowired` annotation is no longer required -- Spring will use that constructor for injection automatically. This further reinforces constructor-based injection as the idiomatic default in Spring applications.
+* It hides dependencies, making it impossible to tell what a class needs by looking at its constructor
+* It prevents fields from being `final`, since the field must be writable after construction
+* It relies on reflection, which bypasses Java's access control mechanisms
+* It makes unit testing harder without a DI framework
+* It makes it easy to keep adding dependencies without noticing that the class is doing too much, violating the Single Responsibility Principle
 
-2. Setter-Based Dependency Injection
-   The container will call the setter method after initiating a bean by invoking a no-argument constructor or no-argument static factory method.
-   Spring documentation recommends setter-based injection for optional ones.
+```java
+class SongLister {
 
-3. Field-Based Dependency Injection
-   If there is no constructor or setter method to inject the Item bean, the container will use reflection to inject our desired dependency.
-   It's not recommended to use this approach because of the following reasons:
-   * It binds us tightly to the Spring framework
-   * This is done by reflection, which bypasses Java's access control mechanisms, and it is costlier than constructor-based or setter-based injection and is also a reason for the first point.
-   * It's harder to test.
-   * Fields can not be final as the final field has to be initialized through the constructor, but Field-Based Injection is performed after constructing an object.
-   * It's easy to add more and more dependencies, especially when using this approach, and violate SRP. Constructor/setter-based injections would make us think earlier that we have too many dependencies.
+    @Inject
+    private SongsProvider provider;
+}
+```
 
-   The only scenario where it is acceptable, it's in tests.
+### Dependency Injection in Spring
 
+Spring is the most widely used DI framework in the Java ecosystem. It manages object creation and lifecycle through its **application context** (the IoC container) and injects dependencies based on configuration or annotations.
 
-##### Recommended and used articles:
+Spring supports all three injection types. For constructor injection, if a class has a single constructor, Spring uses it automatically without requiring the `@Autowired` annotation (since Spring 4.3). This further reinforces constructor-based injection as the idiomatic default in Spring applications.
 
-Baeldung:
-* [Intro to Inversion of Control and Dependency Injection with Spring](https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring)
+```java
+@Service
+class SongLister {
 
-Martin Fowler's articles:
-* [Inversion of Control](https://martinfowler.com/bliki/InversionOfControl.html)
-* [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)
+    private final SongsProvider provider;
+
+    public SongLister(SongsProvider provider) {
+        this.provider = provider;
+    }
+}
+```
+
+For setter injection, Spring calls the annotated setter after constructing the bean:
+
+```java
+@Service
+class SongLister {
+
+    private SongsProvider provider;
+
+    @Autowired
+    public void setProvider(SongsProvider provider) {
+        this.provider = provider;
+    }
+}
+```
+
+Spring documentation recommends setter-based injection for optional dependencies.
+
+For field injection, Spring uses reflection to set the field directly:
+
+```java
+@Service
+class SongLister {
+
+    @Autowired
+    private SongsProvider provider;
+}
+```
+
+Field injection is the most concise syntax, but it carries all the disadvantages described earlier. The only scenario where it is generally acceptable is in test classes, where brevity outweighs the design concerns.
+
+> **Related post:** [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/)
+
+### References
+
+* Martin Fowler, [Inversion of Control](https://martinfowler.com/bliki/InversionOfControl.html)
+* Martin Fowler, [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)
+* Baeldung, [Intro to Inversion of Control and Dependency Injection with Spring](https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring)
