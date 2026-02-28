@@ -9,58 +9,54 @@ tags:
   - Networking
 ---
 
-### Introduction to Peer-To-Peer Networks
+In a traditional client-server architecture, a central server owns the data and clients request it. If the server goes down or gets overloaded, everyone is affected. A **Peer-to-Peer** (P2P) network flips this model: every node (called a **peer**) acts as both a client and a server. Peers share resources directly with each other, distributing the workload so that no single machine is a bottleneck or a single point of failure.
 
-A Peer-To-Peer (P2P) network is a distributed system comprised of connected nodes, known as peers, that cooperate and share resources to achieve a common objective. These peers collectively distribute workloads amongst themselves, which often leads to faster and more efficient task completion as compared to traditional centralized systems. P2P networks are widely utilized in various applications, with file-sharing, content distribution, and decentralized storage being some of the most popular use cases.
+### How P2P Networks Are Used
 
+**File sharing and content distribution.** BitTorrent is the most well-known P2P protocol. When you download a file via BitTorrent, you do not pull it from a single server. Instead, you download different pieces from multiple peers simultaneously, and you upload pieces you already have to other peers. The more popular a file is, the faster it downloads, because more peers are seeding it. This is the opposite of client-server, where popular files overload the server.
 
-### Examples of Peer-To-Peer Network Usage
+**Blockchain and cryptocurrencies.** Bitcoin, Ethereum, and other blockchain networks are P2P systems. Every node maintains a copy of the ledger and validates new transactions. There is no central authority. Consensus protocols (Proof of Work, Proof of Stake) replace the trust that a central server would normally provide.
 
-* **File-sharing and content distribution**: One of the most famous examples of P2P networks is BitTorrent, a protocol used to share large files and content over the internet. In this system, users can download files from multiple peers, distributing the bandwidth and workload across the network, thus increasing the overall download speed and efficiency.
+**Distributed storage.** The InterPlanetary File System (IPFS) uses P2P for decentralized file storage. Files are split into blocks, each identified by its content hash, and distributed across participating nodes. Retrieving a file means fetching blocks from whichever peers have them, providing redundancy and resilience.
 
-* **Distributed storage systems**: P2P networks can be used for distributed storage solutions like InterPlanetary File System (IPFS). IPFS allows users to store and retrieve data in a decentralized manner, reducing reliance on centralized servers and improving data redundancy and resilience.
+**Messaging.** P2P enables communication without centralized servers. Briar routes messages through the Tor network without relying on any central infrastructure, and Tox provides direct peer-to-peer encrypted messaging. Note that while apps like Signal use end-to-end encryption, they still rely on centralized servers for message routing and are not true P2P systems.
 
-* **Cryptocurrencies and blockchain**: Blockchain networks like Bitcoin and Ethereum use P2P networks for the decentralized management and verification of transactions. Nodes in these networks maintain copies of the blockchain ledger and validate new transactions, eliminating the need for central authorities.
+### Structured vs Unstructured Networks
 
-* **Communication and messaging**: P2P networks can be used to build secure and private messaging systems. Examples include Briar, which routes messages through the Tor network without relying on centralized servers, and Tox, which provides direct peer-to-peer encrypted communication. Note that while apps like Signal and WhatsApp use the Signal Protocol for end-to-end encryption, they still rely on centralized servers for message routing and are not true P2P systems.
+P2P networks fall into two categories based on how peers are organized.
 
+**Structured networks** impose a specific topology using a **Distributed Hash Table** (DHT). Each piece of data maps to a specific node (or set of nodes) based on its key. When a peer wants to find data, it does not need to ask everyone. It can route the query through the DHT and reach the responsible node in O(log N) hops, where N is the number of peers. Kademlia (used by BitTorrent and Ethereum) and Chord are well-known DHT implementations.
 
+The trade-off is maintenance overhead: when peers join or leave, the DHT must be updated. But the lookup efficiency makes structured networks the right choice for systems where data needs to be found reliably.
 
-### Challenges in P2P Networks
+**Unstructured networks** have no predefined topology. Peers form connections randomly, and there is no mapping between data and nodes. To find something, a peer floods a query to its neighbors, who forward it to their neighbors, and so on. Early Gnutella worked this way. Unstructured networks are simple to build and resilient to churn (peers joining and leaving frequently), but searching for rare items is inefficient because there is no guarantee that a query will reach the peer holding the data.
 
-P2P networks come with a unique set of challenges that must be addressed for reliable operation:
+### Gossip Protocol
 
-* **NAT traversal**: Most peers sit behind Network Address Translation (NAT) devices, which makes it difficult for external peers to initiate connections to them. Techniques like hole punching, STUN, and TURN servers are commonly used to work around this.
-* **Free-riding**: Some peers consume resources (e.g., downloading files) without contributing back to the network (e.g., not uploading or seeding). This imbalance can degrade network performance and fairness. Incentive mechanisms like BitTorrent's tit-for-tat strategy help mitigate this.
-* **Sybil attacks**: A malicious actor can create a large number of fake identities (peers) to flood the network and gain disproportionate influence, potentially disrupting routing, voting, or reputation systems.
-* **Churn**: Peers frequently join and leave the network, which forces the system to constantly update its routing tables and redistribute data. High churn rates can lead to data unavailability and increased overhead for maintaining network structure.
+The **Gossip Protocol** (also called epidemic protocol) is how many P2P systems propagate information without centralized coordination. It works like rumors spreading through a crowd:
 
+1. A peer periodically selects one or more random neighbors.
+2. It shares its current state or recent updates with them.
+3. Those neighbors do the same in their next cycle, sharing the information with their own randomly chosen neighbors.
 
-### Structured vs Unstructured P2P Networks
+Because each round roughly doubles the number of informed nodes, information spreads exponentially, reaching the entire network in O(log N) rounds. This makes gossip protocols remarkably scalable: even if some peers fail or messages are lost, the redundancy of multiple independent paths ensures that information eventually propagates everywhere.
 
-P2P networks can be broadly classified into two categories based on how peers are organized:
+In practice, gossip protocols handle membership management (tracking which peers are alive), failure detection, and state dissemination. Apache Cassandra uses gossip internally for cluster state propagation, and many blockchain networks use gossip-based transaction broadcasting.
 
-* **Structured P2P networks** impose a specific topology on the overlay network, typically using a Distributed Hash Table (DHT). In these networks, data placement is deterministic -- each piece of data maps to a specific node (or set of nodes) based on its key. Examples include Chord, Kademlia (used in BitTorrent), and Pastry. Structured networks provide efficient lookups, usually in O(log N) hops, but require overhead to maintain the structure as peers join and leave.
+### Challenges
 
-* **Unstructured P2P networks** have no predefined topology. Peers form connections randomly, and data placement has no correlation with the overlay topology. To find data, peers typically rely on flooding queries to their neighbors. Early Gnutella is a classic example. Unstructured networks are simple to build and resilient to churn, but searching for rare items can be inefficient since there is no guarantee a query will reach the peer holding the desired data.
+P2P networks come with a unique set of challenges:
 
+* **NAT traversal.** Most peers sit behind Network Address Translation (NAT) devices, making it difficult for external peers to initiate connections. Techniques like UDP hole punching, STUN, and TURN servers are used to work around this.
+* **Free-riding.** Some peers consume resources (downloading files) without contributing back (not uploading or seeding). This degrades network performance. Incentive mechanisms like BitTorrent's tit-for-tat strategy help: peers that upload more get better download speeds.
+* **Sybil attacks.** A malicious actor creates a large number of fake identities to gain disproportionate influence over routing, voting, or reputation systems. Defenses include proof-of-work identity costs and trust-based reputation systems.
+* **Churn.** Peers frequently join and leave, forcing the system to constantly update routing tables and redistribute data. High churn rates can lead to data unavailability and increased maintenance overhead. Replication (storing data on multiple peers) is the primary mitigation.
 
-### Gossip Protocol in P2P Networks
+### Centralized Discovery
 
-The Gossip Protocol, also known as epidemic protocol, is a communication mechanism used in P2P networks to effectively disseminate information across the network. In this protocol, each peer periodically exchanges information with its neighbors in a randomized and decentralized manner. The process of exchanging information, or gossip, helps maintain consistency and fault tolerance in the network.
+Even in P2P networks, peers need a way to find each other initially. Two common approaches:
 
-Here is how it works in practice: each node periodically selects one or more random peers from its known set of neighbors and shares its current state or recent updates with them. Those peers, in turn, do the same during their next cycle, sharing the received information with their own randomly chosen neighbors. Because each round roughly doubles the number of informed nodes, information spreads exponentially -- reaching the entire network in O(log N) rounds, where N is the number of peers. This property makes gossip protocols remarkably scalable and robust: even if some peers fail or messages are lost, the redundancy of multiple independent gossip paths ensures that information eventually propagates throughout the network.
+* **Tracker servers.** A central server maintains a list of peers participating in a particular swarm or network. BitTorrent trackers are the classic example. The tracker is not involved in data transfer, only in helping peers discover each other. If the tracker goes down, existing connections continue, but new peers cannot join.
+* **Bootstrap nodes.** A small set of well-known nodes that new peers contact to learn about other peers in the network. Once a peer has discovered enough neighbors, it no longer needs the bootstrap nodes. This is how most DHT-based systems handle initial peer discovery.
 
-Gossip protocols are used in practice for membership management (tracking which peers are alive), failure detection, and data dissemination. Systems like Apache Cassandra use gossip internally for cluster state propagation.
-
-
-### Alternative Approaches and Techniques in P2P Networks
-
-Besides the Gossip Protocol, P2P networks can also implement alternative approaches for maintaining the knowledge of data location and network structure, such as Distributed Hash Tables (DHTs) and central trackers.
-
-* **Distributed Hash Table (DHT)**: A DHT is a decentralized data structure that allows nodes to efficiently store and retrieve data in a P2P network. In a DHT-based system, each peer is responsible for a portion of the hash table, storing and maintaining data associated with specific keys. Nodes can efficiently locate and retrieve data by querying the appropriate peer responsible for the required key. Examples of DHT-based P2P systems include Kademlia, which is used in the BitTorrent protocol, and the Distributed Hash Table used in Ethereum's network.
-
-* **Central Tracker**: In this approach, a central node keeps track of which peer contains specific data, and clients can query the central node to locate the desired data. This method is used in some BitTorrent implementations to maintain an up-to-date list of available peers for downloading a specific file.
-
-
-In summary, Peer-To-Peer networks are distributed systems that leverage the collective power of connected nodes to achieve a common goal. These networks utilize efficient communication mechanisms, such as the Gossip Protocol, as well as alternative approaches like Distributed Hash Tables and central trackers, to provide scalable, fault-tolerant, and decentralized solutions for various applications, including file-sharing, content distribution, and decentralized storage.
+Neither approach contradicts the P2P model. The data transfer and processing remain distributed; only the initial discovery step involves a known endpoint.

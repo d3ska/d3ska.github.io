@@ -9,32 +9,29 @@ tags:
   - E2E Testing
 ---
 
-Software testing is an integral part of the development process. Each type of testing has its specific purpose and helps ensure the highest quality of the final product. Here are the most crucial types of tests used in software development.
+Software testing is an integral part of the development process. Each type of testing targets a different scope, and understanding when to use which is more valuable than memorizing definitions.
 
 ### Unit Tests
 
-Unit tests operate at the lowest level, targeting individual methods, classes, components, and modules. They run without any integration with other modules, without database communication, and without simulated HTTP traffic. These are considered "small tests" according to Google's scale and involve a single process.
+Unit tests operate at the lowest level, targeting individual methods, classes, or components. They run in isolation: no database, no network, no external dependencies. According to Google's testing taxonomy, these are "small tests" that run in a single process.
 
-Unit tests are quick to execute and involve simple objects, structures, stubs, and mocks, without the need for setting up and running application frameworks.
+Unit tests are fast, cheap, and give immediate feedback. They use simple objects, stubs, and mocks, without requiring an application framework to be running.
 
 ```java
 @Test
 void verificationShouldPassForAgeBetween18And99() {
-    // given
+    // Given
     AgeVerification verification = new AgeVerification(22);
-    // when
+    // When
     boolean passes = verification.passes();
-    // then
+    // Then
     assertThat(passes).isTrue();
 }
 ```
 
-
 ### Integration Tests
 
-Integration tests are designed to verify the integration and interaction between different modules. They check whole groups of modules responsible for specific business functionalities. They validate the consistency of returned results concerning business requirements and the interaction between the individual modules within the group.
-
-They also test integration with the infrastructure. According to Google's scale, these tests are considered "medium tests" and are performed on a single machine.
+Integration tests verify that different modules work together correctly. They test the interaction between components, including integration with infrastructure like databases, message brokers, or external APIs. Google classifies these as "medium tests" that run on a single machine.
 
 ```java
 @Test
@@ -47,12 +44,9 @@ void shouldFailWithConnectionResetByPeer() {
 }
 ```
 
-
 ### End-to-End Tests
 
-End-to-End tests simulate the complete flow of a given process in an application or distributed system from beginning to end. They are intended to mimic real-life scenarios of end-users and verify the correctness of entire business processes, data consistency, integration of different applications that are part of the system, and communication with external systems.
-
-Google's scale classifies these as "large tests" and they often require dedicated testing environments, databases, queues, and network protocols similar to those used in production.
+End-to-end (E2E) tests simulate the complete flow of a process from beginning to end, mimicking real user scenarios. They verify entire business processes, data consistency across services, and communication with external systems. Google classifies these as "large tests" that often require dedicated environments with databases, queues, and network setups similar to production.
 
 ```java
 @Test
@@ -62,48 +56,30 @@ void shouldDisplayErrorMessage() {
 }
 ```
 
-### Manual Tests
+### Other Test Types
 
-Manual tests are performed by people who have a good understanding of the business side of a given system. They verify entire business processes and user scenarios in dedicated testing environments with data similar to production data.
+Beyond the core three, several other test types appear regularly in practice:
 
-### Performance Tests
+* **Manual tests.** Performed by people who understand the business domain, verifying user scenarios in dedicated testing environments.
+* **Performance tests.** Verify the system's behavior under load using tools like JMeter or Gatling. The load profile is based on current and anticipated traffic patterns.
+* **User tests.** Potential end-users carry out specific tasks while a UX specialist observes and identifies problematic areas.
+* **Smoke tests.** A quick, shallow pass over the most critical functionality to verify that the system starts up and responds at all. A sanity check before running the full suite.
+* **Regression tests.** Confirm that previously working functionality has not been broken by recent changes. In practice, any test suite that runs on every build acts as a regression safety net.
+* **Security tests.** Verify resilience against common attack vectors (SQL injection, XSS, unauthorized access) using tools like OWASP ZAP or Burp Suite.
+* **Contract tests.** Particularly relevant in microservice architectures, these verify that communication between a consumer and provider adheres to a shared agreement. Frameworks like Pact or Spring Cloud Contract help automate this.
 
-Performance tests verify the system's performance under a given load. Specialized tools like JMeter are used for performance and load testing. The design of the load is based on the current and anticipated system load as well as key performance indicators (KPIs).
+> **Related post**: [Why Are Tests Essential?](/posts/why-are-tests-essential/)
 
-### User Testing
+### Testing Approaches
 
-User tests are performed by potential end-users who carry out specific tasks or processes in the application. These tests are monitored by a UX specialist to identify problematic areas from a user experience perspective.
-
-### Other Notable Test Types
-
-Beyond the categories above, several other test types deserve mention:
-
-* **Smoke Tests:** A quick, shallow pass over the most critical functionality to verify that the system starts up and responds at all. Think of them as a sanity check before running the full suite.
-
-* **Regression Tests:** Tests specifically designed to confirm that previously working functionality has not been broken by recent changes. In practice, any test suite that runs on every build acts as a regression safety net.
-
-* **Security Tests:** These verify that the system is resilient against common attack vectors such as SQL injection, cross-site scripting (XSS), and unauthorized access. Tools like OWASP ZAP or Burp Suite are commonly used here.
-
-* **Contract Tests:** Particularly relevant in microservice architectures, contract tests verify that the communication between a consumer and a provider adheres to a shared agreement (the contract). Frameworks like Pact or Spring Cloud Contract help automate this.
-
-Each type of testing serves its purpose, and their collective use ensures the development of a robust, user-friendly, and efficient software system.
-
-With these test types established, let us now look at the different **testing approaches** -- the strategies we use within these tests to verify correctness.
-
----
-
-### Testing Approaches: Verifying Results, Checking State, and Ensuring Communication
-
-In addition to the various types of testing, such as unit testing, integration testing, and end-to-end testing, there are also different testing approaches that can be employed in software development.
+With the test types established, let's look at a different dimension: the **strategies** we use within tests to verify correctness. Regardless of whether a test is a unit test or an integration test, it typically falls into one of three approaches.
 
 ### Verifying Results
 
-One approach to testing involves verifying the results returned by a component after processing specific input data. This type of test focuses on the output of the code and does not require verifying the internal state of the component or any side effects it may have. By validating the returned result against expected values, we can ensure that the component behaves as intended.
+The most straightforward approach: call a method, check what it returns. The test does not care about internal state or side effects, only the output.
 
 ![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/result-verification-light.png){: .light }
 ![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/result-verification-dark.png){: .dark }
-
-Consider the following example:
 
 ```java
 @Test
@@ -118,19 +94,15 @@ void shouldCreateStudentLoan() {
         .size().isEqualTo(1);
 }
 ```
-In this test, we create a student loan order using the LoanOrderService and verify that the resulting LoanOrder contains a promotion named "Student Promo." By checking the size of the promotions list and filtering it based on the promotion name, we can assert the expected behavior of the code.
 
-This approach to testing focuses on the effectiveness of the tests by directly comparing the actual output with the expected output. It promotes better architectural design as it encourages writing code that produces verifiable results.
-
+We call `studentLoanOrder` and verify the returned `LoanOrder` contains the expected promotion. This is the preferred approach when possible, because it tests behavior without coupling to implementation details.
 
 ### Checking State
 
-Another testing approach involves verifying the state of the system after the completion of an operation. This type of test focuses on the state of the tested component, its collaborators, or external dependencies (e.g., in integration tests). By checking the state of relevant objects, we can ensure that the desired changes have occurred.
+When a method returns `void` or the result alone does not capture the full effect, we verify the state of the system after the operation.
 
-![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/state-verificaiton-light.png){: .light }
-![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/state-verificaiton-dark.png){: .dark }
-
-Consider the following example:
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/state-verification-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/state-verification-dark.png){: .dark }
 
 ```java
 @Test
@@ -148,20 +120,14 @@ void shouldAddManagerPromo() {
 }
 ```
 
-In this test, we create a LoanOrder and add a manager discount using the addManagerDiscount method. We then verify that the promotions list has a size of 1, the name of the first promotion contains the manager's UUID, and the discount value is equal to 50. By asserting the expected changes in the state of the LoanOrder object, we can ensure that the addManagerDiscount method works correctly.
+The method `addManagerDiscount` returns void, so we inspect the `LoanOrder`'s state after the call. This approach is useful but couples the test more tightly to the object's internal structure.
 
-This approach is useful when testing methods that return void and when it is necessary to verify the state of the system due to the existing architecture or design decisions.
+### Verifying Communication
 
+Sometimes we need to verify that an object sent the right messages to its collaborators, without caring about the return value or internal state.
 
-### Ensuring Communication/Verification
-
-The third testing approach involves verifying the communication between objects. This includes checking the messages sent to other objects or using mocks to verify interactions. By capturing and verifying the expected communication, we can ensure that the correct messages are being exchanged.
-
-![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verificaiton-light.png){: .light }
-![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verificaiton-dark.png){: .dark }
-
-Consider the following example:
-
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verification-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-05-12-key-types-of-testing-in-software-development/interaction-verification-dark.png){: .dark }
 
 ```java
 @BeforeEach
@@ -178,3 +144,5 @@ void shouldEmitVerificationEvents() {
     verify(eventEmitter, times(3)).emit(argThat(VerificationEvent::passed));
 }
 ```
+
+We use a mock to verify that `customerVerifier` emitted exactly three passing verification events. This approach is the most implementation-coupled of the three, so it should be used as a last resort when result verification and state checking are not feasible.
