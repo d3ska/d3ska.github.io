@@ -10,154 +10,46 @@ tags:
   - Polymorphism
 ---
 
-### What does object-oriented programming mean?
+**Object-oriented programming** is a paradigm that organizes code around objects, each combining state (fields) and behavior (methods). Objects interact through well-defined interfaces, and the paradigm builds on four core concepts: encapsulation, abstraction, inheritance, and polymorphism.
 
-It is a programming paradigm in which we define objects with their behaviors and attributes. These objects communicate with each other, making our application work.
+### Encapsulation
 
-
-### Core concepts of Object-Oriented Programming
-
-##### Polymorphism
-
-Polymorphism is the ability of a class to provide different implementations of a method, based on the type of object that has been provided.
-In other words, we can perform the same action in multiple forms or ways.<br>
-Let's take a look at an example of code that uses inheritance to achieve it:
-``` java
-public abstract class Vehicle {
-    abstract void drive();
-}
-
-public class Car extends Vehicle {
-
-    @Override
-    public void drive(){
-        // uses a classic engine
-    }
-}
-public class ElectricCar extends Vehicle {
-
-    @Override
-    public void drive(){
-        // uses an electric drive
-    }
-}
-
------------------------------------
-Vehicle car = new Car();
-Vehicle electricCar =  new ElectricCar();
-
-driveToTheChosenPlace(Vehicle vehicle){
-    ...
-    vehicle.drive();
-}
-```
-
-Notice that we can perform the same action in different ways depending on the implementation, as long as both types share a common parent -- both Car and ElectricCar **IS-A** Vehicle.
-Clients of that code do not know anything about the inner implementation, and they don't need to.
-
-The Car class drives using a classic engine, while the ElectricCar uses an electric drive.
-
-Worth mentioning is the fact that in this case polymorphism is achieved through inheritance.
-In practice, inheritance and polymorphism are used together in Java to achieve fast performance and readability of code.
-
-But polymorphism can be achieved without inheritance, for example by having the same method name with different signatures performing different actions.
-
-This type of polymorphism is **static or compile-time polymorphism, and it is basically method overloading.**
-```java
-public boolean validate(){
-    return ...;
-}
-
-public boolean validate(Collection<Rule> rules){
-        return ...;
-}
-```
-
-There is also **runtime or dynamic polymorphism, which is achieved by a child class that overrides the parent's method:**
-```java
-public class GenericFile {
-
-    public String getFileInfo() {
-        return "Generic File Impl";
-    }
-}
-
-public class ImageFile extends GenericFile {
-
-    @Override
-    public String getFileInfo() {
-        return "Image File Impl";
-    }
-}
-```
-<br>
-
-##### Inheritance
-
-It is a mechanism that allows us to acquire fields and methods of another class by inheriting from it.
-By extending, we create an IS-A relationship: Dog IS-A Animal.
-Thanks to this, code becomes more reusable and shorter in OOP.
+**Encapsulation** bundles an object's state with the methods that operate on it and restricts direct access to the internal data. Fields are marked `private`, and access is controlled through public methods. This protects the object's invariants: no external code can put the object into an invalid state by modifying fields directly.
 
 ```java
-// base class
-class Car {
-    private Propulsion propulsion;
-    ...
+public class BankAccount {
 
-    public Car(Propulsion propulsion, ...){
-        this.propulsion = propulsion;
-        ...
+    private BigDecimal balance;
+
+    public BankAccount(BigDecimal initialBalance) {
+        this.balance = initialBalance;
     }
 
-    public boolean isReviewValid(){
-        return ...;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-}
-
-class ElectricCar extends Car {
-
-    // the ElectricCar subclass adds one more field
-    private Battery battery;
-
-    public ElectricCar(Propulsion propulsion, Battery battery){
-        super(propulsion, ...);
-        this.battery = battery;
+    public void deposit(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Deposit must be positive");
+        }
+        this.balance = this.balance.add(amount);
     }
 
-    // the ElectricCar subclass adds one more method
-    public boolean isBatteryLoaded(){
-        return ...
+    public void withdraw(BigDecimal amount) {
+        if (amount.compareTo(balance) > 0) {
+            throw new IllegalArgumentException("Insufficient funds");
+        }
+        this.balance = this.balance.subtract(amount);
     }
 }
 ```
 
-<br>
+The `balance` field is private. The only way to change it is through `deposit` and `withdraw`, which enforce the rules. No caller can set the balance to a negative value by accessing the field directly.
 
-##### Encapsulation
+### Abstraction
 
-Encapsulation hides the state and inner implementation of an object from the clients of an API, making it accessible only through publicly provided methods.
-This allows us to protect specific information and control access to internal implementation details.
-
-For example, member fields in a class are hidden from other classes, and their behaviors can be accessed only through the exposed public methods.
-```java
-public class Car extends Vehicle {
-    private Engine engine;
-    private Gear gear;
-
-    public EngineType getEngineType(){
-        return engine.getType();
-    }
-}
-```
-
-##### Abstraction
-Abstraction hides the complexities of implementation and exposes simpler interfaces.
-
-Imagine that you are driving a car. You use the gas pedal, the brake, the steering wheel, and maybe a few other controls. But you don't know what is happening under the hood -- how gears are changed, how the engine works, and so on. That inner implementation is hidden from the driver.
-
-In OOP, we hide complex implementation details and expose only a stable API that consumers need in order to use the functionality.
-In Java, abstraction is commonly achieved through interfaces and abstract classes.
+Abstraction is sometimes confused with encapsulation, but they address different concerns. Encapsulation hides **data** (private fields behind public methods). **Abstraction** hides **complexity** (a complex implementation behind a simple interface).
 
 Consider a payment processing system. The caller only sees a clean `PaymentProcessor` interface, while the complexities of communicating with external payment gateways, handling retries, and managing transaction state are hidden behind the implementation:
 
@@ -193,4 +85,120 @@ public class StripePaymentProcessor implements PaymentProcessor {
 }
 ```
 
-The caller simply invokes `processor.process(request)` without any knowledge of Stripe, retry policies, or logging. If we later switch to a different payment gateway, the calling code remains untouched -- we just provide a different implementation of `PaymentProcessor`.
+The caller simply invokes `processor.process(request)` without any knowledge of Stripe, retry policies, or logging. If we later switch to a different payment gateway, the calling code remains untouched.
+
+### Inheritance
+
+**Inheritance** lets a class acquire the fields and methods of another class, creating an IS-A relationship. A Dog IS-A Animal. An ElectricCar IS-A Car.
+
+```java
+class Car {
+
+    private final Propulsion propulsion;
+
+    public Car(Propulsion propulsion) {
+        this.propulsion = propulsion;
+    }
+
+    public boolean isReviewValid() {
+        return ...;
+    }
+}
+
+class ElectricCar extends Car {
+
+    private final Battery battery;
+
+    public ElectricCar(Propulsion propulsion, Battery battery) {
+        super(propulsion);
+        this.battery = battery;
+    }
+
+    public boolean isBatteryCharged() {
+        return battery.getChargeLevel() > 0;
+    }
+}
+```
+
+`ElectricCar` inherits everything from `Car` (the `propulsion` field, the `isReviewValid` method) and adds its own `battery` field and method. This avoids duplicating shared logic.
+
+Inheritance is powerful but should be used with care. Deep class hierarchies become rigid and hard to change. In many cases, composition (holding a reference to another object) is more flexible.
+
+> **Related post**: [Prefer Composition over Inheritance](/posts/prefer-composition-over-inheritance/)
+
+### Polymorphism
+
+**Polymorphism** means that the same action can behave differently depending on the type of object performing it. There are two forms in Java.
+
+**Runtime polymorphism** is the more important one. It lets you write code against a parent type and have different implementations execute depending on the actual object. This can be achieved through inheritance:
+
+```java
+public abstract class Vehicle {
+
+    abstract void drive();
+}
+
+public class Car extends Vehicle {
+
+    @Override
+    public void drive() {
+        // uses a combustion engine
+    }
+}
+
+public class ElectricCar extends Vehicle {
+
+    @Override
+    public void drive() {
+        // uses an electric motor
+    }
+}
+```
+
+Or through interfaces, which is the preferred approach in Java because a class can implement multiple interfaces (unlike single inheritance from a class):
+
+```java
+public interface Notifier {
+    void send(String message);
+}
+
+public class EmailNotifier implements Notifier {
+
+    @Override
+    public void send(String message) {
+        // send via SMTP
+    }
+}
+
+public class SmsNotifier implements Notifier {
+
+    @Override
+    public void send(String message) {
+        // send via SMS gateway
+    }
+}
+```
+
+In both cases, the calling code works with the abstract type and does not need to know the concrete implementation:
+
+```java
+void notifyUser(Notifier notifier, String message) {
+    notifier.send(message);
+}
+```
+
+The method accepts any `Notifier`. Whether it sends an email or an SMS depends entirely on the object passed in at runtime.
+
+**Compile-time polymorphism** is method overloading: same method name, different parameter lists.
+
+```java
+public boolean validate() {
+    return ...;
+}
+
+public boolean validate(Collection<Rule> rules) {
+    return ...;
+}
+```
+
+The compiler resolves which method to call based on the arguments provided. This is a simpler form of polymorphism compared to runtime dispatch.
