@@ -10,58 +10,97 @@ tags:
   - Design Patterns
 ---
 
-In an object-oriented language like Java, what could be wrong with constructors? Overall, nothing. Even so, the famous Joshua Bloch's Effective Java Item 1 clearly states:
+Constructors in Java have a fundamental limitation: they must be named after the class. If a class needs to be created in different ways, you end up with multiple constructors that differ only in their parameter lists. The caller sees `new Order(String, String)` and has no idea what those two strings represent. Joshua Bloch's *Effective Java* (Item 1) puts it simply: "Consider static factory methods instead of constructors."
 
-"Consider static factory methods instead of constructors"
+A **static factory method** is a static method that returns an instance of the class. It is not the same as the Factory Method design pattern from the Gang of Four. It is a simpler concept: instead of calling `new`, you call a named static method.
 
-The following are main pros of this approach:
+### Why Static Factory Methods?
 
-1. Static factory methods can have meaningful names, hence explicitly conveying what they do. Unlike the constructors.
-2. Unlike constructors, they are not required to create a new object each time they're invoked, so we may implement the singleton pattern or cache frequently requested instances.
-3. Unlike constructors, they can return an object of any subtype of their return type. For example, `EnumSet` has no public constructors -- its static factory `EnumSet.of(...)` returns either a `RegularEnumSet` or a `JumboEnumSet` depending on the number of elements, and the caller never needs to know which concrete class it receives.
-4. The class of the returned object can vary from call to call as a function of the input parameters. A good example is `EnumSet` again: when the underlying enum has 64 or fewer elements, the factory returns a `RegularEnumSet` backed by a single `long`; for larger enums it returns a `JumboEnumSet` backed by a `long[]`. The caller code stays the same regardless.
-5. Static factory methods can encapsulate all the logic required for pre-constructing fully initialized instances, so they serve well for moving this additional logic out of constructors. This prevents constructors from performing further tasks other than just initializing fields.
-6. A sixth advantage of static factories is that the class of the returned object need not exist when the class containing the method is written. This is the foundation for service-provider frameworks like JDBC. When I call `DriverManager.getConnection(url)`, the actual `Connection` implementation class can come from a driver JAR that did not exist when `DriverManager` was compiled.
+**Meaningful names.** A constructor must match the class name. A static factory method can say exactly what it does:
 
-**Cons**
-
-The main con of providing only static factory methods is that classes without public or protected constructors cannot be subclassed. For example, if `Collections` had convenience classes you wanted to extend, you would be out of luck -- all its utility types are package-private. In practice, this limitation can actually push you toward composition over inheritance, which is often a better design choice anyway.
-
-A second shortcoming of static factory methods is that they are hard for programmers to find. Constructors stand out clearly in API documentation, while factory methods blend in with every other static method. Following well-known naming conventions helps mitigate this -- names like `of`, `valueOf`, `getInstance`, `create`, and `newInstance` signal to readers that the method is a factory.
-
-A third downside worth mentioning: when a class exposes many factory methods with similar parameter lists, the API can become confusing. Careful naming and thorough Javadoc go a long way here.
-
-**Example** <br>
-There are plenty of examples of static factory methods in the JDK:
 ```java
-String value1 = String.valueOf(1);
-String value2 = String.valueOf(1.0L);
-String value3 = String.valueOf(true);
-String value4 = String.valueOf('a');
+// Constructor: what do these parameters mean?
+Order order = new Order("Warsaw", "Express");
 
-Optional<String> optValue1 = Optional.empty();
-Optional<String> optValue2 = Optional.of("Baeldung");
-Optional<String> optValue3 = Optional.ofNullable(null);
+// Static factory: the name tells you
+Order order = Order.withExpressShipping("Warsaw");
+```
 
+**Control over instance creation.** A constructor always creates a new object. A static factory can return a cached instance, enforce a singleton, or return a pre-existing object. The `Boolean.valueOf` method is a classic example:
 
-//implementation of static factory method in Boolean class
+```java
 public static Boolean valueOf(boolean b) {
-return b ? Boolean.TRUE : Boolean.FALSE;
+    return b ? Boolean.TRUE : Boolean.FALSE;
 }
 ```
 
-The most representative example of static factory methods in the JDK is, in my opinion, the `Collections` class. It is a non-instantiable class that consists entirely of static methods. <br>
+It never creates a new `Boolean` object. It always returns one of the two cached constants.
 
-A few examples of Collections static factory methods:
+**Return subtypes.** A constructor can only return the exact class it belongs to. A static factory can return any subtype of its declared return type. The caller programs against the interface and never needs to know the concrete class.
 
-![img]({{site.url}}/assets/blog_images/2022-08-22-static-factory-method/collections-method-light.png){: .light }
-![img]({{site.url}}/assets/blog_images/2022-08-22-static-factory-method/collections-method-dark.png){: .dark }
+`EnumSet` is a great example: it has no public constructors. Its static factory `EnumSet.of(...)` returns either a `RegularEnumSet` (backed by a single `long`, for enums with 64 or fewer elements) or a `JumboEnumSet` (backed by a `long[]`, for larger enums). The caller just sees `EnumSet` and the JDK is free to change the internal implementations without breaking any code.
 
-If you want to check some method of Collections class, you can find it [here](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html).
+**Encapsulate construction logic.** When object creation involves validation, default values, or derived fields, a static factory keeps that logic out of the constructor. The constructor stays simple (just field assignment), and the factory method handles everything else.
 
-<br>
+**Decouple from concrete classes.** The class of the returned object need not exist when the class containing the factory method is written. This is the foundation for service-provider frameworks like JDBC. When you call `DriverManager.getConnection(url)`, the actual `Connection` implementation comes from a driver JAR that did not exist when `DriverManager` was compiled.
 
-**Example of custom factory method**
+### Cons
+
+The main limitation of providing only static factory methods is that classes without public or protected constructors cannot be subclassed. In practice, this can actually push you toward composition over inheritance, which is often a better design choice anyway.
+
+A second shortcoming is discoverability. Constructors stand out clearly in API documentation, while factory methods blend in with every other static method. Following well-known naming conventions helps mitigate this.
+
+### Naming Conventions
+
+Common naming patterns that signal a method is a factory:
+
+```java
+// of - concise factory, common for value types
+List<String> list = List.of("a", "b", "c");
+EnumSet<Color> colors = EnumSet.of(Color.RED, Color.BLUE);
+
+// valueOf - verbose alternative to of
+Integer i = Integer.valueOf(42);
+BigDecimal d = BigDecimal.valueOf(3.14);
+
+// from - type-conversion factory
+Instant instant = Instant.from(zonedDateTime);
+Date date = Date.from(instant);
+
+// create / newInstance - guarantees a new instance each time
+Object obj = Array.newInstance(String.class, 10);
+
+// getInstance - may return a shared instance
+Calendar cal = Calendar.getInstance();
+```
+
+### JDK Examples
+
+The `Collections` class is perhaps the most representative example. It is a non-instantiable utility class that consists entirely of static methods, many of which are factory methods:
+
+```java
+List<String> empty   = Collections.emptyList();
+List<String> single  = Collections.singletonList("only");
+Map<String, Integer> singleMap = Collections.singletonMap("key", 1);
+
+// Wrapping factories: return a decorated view of the original collection
+List<String> readOnly = Collections.unmodifiableList(mutableList);
+List<String> safe     = Collections.synchronizedList(mutableList);
+```
+
+`Optional` is another good example:
+
+```java
+Optional<String> empty    = Optional.empty();
+Optional<String> present  = Optional.of("value");
+Optional<String> nullable = Optional.ofNullable(mayBeNull);
+```
+
+Each method name communicates exactly what kind of Optional you get back.
+
+### Custom Factory Method
+
+Here is a practical example for a domain class. The constructor is private, so the only way to create a `Client` is through the factory methods:
 
 ```java
 public class Client {
@@ -76,13 +115,24 @@ public class Client {
         this.country = country;
     }
 
-    public static Client createWithDefaultCountry(String name, String phoneNo) {
-        return new Client(name, phoneNo, "Poland");
+    public static Client of(String name, String phoneNo, String country) {
+        return new Client(name, phoneNo, country);
     }
 
+    public static Client withDefaultCountry(String name, String phoneNo) {
+        return new Client(name, phoneNo, "Poland");
+    }
 }
 ```
 
 ```java
-Client client = Client.createWithDefaultCountry("John", "001111111");
+Client client = Client.withDefaultCountry("John", "001111111");
 ```
+
+The method name `withDefaultCountry` tells the caller exactly what is happening. A second constructor with two `String` parameters would be ambiguous and would not even compile if the three-parameter constructor already existed (both would have overlapping erasure in some cases).
+
+### When to Prefer Static Factory Methods
+
+Use static factory methods when the class has multiple ways of being constructed and meaningful names would help the caller, when you want control over instance creation (caching, singletons, returning subtypes), or when construction logic is complex enough that it should not live inside a constructor. For simple value classes with one obvious way to construct them, a plain public constructor is perfectly fine.
+
+> **Related post:** [Builder Design Pattern](/posts/builder-design-pattern/)

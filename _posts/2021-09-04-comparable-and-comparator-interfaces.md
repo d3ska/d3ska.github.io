@@ -10,26 +10,19 @@ tags:
   - Interfaces
 ---
 
+Java provides two interfaces for ordering objects: `Comparable` and `Comparator`. Both serve the same goal (defining an order between objects), but they differ in where the comparison logic lives and how many sort orders you can define.
+
 ### Comparable
 
-Both interfaces are used to order the objects of a user-defined class.
-The `Comparable<T>` interface is found in the `java.lang` package and contains only one method named `compareTo(T)`.<br>
-**It provides a single sorting sequence only**, i.e., you can sort the elements on the basis of a single data member only.
-For example, it may be name, age or anything else.
+The `Comparable<T>` interface is found in the `java.lang` package and contains a single method, `compareTo(T)`. A class that implements `Comparable` defines its own **natural ordering**. It provides a single sorting sequence only, meaning you can sort elements on the basis of one data member (for example, age).
 
-**compareTo(T obj) method**
+The `compareTo` method returns:
 
-`public int compareTo(T obj)`: It is used to compare the current object with the specified object. It returns:
+* a positive integer if the current object is greater than the specified object
+* a negative integer if the current object is less than the specified object
+* zero if the current object is equal to the specified object
 
-* a positive integer, if the current object is greater than the specified object.
-* a negative integer, if the current object is less than the specified object.
-* zero, if the current object is equal to the specified object.
-
-An important contract to keep in mind: the `compareTo` method should be consistent with `equals`. If `a.compareTo(b) == 0`, then `a.equals(b)` should ideally return `true`. Violating this can lead to unexpected behavior in sorted collections like `TreeSet`, which rely on `compareTo` to determine equality.
-
-**Code Example**
-
-We need to implement the Comparable interface first and override the compareTo method.
+An important contract to keep in mind: `compareTo` should be consistent with `equals`. If `a.compareTo(b) == 0`, then `a.equals(b)` should ideally return `true`. Violating this can lead to unexpected behavior in sorted collections like `TreeSet`, which rely on `compareTo` to determine equality.
 
 ```java
 public class Student implements Comparable<Student> {
@@ -46,32 +39,18 @@ public class Student implements Comparable<Student> {
 
     @Override
     public int compareTo(Student student) {
-        if (age == student.getAge()) {
-            return 0;
-        } else if (age > student.getAge()) {
-            return 1;
-        } else {
-            return -1;
-        }
+        return Integer.compare(age, student.getAge());
     }
 }
 ```
 
-or simpler:
-
-```java
-@Override
-public int compareTo(Student student) {
-    return Integer.compare(age, student.getAge());
-}
-```
-
-<br>
+`Integer.compare` is the recommended way to compare numeric fields. A common shortcut is `return this.age - other.age`, but this is a bug: if the values are large enough, the subtraction overflows and produces a wrong result. `Integer.compare` handles all edge cases correctly.
 
 ```java
 public class TestSort {
+
     public static void main(String[] args) {
-        List<Student> students=new ArrayList<>();
+        List<Student> students = new ArrayList<>();
         students.add(new Student("John", 28, 22176));
         students.add(new Student("Anastasia", 34, 44521));
         students.add(new Student("Json", 20, 69120));
@@ -83,31 +62,18 @@ public class TestSort {
 ```
 
 ```
-Name: JsonAge: 20, StudentNumber: 69120
-Name: JohnAge: 28, StudentNumber: 22176
-Name: AnastasiaAge: 34, StudentNumber: 44521
+Name: Json, Age: 20, StudentNumber: 69120
+Name: John, Age: 28, StudentNumber: 22176
+Name: Anastasia, Age: 34, StudentNumber: 44521
 ```
-
 
 ### Comparator
 
-Unlike Comparable, Comparator is external to the element type we are comparing. It's a separate class. We create multiple separate classes (that implement Comparator) to compare by different members.
-The `Collections` class has a second `sort()` method, and it takes a Comparator which could be found in the `java.util` package.
-The sort() method invokes the compare() to sort objects.
-**To compare Student by age, we need to do 3 things :**
+Unlike `Comparable`, a `Comparator` is external to the element type being compared. It is a separate class (or lambda) that defines a custom ordering. This means you can create multiple comparators for the same class, each sorting by a different field, without modifying the class itself.
 
-1) Create a class that implements Comparator (and thus the compare() method that does the work previously done by compareTo()).
-
-2) Make an instance of the Comparator class.
-
-3) Call the overloaded sort() method, giving it both the list and the instance of the class that implements Comparator.<br>
-Or you may call sort() method directly on Collection that you want to sort and give it Comparator as an argument.
-
-**Code Example**
+The `Comparator<T>` interface is in the `java.util` package and defines a `compare(T, T)` method.
 
 ```java
-import java.util.Comparator;
-
 public class Student {
 
     String name;
@@ -122,33 +88,30 @@ public class Student {
 }
 
 class SortByAge implements Comparator<Student> {
-    // Used for sorting in ascending order of age
+
     public int compare(Student a, Student b) {
-        return a.age - b.age;
+        return Integer.compare(a.age, b.age);
     }
 }
 
 class SortByName implements Comparator<Student> {
-    // Used for sorting in ascending order of name
+
     public int compare(Student a, Student b) {
         return a.name.compareTo(b.name);
     }
 }
 ```
 
-<br>
-
 ```java
 public class TestSort {
+
     public static void main(String[] args) {
         List<Student> students = new ArrayList<>();
         students.add(new Student("John", 28, 22176));
         students.add(new Student("Anastasia", 34, 44521));
         students.add(new Student("Json", 20, 69120));
 
-        //Collections.sort(students, new SortByAge());
         students.sort(new SortByAge());
-
         students.forEach(System.out::println);
     }
 }
@@ -159,8 +122,6 @@ Name: Json, Age: 20, StudentNumber: 69120
 Name: John, Age: 28, StudentNumber: 22176
 Name: Anastasia, Age: 34, StudentNumber: 44521
 ```
-
-<br>
 
 ### Java 8+ Comparator Features
 
@@ -190,52 +151,14 @@ Comparator<Student> byNameNullsFirst =
         Comparator.comparing(Student::getName, Comparator.nullsFirst(Comparator.naturalOrder()));
 ```
 
-These additions make sorting code significantly shorter and more readable, and they eliminate the need for dedicated Comparator classes in most situations.
+These additions make sorting code significantly shorter and more readable, and they eliminate the need for dedicated `Comparator` classes in most situations.
 
-<br>
+### Comparable vs Comparator
 
-**Key differences between Comparable vs Comparator in Java.**
-
- <table style="width:100%">
-  <tr>
-    <th>Comparable</th>
-    <th>Comparator</th>
-  </tr>
-  <tr>
-    <td>It provides single sorting sequences.</td>
-    <td>It provides multiple sorting sequences.
-</td>
-  </tr>
-  <tr>
-    <td>It affects the original class. i.e., actual class is altered.</td>
-    <td>It doesn't affect the original class, i.e., actual class is not altered.</td>
-  </tr>
-  <tr>
-    <td>This method can sort the data according to the natural sorting order.</td>
-    <td>This method sorts the data according to the customized sorting order.</td>
-  </tr>
-  <tr>
-    <td>The class whose objects you want to sort must implement comparable interface.</td>
-    <td>Class, whose objects you want to sort, do not need to implement a comparator interface.</td>
-  </tr>
-  <tr>
-    <td>The logic of sorting must be in the same class whose object you are going to sort.</td>
-    <td>The logic of sorting should be in a separate class to write different sorting based on different attributes of objects.</td>
-  </tr>
-  <tr>
-    <td>Comparable interface is present in java.lang package.</td>
-    <td>Comparator interface is present in java.util package.</td>
-  </tr>
-  <tr>
-    <td>Comparable provides compareTo() method to sort elements in Java.</td>
-    <td>Comparator provides compare() method to sort elements in Java.</td>
-  </tr>
-  <tr>
-    <td>Implemented frequently in the API by: Calendar, Wrapper classes, Date, and String.</td>
-    <td>It is implemented to sort instances of third-party classes.</td>
-  </tr>
-  <tr>
-    <td>All wrapper classes and String class implement comparable interface.</td>
-    <td>Some well-known implementations of Comparator include Collator and RuleBasedCollator.</td>
-  </tr>
-</table>
+| | Comparable | Comparator |
+|---|---|---|
+| Package | `java.lang` | `java.util` |
+| Method | `compareTo(T)` | `compare(T, T)` |
+| Sort orders | Single (natural order) | Multiple |
+| Modifies the class | Yes (class implements the interface) | No (comparison is external) |
+| Typical use | Default ordering for the class | Alternative or ad-hoc orderings |

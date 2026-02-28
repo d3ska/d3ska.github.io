@@ -9,20 +9,17 @@ tags:
   - SOLID
 ---
 
-### Builder is a creational design pattern that lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
-<br/>
-**Problem**
+The **Builder** is a creational design pattern that lets you construct complex objects step by step, producing different types and representations of an object using the same construction code.
 
-Imagine you have an item that is quite complicated to create and has many possible combinations. For example, it could be a car.
-Some cars will be in the basic version, while others may have many additional things.<br/>You might think about creating a class with common fields that others will extend as they have additional functions.<br/>
-This solution comes with another problem, which is many classes extending the Car class, e.g. CarWithAutopilot, CarWithSteeringWheel, CarInSportVersion.
-So it is not the optimal solution.<br/>
-Another idea might be to create just one class, just Car, which will have all the possibilities as fields such as hasAutopilot, isSportVersion, hasSteeringWheel, additionalWarranty, soundSystem, and so on.
-So if we create a base car, in most constructor fields we will pass null, which looks messy.
+### The Problem: Telescoping Constructors
 
-**Solution**
+Imagine you have an item that is quite complicated to create and has many possible combinations. For example, it could be a car. Some cars will be in the basic version, while others may have many additional features.
 
-The Builder design pattern suggests extracting the construction code from its class and placing it in separate objects called builders.
+You might think about creating a class with common fields that others will extend as they have additional functions. This leads to many classes extending the Car class: `CarWithAutopilot`, `CarWithSteeringWheel`, `CarInSportVersion`. Not a scalable solution.
+
+Another idea might be to create just one class, `Car`, which will have all the possibilities as fields: `hasAutopilot`, `isSportVersion`, `hasSteeringWheel`, `additionalWarranty`, `soundSystem`, and so on. If we create a base car, most constructor parameters will be null or false, which is both messy and error-prone. This is the classic **telescoping constructor** problem: constructors with ever-growing parameter lists.
+
+### The Pattern
 
 In the classic Gang of Four (GoF) formulation, a **Director** class orchestrates the building process. The Director defines the order in which to call construction steps, while the Builder provides the implementation for those steps. This separation lets you reuse the same building routine across different builders.
 
@@ -54,13 +51,13 @@ Car car = Car.builder()
     .build();
 ```
 
-Under the hood Lombok generates the static inner `Builder` class, fluent setters, and the `build()` method. I use this in nearly every project where I need builders -- it removes a significant amount of repetitive code.
+Under the hood Lombok generates the static inner `Builder` class, fluent setters, and the `build()` method. I use this in nearly every project where I need builders. It removes a significant amount of repetitive code.
 
-**Example**
+### Full Example
 
 ```java
 public class Car {
-    //final attributes
+
     private final CarType carType;          // required
     private final Engine engine;            // required
     private final Transmission transmission;// required
@@ -81,7 +78,7 @@ public class Car {
         this.hasHeatedWheel = builder.hasHeatedWheel;
     }
 
-    //All getter, and NO setter to preserve immutability
+    // All getters, and NO setters to preserve immutability
 
     public CarType getCarType() {
         return carType;
@@ -116,6 +113,7 @@ public class Car {
     }
 
     public static class Builder {
+
         private final CarType carType;
         private final Engine engine;
         private final Transmission transmission;
@@ -155,7 +153,6 @@ public class Car {
             return this;
         }
 
-        //Return the finally constructed Car object
         public Car build() {
             Car car = new Car(this);
             validateCarObject(car);
@@ -173,52 +170,41 @@ public class Car {
 ```java
 public static void main(String[] args) {
 
-    Car car1 = new Car.Builder(SPORTS_CAR, new Engine( volume: 6.0,  mileage: 0), AUTOMATIC,  seats: 2)
+    Car car1 = new Car.Builder(SPORTS_CAR, new Engine(6.0, 0), AUTOMATIC, 2)
             .hasHeatedSeats(true)
             .hasHeatedWheel(false)
             .additionalWarranty(3)
             .soundSystem("Sony")
             .build();
 
-    Car car2 = new Car.Builder(CITY_CAR, new Engine( volume: 1.5,  mileage: 0), AUTOMATIC,  seats: 5)
+    Car car2 = new Car.Builder(CITY_CAR, new Engine(1.5, 0), AUTOMATIC, 5)
             .hasHeatedSeats(true)
             .hasHeatedWheel(true)
-            //no additional warranty
-            //no sound system
+            // no additional warranty
+            // no sound system
             .build();
 }
 ```
 
-* Use the Builder pattern to get rid of a "telescopic constructor".
+Notice how the required parameters go into the Builder's constructor, while optional ones are set through fluent methods. If an optional parameter is not set, it keeps its default value. No nulls, no confusion about which argument is which.
 
-* Use the Builder pattern when you want your code to be able to create different representations of some product (for example, stone and wooden houses).
+### When to Use the Builder Pattern
 
-* Use the Builder to construct Composite trees or other complex objects.
+* **Telescoping constructors.** When a constructor has many parameters (especially optional ones), the builder makes construction readable and self-documenting.
+* **Different representations.** When the same construction process should produce different configurations of the same type.
+* **Composite or complex objects.** When the object being built is a tree structure or involves many nested parts.
+* **Immutability.** The builder accumulates state through mutable setters, then the `build()` method produces a fully initialized object with all fields set to `final`. The builder itself does not make your code immutable. It gives you a clean way to construct objects that are.
 
-* Use the Builder when you want to facilitate creating immutable objects. The builder accumulates state through mutable setters, then the `build()` method produces a fully initialized object with all fields set to `final`. The builder itself does not make your code immutable -- it gives you a clean way to construct objects that are.
+### Pros and Cons
 
+**Pros:**
 
-**Pros and Cons**
+* You can construct objects step by step, defer construction steps, or run steps recursively.
+* You can reuse the same construction code when building various representations.
+* Facilitates creating immutable objects by centralizing construction logic while keeping the resulting object's fields final.
+* Single Responsibility Principle. Complex construction code is isolated from the business logic.
 
- <table style="width:100%">
-  <tr>
-    <th>Pros</th>
-    <th>Cons</th>
-  </tr>
-  <tr>
-    <td>You can construct objects step-by-step, defer construction steps or run steps recursively.</td>
-    <td>The overall complexity of the code increases since the pattern requires creating multiple new classes.</td>
-  </tr>
-  <tr>
-    <td>You can reuse the same construction code when building various representations of products.</td>
-    <td>If the object has only a few fields, a builder adds unnecessary indirection -- a simple constructor or static factory method may be a better fit.</td>
-  </tr>
-  <tr>
-    <td>Facilitates creating immutable objects by centralizing construction logic while keeping the resulting object's fields final.</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Single Responsibility Principle. You can isolate complex construction code from the business logic of the product.</td>
-    <td></td>
-   </tr>
-</table>
+**Cons:**
+
+* The overall complexity of the code increases since the pattern requires creating additional classes.
+* If the object has only a few fields, a builder adds unnecessary indirection. A simple constructor or static factory method may be a better fit.

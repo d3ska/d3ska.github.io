@@ -1,93 +1,92 @@
 ---
-title: "DeMorgan’s Laws"
+title: "De Morgan's Laws"
 categories:
   - Software Design
 tags:
-  - DeMorgan's Laws
+  - De Morgan's Laws
   - Boolean Logic
   - Clean Code
 ---
 
-### DeMorgan's Laws
+Boolean conditions in code tend to accumulate negations. A method might check `!a && !b && !c`, and after staring at it for a moment you realize it means "none of these are true." **De Morgan's Laws** give you a systematic way to rewrite such expressions into equivalent forms that are often easier to read.
 
-De Morgan’s laws state that specific Boolean statements can be written in different ways to the same effect.
+### The Two Laws
 
-The rules can be expressed in English as:
+De Morgan's Laws define how negation distributes over `AND` and `OR`:
 
-* the negation of a disjunction is the conjunction of the negations
-* the negation of a conjunction is the disjunction of the negations
+**First law:** the negation of a disjunction (OR) is the conjunction (AND) of the negations.
 
-or
+```
+!(A || B)  ==  !A && !B
+```
 
-* the complement of the union of two sets is the same as the intersection of their complements
-* the complement of the intersection of two sets is the same as the union of their complements
+**Second law:** the negation of a conjunction (AND) is the disjunction (OR) of the negations.
 
-or
+```
+!(A && B)  ==  !A || !B
+```
 
-not (A or B) = (not A) and (not B)
+These laws work in both directions. You can factor a negation out of individual terms into a single outer negation, or distribute a single outer negation across the terms. Both directions are useful depending on which form is more readable in context.
 
-not (A and B) = (not A) or (not B)
+### Applying the Laws in Code
 
+Consider a condition that checks whether none of the three flags are set:
 
-**Additionally, when negating compound conditions, each comparison operator is also negated:**
+```java
+if (!a && !b && !c) {
+    // none are true
+}
+```
 
-* < becomes >=
+We read this as "not A, and not B, and not C." It works, but the repeated negations add cognitive load. Applying De Morgan's first law in reverse, we can factor out the negation:
 
-* \> becomes <=
+```java
+if (!(a || b || c)) {
+    // none are true
+}
+```
 
-* == becomes !=
+Now it reads as "none of A, B, or C are true," which communicates the same intent more directly.
 
-* <= becomes >
+The transformation works the other way too. If we see:
 
-* \>= becomes <
+```java
+if (!a || !b || !c) {
+    // at least one is false
+}
+```
 
-* != becomes ==
+We can apply the second law in reverse:
 
+```java
+if (!(a && b && c)) {
+    // not all are true (at least one is false)
+}
+```
 
-**Why it is useful during programming?**
+The rewritten version immediately tells us "not all conditions are met."
 
-It could help us and others to more easily read the if statements, and it's also useful to refactor some if's monsters (if you know what I mean).
-
-**Examples**
-
-* (!a && !b && !c), we will read it as, "not 'a', not 'b' and not 'c'".
-
-after change: 
-
-* !(a \|\| b \|\| c), by using the second law, we can simply read this as "at least one of these is required."
-
-<br/>
-<br/>
-
-* (!a \|\| !b \|\| !c), after a while we see that all requirements must be met.
-
-after change:
-
-* !(a && b && c), now we see it immediately
-
-<br/>
-
-**Practical Refactoring Example**
+### Practical Refactoring Example
 
 Let's say I have a method that checks whether a user should be denied access:
 
 ```java
-// Before: a chain of negations -- hard to parse at a glance
+// Before: a chain of negations
 if (!user.isActive() || !user.hasValidSubscription() || !user.isEmailVerified()) {
     denyAccess();
 }
 ```
 
-Applying De Morgan's first law (`!A || !B || !C` equals `!(A && B && C)`), we can rewrite it as:
+Applying the second law (`!A || !B || !C` equals `!(A && B && C)`):
 
 ```java
-// After: one negation wrapping positive conditions -- reads naturally
+// After: one negation wrapping positive conditions
 if (!(user.isActive() && user.hasValidSubscription() && user.isEmailVerified())) {
     denyAccess();
 }
 ```
 
-Now the intent is clear: deny access unless **all three** conditions are satisfied. We could even extract the inner expression into a helper method for maximum readability:
+Now the intent is clear: deny access unless **all three** conditions are satisfied. We could even extract the inner expression into a method for maximum readability:
 
 ```java
 private boolean isFullyAuthorized(User user) {
@@ -99,11 +98,14 @@ if (!isFullyAuthorized(user)) {
 }
 ```
 
-<br/>
+### A Note on Comparison Operators
 
-**Summary**
+When manually negating a compound condition, you also need to negate each comparison operator: `<` becomes `>=`, `>` becomes `<=`, `==` becomes `!=`, and vice versa. This is not De Morgan's Law itself, but it comes up naturally when applying it to conditions that involve comparisons.
 
-De Morgan's Laws can help simplify your code to make it more readable. You can change a sequence of negated ands to something that reads as “at least one of these is required”, and a sequence of negated ors to something that reads as “all of these are required.”
+For example, negating `(age >= 18 && score > 50)` gives `(age < 18 || score <= 50)`. De Morgan's Law handles the `AND`-to-`OR` transformation and the outer negation, while the individual operator flips follow from standard logical negation.
 
+### When It Helps
 
+De Morgan's Laws are not about making code shorter. They are about picking the form that best communicates intent. A chain of negated ORs like `!a || !b || !c` is easier to understand as `!(a && b && c)` because the latter reads as a single thought: "not all of these hold." Conversely, `!a && !b && !c` becomes `!(a || b || c)`: "none of these hold."
 
+The transformation is mechanical, which means you can apply it confidently without worrying about introducing bugs. When you spot a conditional that's hard to parse because of scattered negations, try applying De Morgan's Laws and see if the result reads better.
