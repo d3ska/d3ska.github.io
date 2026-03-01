@@ -10,104 +10,141 @@ tags:
   - Time Complexity
 ---
 
-The Big O Notation is a mathematical, asymptotic notation that describes time complexity and space complexity of algorithms/functions when the argument tends towards a particular value of infinity.<br>
-For example, O(n) might be the same complexity of an algorithm that traverses through an array of length n, <br>similarly, O(n+m) might be the time complexity of an algorithm that traverses through an array of length n and through a string of length m.<br>
-The following are examples of common complexities and their Big O notations, ordered from fastest to slowest
+You have an array of 10,000 users and need to find one by name. A linear search checks up to 10,000 entries. Binary search on a sorted array checks about 14. That difference, O(n) vs O(log n), is what **Big O notation** captures.
 
-- Constant: O(1)
-- Logarithmic: O(log(n))
-- Linear: O(n)
-- Log-linear: O(n log(n))
-- Quadratic: O(n<sup>2</sup>)
-- Factorial: O(n!)
+Both approaches solve the same problem, but one scales dramatically better than the other. Big O gives us a shared language to talk about that scaling behavior without getting bogged down in hardware specifics, programming languages, or constant factors that vary from machine to machine.
+
+### How Does the Work Grow?
+
+The core question Big O answers is: **as the input grows, how does the number of operations grow?**
+
+It does not tell you how many milliseconds something takes. It tells you the shape of the growth. If you double the input size, does the work double? Quadruple? Stay the same? That growth rate is what determines whether your solution works on a million records or falls apart.
+
+Think of it this way. An O(n) algorithm that processes 1,000 items will need roughly 2,000 operations for 2,000 items. An O(n<sup>2</sup>) algorithm that handles 1,000 items comfortably will need four times the work for 2,000 items. At 10,000 items, it needs 100 times the work. The growth rate dominates everything else at scale.
+
+### Common Complexity Classes
+
+Here are the most common Big O complexities, ordered from fastest to slowest growing:
+
+- **Constant: O(1)** -- the work stays the same regardless of input size
+- **Logarithmic: O(log n)** -- the work grows slowly, roughly halving the problem each step
+- **Linear: O(n)** -- the work grows proportionally to the input
+- **Log-linear: O(n log n)** -- typical of efficient sorting algorithms
+- **Quadratic: O(n<sup>2</sup>)** -- the work grows as the square of the input
+- **Factorial: O(n!)** -- the work grows astronomically fast
 
 ![img]({{site.url}}/assets/blog_images/2022-08-01-big-o-notation/big-o-notation-complexity-light.png){: .light }
 ![img]({{site.url}}/assets/blog_images/2022-08-01-big-o-notation/big-o-notation-complexity-dark.png){: .dark }
 
-Sometimes there may be best/average/worst case scenarios depending on the input data, how they're structured and so on, so in other words it depends on the algorithm (quick sort for example) but Big O usually refers to the worst case scenario.
+The graph makes the differences vivid. O(1) and O(log n) are practically flat compared to the explosive growth of O(n<sup>2</sup>) and beyond. This is exactly why choosing the right algorithm matters so much.
 
-Examples of algorithms and their time complexity:
+### Code Examples for Each Complexity Class
 
-- fun(arr[]) => 1 + arr\[0]     We just return a static number and the first element of an array (assuming it is not empty), so the size of input data will not affect the complexity anyhow. The time complexity will be O(1), in other words constant.
-- fun(arr []) => sum(arr)    Here we are summing the given array, so we have to traverse through the whole array. In other words, the more elements are in the given array, the more work our algorithm needs to perform, so it has linear complexity, in other words O(n).
-- fun(arr []) => pair(arr)    Here we are pairing all elements, assume that it's done by nested for loops. Then guess what, it would require going through every element for each element. In the previous example it was O(n) to iterate over the given array. In this case it will be O(n<sup>2</sup>).
+#### O(1) -- Constant Time
 
-### Code Examples for Common Complexity Classes
-
-**O(1) — Constant Time**
-
+```java
+public static int getFirst(int[] array) {
+    return array[0];
+}
 ```
-function getFirst(array):
-    return array[0]
+
+No matter whether the array has 10 elements or 10 million, accessing an element by index takes the same amount of time. The size of the input is irrelevant.
+
+#### O(log n) -- Logarithmic Time
+
+```java
+public static int binarySearch(int[] sortedArray, int target) {
+    int left = 0;
+    int right = sortedArray.length - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (sortedArray[mid] == target) {
+            return mid;
+        } else if (sortedArray[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return -1;
+}
 ```
-No matter how large the array is, accessing the first element always takes the same amount of time.
 
-**O(log n) — Logarithmic Time**
+Each iteration cuts the search space in half. Doubling the input size adds only one extra step. For an array of 1,000,000 elements, binary search needs at most about 20 comparisons.
 
+#### O(n) -- Linear Time
+
+```java
+public static int sum(int[] array) {
+    int total = 0;
+    for (int element : array) {
+        total += element;
+    }
+    return total;
+}
 ```
-function binarySearch(sortedArray, target):
-    left = 0
-    right = length(sortedArray) - 1
-    while left <= right:
-        mid = left + (right - left) / 2
-        if sortedArray[mid] == target:
-            return mid
-        else if sortedArray[mid] < target:
-            left = mid + 1
-        else:
-            right = mid - 1
-    return -1
+
+We visit every element exactly once. Double the array size and the work doubles. This is as good as it gets when you need to look at every element.
+
+#### O(n<sup>2</sup>) -- Quadratic Time
+
+```java
+public static void printAllPairs(int[] array) {
+    for (int i = 0; i < array.length; i++) {
+        for (int j = 0; j < array.length; j++) {
+            System.out.println(array[i] + ", " + array[j]);
+        }
+    }
+}
 ```
-Each iteration cuts the search space in half, so doubling the input size only adds one extra step.
 
-**O(n) — Linear Time**
+For each element, we loop through every other element. An array of 100 produces 10,000 pairs. An array of 1,000 produces 1,000,000. You can see how this gets out of hand quickly.
 
-```
-function sumArray(array):
-    total = 0
-    for each element in array:
-        total = total + element
-    return total
-```
-We visit every element exactly once, so the time grows directly in proportion to the input size.
+### Why Constants Don't Matter
 
-**O(n²) — Quadratic Time**
+You might wonder why we write O(n) instead of O(2n) or O(5n). The reason is that Big O describes the growth rate, not the exact count of operations. Constants affect how fast something runs on a specific machine, but they do not change how it scales.
 
-```
-function printAllPairs(array):
-    for i = 0 to length(array) - 1:
-        for j = 0 to length(array) - 1:
-            print(array[i], array[j])
-```
-For each element, we loop through every other element, so the number of operations grows as the square of the input size.
+Consider two algorithms, one that does 2n operations and another that does 100n. Both are O(n). Yes, the second one is 50 times slower in practice, and that matters for performance tuning. But as n grows, both scale the same way: double the input, double the work. Compare either of them to an O(n<sup>2</sup>) algorithm, and at large enough inputs the quadratic one will always lose, even if its constant factor is tiny.
 
-<br>
+Here are the simplification rules:
 
-The constants in Big O Notation do not matter, and here is how to simplify it.
+**Drop constants.** O(25) becomes O(1). O(2n) becomes O(n). The constant does not change the shape of the growth curve.
 
+**Drop lower-order terms.** O(n<sup>2</sup> + 2n) becomes O(n<sup>2</sup>). As n grows large, n<sup>2</sup> dominates completely. When n is 1,000, n<sup>2</sup> is 1,000,000 while 2n is just 2,000. The linear term becomes noise.
 
-Let's assume that we have a function that does a bunch of elementary operations: it sums up a few numbers, declares some variables, creates an array with a few elements. It's going to be an algorithm that may run in O(25), but that would be written down to O(1). So you never want to say O(25) as it does not really make sense, and you should write it as O(1).
-The second example might be an algorithm in which we iterate over a given array from left to right and from right to left.  That would be an O(2n) complexity, but you would drop the two because it's a constant, so it would be just O(n).
-Also, an important thing to remember: let's assume that in our function we have a pairing algorithm and the one described just before. That is O(n<sup>2</sup> + 2n) but we would remove the two as it's a constant and n also as it becomes meaningless next to the n squared, so it would be O(n<sup>2</sup>).
+Another example: O(n! + n<sup>3</sup> + log n + 3) simplifies to O(n!), because factorial growth dwarfs everything else.
 
-Other example: O(n! + n<sup>3</sup> + log(n) + 3)   =>   O(n!)   as factorial would grow the fastest.
-We were able to drop this in the above way as we were iterating on the same input data N.
-Now assume that we do the same but for input we're going to get two different arrays of size M and N.
+#### Multiple Inputs Are Different
 
-O(m<sup>2</sup> + 2n) can we transform it to O(m<sup>2</sup>)?
-No! We can not! As those are different inputs, so we want to know the behaviour as it relates to these two different inputs, and you can imagine that there is actually a scenario where m<sup>2</sup> is tiny compared to N. <br>
-Imagine M is equal to two and N is equal to a thousand, then m<sup>2</sup> would be smaller than N. That's why when you have two variables, you do always want to keep both of them.  So it has to remain O(m<sup>2</sup> + n) (we can still drop constants).
+There is one important exception to dropping terms. When an algorithm operates on two separate inputs, you cannot simplify across them.
+
+Consider a function that iterates over one array of size m and another of size n. Its complexity is O(m + n), and you cannot reduce it to O(m) or O(n). You can imagine a scenario where m is 2 and n is 1,000,000. Dropping either variable would hide meaningful information about how the algorithm behaves.
+
+The same applies to O(m<sup>2</sup> + n). You can still drop constants (O(2m<sup>2</sup> + 3n) becomes O(m<sup>2</sup> + n)), but you must keep both variables because they represent independent inputs.
 
 ### Amortized Complexity
 
-Some operations have a worst-case cost that is expensive but happens rarely enough that the **average cost per operation** over a sequence of operations is much lower. This is called **amortized complexity**. A classic example is appending to a dynamic array. Most appends are O(1) because there is room in the pre-allocated buffer. Occasionally, the array runs out of space and must allocate a new, larger buffer and copy all existing elements over — an O(n) operation. However, because the array doubles in capacity each time, that expensive copy happens less and less frequently. When you spread the cost of the occasional O(n) copy across all the cheap O(1) appends, each append costs O(1) **amortized**.
+Sometimes looking at the worst case of a single operation gives a misleading picture. A good example is Java's `ArrayList`.
+
+When you call `add()` on an ArrayList, the element is usually just placed into the next open slot in the backing array. That is O(1). But occasionally, the backing array is full. When that happens, ArrayList allocates a new array (typically 1.5 times the old capacity), copies everything over, and then inserts the new element. That single operation is O(n).
+
+If you only looked at the worst case, you might conclude that ArrayList insertions are O(n). But that expensive copy happens less and less frequently as the array grows. After copying n elements into a new array, you get n more cheap insertions before the next resize. When you spread the cost of the occasional O(n) copy across all the O(1) appends, each insertion costs O(1) **amortized**.
+
+This concept, **amortized complexity**, is the average cost per operation over a sequence of operations. It is a more honest description of how dynamic arrays actually perform in practice.
 
 ### Big O vs Big Theta vs Big Omega
 
-Big O is the notation we use most, but it is worth knowing about its siblings:
+Big O is not the only asymptotic notation, though it is by far the most commonly used in practice.
 
-- **Big O (O)** describes an **upper bound**. Saying an algorithm is O(n²) means the number of operations grows no faster than n² (up to a constant factor) for sufficiently large inputs. It is a ceiling, not an exact measurement.
-- **Big Omega (Ω)** describes a **lower bound**. Saying an algorithm is Ω(n) means it will take at least n operations in the worst case.
-- **Big Theta (Θ)** describes a **tight bound** — the algorithm is both O(f(n)) and Ω(f(n)). For instance, a simple loop over an array is Θ(n): it is at least linear and at most linear.
+- **Big O (O)** describes an **upper bound**. Saying an algorithm is O(n<sup>2</sup>) means the number of operations grows no faster than n<sup>2</sup> (up to a constant factor) for large inputs. It is a ceiling.
+- **Big Omega (&#937;)** describes a **lower bound**. Saying an algorithm is &#937;(n) means it needs at least n operations.
+- **Big Theta (&#920;)** describes a **tight bound**, meaning the algorithm is both O(f(n)) and &#937;(f(n)). A simple loop over an array is &#920;(n): it is exactly linear.
 
-In everyday engineering and interview discussions, we almost always use Big O, and we typically mean it as a tight bound even though, formally, it only guarantees an upper bound.
+In everyday engineering, we almost always say "Big O" and mean it as a tight bound. When someone says "this algorithm is O(n log n)," they typically mean it is also &#920;(n log n), not just that it is bounded above by n log n. Technically imprecise, but universally understood.
+
+### Best, Average, and Worst Case
+
+Big O usually refers to the worst-case scenario, but it is worth noting that some algorithms behave very differently depending on the input. QuickSort, for example, is O(n log n) on average but O(n<sup>2</sup>) in the worst case (when the pivot choices are consistently bad). Knowing which case you are analyzing matters, and when someone states a Big O without qualification, they almost always mean worst case.
+
+> **Related posts**: [Complexity Analysis](/posts/complexity-analysis/), [Arrays](/posts/arrays/), [Logarithms in Algorithm Complexity](/posts/logarithm/)

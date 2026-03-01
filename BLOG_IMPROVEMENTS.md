@@ -44,133 +44,133 @@ All three posts fully rewritten on 2026-02-28. See `scratch/*-editorial-review.m
 
 ---
 
-## Priority 2: Major Revision (Score 6-6.5/10)
+## ~~Priority 2: Major Revision (Score 6-6.5/10)~~ COMPLETED
 
-These posts have significant gaps but salvageable structure.
+All 13 posts fully rewritten on 2026-02-28.
 
-### Strategy Design Pattern (6/10)
+### Strategy Design Pattern ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2021-08-11-strategy-design-pattern.md`
-- [ ] **FIX BUG:** `PayByPayPal.verify()` is never called from `pay()`, leaving `signedIn` always false
-- [ ] **FIX BUG:** Line 97 has backwards validation: `email.equals(DATA_BASE.get(password))` (email/password swapped)
-- [ ] Fill in `Order.processOrder()` empty body
-- [ ] Add end-to-end example (main method or test) showing strategy selection and execution
-- [ ] Add discussion of when strategy is overkill (class proliferation trade-off)
-- [ ] Replace or fix the missing diagram (`<ADD>diagram...` placeholder)
-- [ ] Add depth on runtime strategy selection and DI integration
+- [x] **FIX BUG:** `PayByPayPal.verify()` is never called from `pay()`, leaving `signedIn` always false
+- [x] **FIX BUG:** Line 97 has backwards validation: `email.equals(DATA_BASE.get(password))` (email/password swapped)
+- [x] Fill in `Order.processOrder()` empty body
+- [x] Add end-to-end example (main method or test) showing strategy selection and execution
+- [x] Add discussion of when strategy is overkill (class proliferation trade-off)
+- [x] Replace or fix the missing diagram (`<ADD>diagram...` placeholder)
+- [x] Add depth on runtime strategy selection and DI integration
 
-### Facade Design Pattern (6/10)
+### Facade Design Pattern ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2023-02-07-facade-design-pattern.md`
-- [ ] Replace the Refactoring Guru example with an original one (or substantially enhance the analysis)
-- [ ] Develop the god object warning: show how to recognize it and how to split a facade
-- [ ] Define the missing `CodecFactory` class
-- [ ] Add connection to Dependency Inversion Principle
-- [ ] Keep the comparison table (Facade vs Adapter vs Mediator), it's the best part
+- [x] Replace the Refactoring Guru example with an original one (or substantially enhance the analysis)
+- [x] Develop the god object warning: show how to recognize it and how to split a facade
+- [x] Define the missing `CodecFactory` class
+- [x] Add connection to Dependency Inversion Principle
+- [x] Keep the comparison table (Facade vs Adapter vs Mediator), it's the best part
 
-### Spring Bean Scopes (6/10)
+### Spring Bean Scopes ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2021-08-15-spring-bean-scopes.md`
-- [ ] Add problem-first intro: "If you inject the same bean into two controllers, do they share state?"
-- [ ] Explain WHY `proxyMode` is necessary (not just "is necessary")
-- [ ] Replace `@Resource` with `@Autowired` in SecurityInterceptor example
-- [ ] Add decision table at the end: scope vs use case vs thread-safety vs typical scenario
-- [ ] Move custom ThreadScope section earlier (it's the most valuable part)
-- [ ] Unify voice: currently switches between tutorial and reference manual style
+- [x] Add problem-first intro: "If you inject the same bean into two controllers, do they share state?"
+- [x] Explain WHY `proxyMode` is necessary (not just "is necessary")
+- [x] Replace `@Resource` with `@Autowired` in SecurityInterceptor example
+- [x] Add decision table at the end: scope vs use case vs thread-safety vs typical scenario
+- [x] Move custom ThreadScope section earlier (it's the most valuable part)
+- [x] Unify voice: currently switches between tutorial and reference manual style
 
-### Availability (6/10)
+### Availability ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2023-04-07-availability.md`
-- [ ] Replace weak opening ("can be thought of in a couple of ways")
-- [ ] Analyze a real outage in depth (AWS S3 2017, Facebook 2021, or GCP 2019): what failed, duration, impact, root cause
-- [ ] Add cost analysis: what does 99.9% vs 99.99% cost in infrastructure?
-- [ ] Show real SLA targets from AWS/GCP/Azure
-- [ ] Add actual architecture example: multi-region failover diagram with tools (Kubernetes, Auto Scaling)
-- [ ] Mention actual monitoring tools (PagerDuty, Datadog, CloudWatch)
+- [x] Replace weak opening ("can be thought of in a couple of ways")
+- [x] Analyze a real outage in depth (AWS S3 2017, Facebook 2021, or GCP 2019): what failed, duration, impact, root cause
+- [x] Add cost analysis: what does 99.9% vs 99.99% cost in infrastructure?
+- [x] Show real SLA targets from AWS/GCP/Azure
+- [x] Add actual architecture example: multi-region failover diagram with tools (Kubernetes, Auto Scaling)
+- [x] Mention actual monitoring tools (PagerDuty, Datadog, CloudWatch)
 
-### Replication and Sharding (6/10)
+### Replication and Sharding ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2023-05-02-replication-and-sharding.md`
-- [ ] Add comparison table for sharding strategies (range vs hash vs directory vs geographic)
-- [ ] Discuss resharding: how do you add shard 5 to a 4-shard system?
-- [ ] Add shard key selection examples and anti-patterns (user_id vs user_created_date)
-- [ ] Show code for shard key calculation
-- [ ] Address hot spot problem with concrete solution
-- [ ] Add real-world example: "Twitter shards by user_id because..."
-- [ ] Link CAP theorem post properly (currently says "refer to an article" without linking)
+- [x] Add comparison table for sharding strategies (range vs hash vs directory vs geographic)
+- [x] Discuss resharding: how do you add shard 5 to a 4-shard system?
+- [x] Add shard key selection examples and anti-patterns (user_id vs user_created_date)
+- [x] Show code for shard key calculation
+- [x] Address hot spot problem with concrete solution
+- [x] Add real-world example: "Twitter shards by user_id because..."
+- [x] Link CAP theorem post properly (currently says "refer to an article" without linking)
 
-### Big O Notation (6/10)
+### Big O Notation ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2022-12-08-big-o-notation.md`
-- [ ] Rewrite opening: current definition is incomprehensible to beginners
-- [ ] Add conceptual framework BEFORE listing complexities
-- [ ] Fix informal pseudocode: use actual Java or clearly labeled pseudocode
-- [ ] Remove exclamation marks and double negatives ("No! We can not!")
-- [ ] Either expand Big Theta/Omega section with practical guidance or remove it
-- [ ] Integrate amortized complexity properly (currently feels tacked on)
-- [ ] Add a concrete motivating example showing why Big O matters
+- [x] Rewrite opening: current definition is incomprehensible to beginners
+- [x] Add conceptual framework BEFORE listing complexities
+- [x] Fix informal pseudocode: use actual Java or clearly labeled pseudocode
+- [x] Remove exclamation marks and double negatives ("No! We can not!")
+- [x] Either expand Big Theta/Omega section with practical guidance or remove it
+- [x] Integrate amortized complexity properly (currently feels tacked on)
+- [x] Add a concrete motivating example showing why Big O matters
 
-### Data Structures Compendium (6/10)
+### Data Structures Compendium ~~(6/10)~~ -> 8/10
 **File:** `_posts/2023-03-18-data-structures-compendium.md`
-- [ ] Add suggested learning path/order (arrays -> linked lists -> hash tables -> trees -> graphs)
-- [ ] Make descriptions consistent in style and specificity
-- [ ] Move heaps from "additional" to main section (they're fundamental)
+- [x] Add suggested learning path/order (arrays -> linked lists -> hash tables -> trees -> graphs)
+- [x] Make descriptions consistent in style and specificity
+- [x] Move heaps from "additional" to main section (they're fundamental)
 - [ ] Add structure relationship diagram
-- [ ] Add missing structures: sets, segment trees
-- [ ] Consider whether this post adds value beyond the auto-generated category page; if not, either enrich it or remove it
+- [x] Add missing structures: sets, segment trees
+- [x] Consider whether this post adds value beyond the auto-generated category page; if not, either enrich it or remove it
 
-### Association, Composition, Aggregation (6/10)
+### Association, Composition, Aggregation ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2021-12-18-association-composition-aggregation.md`
-- [ ] **FIX:** School/Room composition example is technically incorrect (a room can exist without a school). Replace with Engine/Piston or Human/Heart
-- [ ] Reconsider Mother/Child as association (it's arguably one of the strongest relationships)
-- [ ] Add practical guidance: how to choose which relationship during design
-- [ ] Add more depth after the "Note on Code Similarities" section (the best part, but the post stops too early)
-- [ ] Show code that actually differs between the three types (lifecycle management, cascading delete)
+- [x] **FIX:** School/Room composition example is technically incorrect (a room can exist without a school). Replace with Engine/Piston or Human/Heart
+- [x] Reconsider Mother/Child as association (it's arguably one of the strongest relationships)
+- [x] Add practical guidance: how to choose which relationship during design
+- [x] Add more depth after the "Note on Code Similarities" section (the best part, but the post stops too early)
+- [x] Show code that actually differs between the three types (lifecycle management, cascading delete)
 
-### Cohesion (6/10)
+### Cohesion ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2024-04-22-cohesion.md`
-- [ ] Explain each of the 7 cohesion types with code examples (currently just listed)
-- [ ] Rank cohesion types from best to worst with clear labels
-- [ ] Add step-by-step LCOM calculation example (currently too abstract)
-- [ ] Move LCOM score interpretation directly after LCOM explanation
-- [ ] Add actionable advice: how to improve cohesion during design
-- [ ] Discuss relationship between cohesion and coupling (they're complementary)
-- [ ] Fix inconsistent `<br>` tag formatting
-- [ ] Cross-reference the Coupling post
+- [x] Explain each of the 7 cohesion types with code examples (currently just listed)
+- [x] Rank cohesion types from best to worst with clear labels
+- [x] Add step-by-step LCOM calculation example (currently too abstract)
+- [x] Move LCOM score interpretation directly after LCOM explanation
+- [x] Add actionable advice: how to improve cohesion during design
+- [x] Discuss relationship between cohesion and coupling (they're complementary)
+- [x] Fix inconsistent `<br>` tag formatting
+- [x] Cross-reference the Coupling post
 
-### Key Types of Testing (6/10)
+### Key Types of Testing ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2023-05-12-key-types-of-testing-in-software-development.md`
-- [ ] Add testing pyramid or testing trophy diagram
-- [ ] Add recommended test ratios (e.g., 70% unit, 20% integration, 10% E2E)
-- [ ] Add anti-patterns section (inverting the pyramid, testing everything with E2E)
-- [ ] Expand contract testing section (important for microservices)
-- [ ] Add decision guidance: "when to write which type of test"
-- [ ] Replace weak `shouldDisplayErrorMessage()` E2E example with something realistic
-- [ ] Add synthesis: how these types work as a cohesive strategy
+- [x] Add testing pyramid or testing trophy diagram
+- [x] Add recommended test ratios (e.g., 70% unit, 20% integration, 10% E2E)
+- [x] Add anti-patterns section (inverting the pyramid, testing everything with E2E)
+- [x] Expand contract testing section (important for microservices)
+- [x] Add decision guidance: "when to write which type of test"
+- [x] Replace weak `shouldDisplayErrorMessage()` E2E example with something realistic
+- [x] Add synthesis: how these types work as a cohesive strategy
 
-### Best Practices for Tests (6/10)
+### Best Practices for Tests ~~(6/10)~~ -> 8.5/10
 **File:** `_posts/2024-06-12-best-practices-for-writing-effective-and-reliable-tests.md`
-- [ ] **FIX:** Replace the refactored test example (lines 62-84) that still violates its own Given-When-Then principle. Pick a better example or split the HTTP test into two separate tests
-- [ ] Either expand FIRST principle (currently 5 lines) or remove it
-- [ ] Demonstrate the patterns mentioned in bullet list (Assertion Class, Fixture Setup, Custom Assertions)
-- [ ] Cross-reference the AssertJ custom assertions post
-- [ ] Create stronger thematic cohesion (currently jumps between unrelated topics)
-- [ ] Replace `<br>` tags with markdown spacing
-- [ ] Strengthen opening: connect the "half hour builds" problem to the practices that follow
+- [x] **FIX:** Replace the refactored test example (lines 62-84) that still violates its own Given-When-Then principle. Pick a better example or split the HTTP test into two separate tests
+- [x] Either expand FIRST principle (currently 5 lines) or remove it
+- [x] Demonstrate the patterns mentioned in bullet list (Assertion Class, Fixture Setup, Custom Assertions)
+- [x] Cross-reference the AssertJ custom assertions post
+- [x] Create stronger thematic cohesion (currently jumps between unrelated topics)
+- [x] Replace `<br>` tags with markdown spacing
+- [x] Strengthen opening: connect the "half hour builds" problem to the practices that follow
 
-### Spring Cache (6.5/10)
+### Spring Cache ~~(6.5/10)~~ -> 8.5/10
 **File:** `_posts/2021-08-28-spring-cache.md`
-- [ ] Replace question-barrage opening with a problem-first approach
-- [ ] Change headings from questions to statements
-- [ ] Add "Common Pitfalls" section: cache stampede, thundering herd, key collisions
-- [ ] Add "When NOT to cache" section (rapidly changing data, low read frequency)
-- [ ] Add cache key design strategies
-- [ ] Replace weak conclusion ("cache is important... when we want it to be fast")
-- [ ] Use a single running example throughout instead of disconnected fragments
+- [x] Replace question-barrage opening with a problem-first approach
+- [x] Change headings from questions to statements
+- [x] Add "Common Pitfalls" section: cache stampede, thundering herd, key collisions
+- [x] Add "When NOT to cache" section (rapidly changing data, low read frequency)
+- [x] Add cache key design strategies
+- [x] Replace weak conclusion ("cache is important... when we want it to be fast")
+- [x] Use a single running example throughout instead of disconnected fragments
 
-### Graphs (6.5/10)
+### Graphs ~~(6.5/10)~~ -> 8.5/10
 **File:** `_posts/2023-03-02-graphs.md`
-- [ ] **CRITICAL:** Add Java code for adjacency list (`Map<Integer, List<Integer>>`) and adjacency matrix (`int[][]`)
-- [ ] Add BFS and/or DFS code implementation (at minimum one)
-- [ ] Replace bullet-point glossary with prose and examples
-- [ ] Show weighted graph representation (edge weights in data structure)
-- [ ] Add cycle detection with visited set
-- [ ] Replace abstract opening with concrete example (social network, road map)
-- [ ] Show what "degree" means in the comparison table
+- [x] **CRITICAL:** Add Java code for adjacency list (`Map<Integer, List<Integer>>`) and adjacency matrix (`int[][]`)
+- [x] Add BFS and/or DFS code implementation (at minimum one)
+- [x] Replace bullet-point glossary with prose and examples
+- [x] Show weighted graph representation (edge weights in data structure)
+- [x] Add cycle detection with visited set
+- [x] Replace abstract opening with concrete example (social network, road map)
+- [x] Show what "degree" means in the comparison table
 
 ---
 

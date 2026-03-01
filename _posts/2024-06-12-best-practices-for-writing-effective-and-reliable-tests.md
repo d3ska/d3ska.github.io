@@ -9,26 +9,101 @@ tags:
   - Clean Code
 ---
 
-Many teams face a common challenge after introducing the practice of writing tests: builds take up to half an hour, test refactoring proves to be difficult, and testing consumes too much of the team's time and energy. However, this problem can be solved by adhering to good testability practices.
-
-### The FIRST Principle
-
-The FIRST principle is a set of criteria that good unit tests should meet:
-
-* **Fast**: Quick tests lead to quicker project building times. However, the execution time can vary depending on the type of test. Typically, unit tests are faster than integration tests, which in turn are faster than end-to-end (E2E) tests.
-
-* **Independent**: Tests should not depend on each other. Each test should be able to run alone and in any order. This makes it easier to pinpoint problems when a test fails.
-
-* **Repeatable**: Tests should give the same result each time, no matter how often they are run.
-
-* **Self-Validating**: The test should have a clear result, either positive or negative. There's no need for any additional activities to interpret the result.
-
-* **Timely**: Ideally, tests should be written just before the production code that makes them pass (Test-Driven Development - TDD).
+Many teams introduce testing and then hit a wall: builds take thirty minutes, tests break on every refactor, and the team spends more time fixing tests than writing features. These problems are not caused by testing itself but by how tests are written. The practices below target exactly these pain points, from keeping tests fast and independent, through making them readable, to ensuring they actually catch bugs.
 
 
-### Clarity in Tests
+### The FIRST Principles
 
-In the realm of software testing, readability and clarity are crucial to understanding the purpose of each test, the functionality being tested, and the expected outcome. Let's consider an initial version of a test that lacks these elements:
+The **FIRST** acronym captures five properties that well-written tests should have. Rather than listing them in isolation, I want to show how violating even one of them creates real problems.
+
+**Fast.** Slow tests kill feedback loops. Unit tests should run in milliseconds, integration tests in seconds. When a full suite takes minutes, developers stop running it locally and bugs slip through to CI. The most common culprits are unnecessary database calls, network I/O, and sleeping threads in tests that could use deterministic scheduling instead.
+
+**Independent.** Tests that depend on each other are a debugging nightmare. If test B only passes when test A runs first, a failure in B tells you nothing useful. Each test should set up its own state and tear it down afterwards.
+
+**Repeatable.** A test that passes on Monday and fails on Tuesday without any code change is worse than no test at all. The usual offender is hidden dependency on something external: the current date, a random number, a running service. Consider this example where a discount is tied to the current date:
+
+```java
+// Broken: depends on the system clock
+public class DiscountService {
+    public BigDecimal calculateDiscount(Order order) {
+        LocalDate today = LocalDate.now();
+        if (today.getMonthValue() == 12) {
+            return order.getTotal().multiply(new BigDecimal("0.10"));
+        }
+        return BigDecimal.ZERO;
+    }
+}
+
+// This test passes only in December
+@Test
+void shouldApplyDecemberDiscount() {
+    // Given
+    Order order = new Order(new BigDecimal("100.00"));
+    DiscountService service = new DiscountService();
+
+    // When
+    BigDecimal discount = service.calculateDiscount(order);
+
+    // Then
+    assertThat(discount).isEqualByComparingTo("10.00");
+}
+```
+
+The fix is to inject a `Clock` so the test controls time:
+
+```java
+public class DiscountService {
+    private final Clock clock;
+
+    public DiscountService(Clock clock) {
+        this.clock = clock;
+    }
+
+    public BigDecimal calculateDiscount(Order order) {
+        LocalDate today = LocalDate.now(clock);
+        if (today.getMonthValue() == 12) {
+            return order.getTotal().multiply(new BigDecimal("0.10"));
+        }
+        return BigDecimal.ZERO;
+    }
+}
+
+@Test
+void shouldApplyDecemberDiscount() {
+    // Given
+    Clock decemberClock = Clock.fixed(
+        LocalDate.of(2024, 12, 15).atStartOfDay(ZoneId.systemDefault()).toInstant(),
+        ZoneId.systemDefault()
+    );
+    Order order = new Order(new BigDecimal("100.00"));
+    DiscountService service = new DiscountService(decemberClock);
+
+    // When
+    BigDecimal discount = service.calculateDiscount(order);
+
+    // Then
+    assertThat(discount).isEqualByComparingTo("10.00");
+}
+```
+
+Now the test passes in any month, on any machine.
+
+**Self-Validating.** A test should produce a clear pass or fail. If someone has to open a log file or check a database row manually to decide whether the test passed, it is not a real test.
+
+**Timely.** Writing tests close to (or before) the production code they verify keeps the design testable. Code that is written first and tested later often turns out to be hard to test, which leads to tests being skipped entirely.
+
+These five properties are a useful checklist, but they are not enough on their own. The rest of this post covers the practices that turn these principles into concrete, day-to-day habits.
+
+
+### Structuring Tests with Given-When-Then
+
+Once tests are fast, independent, and repeatable, the next challenge is making them readable. A test that nobody can understand is a test nobody trusts. **Given-When-Then** (also called Arrange-Act-Assert) is the simplest way to bring structure to a test method. It splits every test into three sections:
+
+* **Given** -- set up the preconditions.
+* **When** -- execute the action under test.
+* **Then** -- verify the outcome.
+
+Consider this test that is hard to follow at a glance:
 
 ```java
 @Test
@@ -48,80 +123,92 @@ void testVerification() throws IOException {
 }
 ```
 
-While this test might work perfectly, it's somewhat hard to reason about. It's not immediately clear what the test setup is, what operation is being tested, and what the expected outcome is. This can become problematic as the codebase grows and as more developers interact with the tests.
-
-To address these issues, we can refactor the test to be more readable and clear. **The Given-When-Then practice (Arrange-Act-Assert)**, commonly used in behavior-driven development (BDD), is a brilliant approach to make tests more comprehensible. It separates the test method into three well-defined sections:
-
-* **Given (set up)**: Outlines the preconditions.
-* **When (execution)**: Describes the action to be tested.
-* **Then (verification)**: Verifies the outcome.
-
-Let's refactor our original test to adhere to the Given-When-Then pattern:
+The setup, action, and assertion are tangled together. Applying Given-When-Then properly means one cycle per test. Here the original test has two distinct behaviors (creating a loan order and verifying its status), so it should be two tests:
 
 ```java
 @Test
-void testVerification() throws IOException {
+void shouldCreateLoanOrder() throws IOException {
     // Given
-    Customer correctCustomer = CustomerBuilder.create().build();
-    LoanOrder loanOrderRequest = new LoanOrder(correctCustomer);
-    HttpPost httpPost = createHttpPost(LOAN_ORDERS_URI, loanOrderRequest);
-    
+    Customer customer = CustomerBuilder.create().build();
+    LoanOrder loanOrderRequest = new LoanOrder(customer);
+
     // When
-    HttpResponse postResponse = httpClient.execute(httpPost);
-    
+    HttpResponse response = postLoanOrder(loanOrderRequest);
+
     // Then
-    assertThat(postResponse.getStatusLine().getStatusCode()).isEqualTo(200);
-    
-    // Extract loanOrderId from the response
-    String loanOrderId = parseLoanOrderIdFromResponse(postResponse);
-    
-    // When
-    HttpResponse getResponse = executeHttpGet(LOAN_ORDERS_URI, loanOrderId);
-    
-    // Then
-    LoanOrder loanOrder = parseLoanOrderFromResponse(getResponse);
-    assertThat(loanOrder.getStatus()).isEqualTo(VERIFIED);
+    assertThat(response.getStatusLine().getStatusCode()).isEqualTo(200);
+    assertThat(parseLoanOrderIdFromResponse(response)).isNotBlank();
 }
 
+@Test
+void shouldVerifyCreatedLoanOrder() throws IOException {
+    // Given
+    String loanOrderId = createLoanOrderAndReturnId(CustomerBuilder.create().build());
+
+    // When
+    HttpResponse response = getLoanOrder(loanOrderId);
+
+    // Then
+    LoanOrder loanOrder = parseLoanOrderFromResponse(response);
+    assertThat(loanOrder.getStatus()).isEqualTo(VERIFIED);
+}
 ```
 
-> **A note on the example above:** You may have noticed that this "refactored" test still contains two Given-When-Then cycles (POST then GET) within a single test method. In a stricter application of the pattern, each cycle would be its own test. Here, I kept both cycles together intentionally because this is an end-to-end integration test where the GET depends on the result of the POST -- splitting them would require sharing state between tests, which violates the Independence principle from FIRST. In practice, this is a reasonable trade-off, but it is worth being aware of.
-
-In the realm of software testing, readability and clarity are crucial elements. By breaking down tests into smaller, well-named methods and adhering to the Given-When-Then pattern, we significantly improve the readability and maintenance of our code. This pattern is very effective in breaking down the test into clear, understandable stages. The test itself becomes more focused, making it easier to understand the functionality that's being tested, the initial state, the operation being tested, and the expected outcome.
-
-However, the **Given-When-Then (Arrange-Act-Assert)** approach is just one of many techniques we can use to improve our tests. Other testing patterns and methodologies can provide additional clarity and efficiency, and they are worth considering as part of a robust testing strategy. Here are a few worth mentioning:
-
-* **Assertion Class**: This involves creating a separate class to handle assertions. This makes tests easier to read and allows for better reuse of common assertions.
-
-* **Fixture Setup**: A fixed setup (or 'fixture') is a context where tests run. This can be anything from input data to a mock object or a test double. Clear and consistent setup of fixtures can make tests more reliable and easier to understand.
-
-* **Custom Assertions**: Developing custom assertions for your tests can improve readability and reduce code duplication. This might involve creating a method that takes in parameters and performs an assertion based on those parameters.
-
-* **Data-Driven Testing**: This pattern involves parameterizing your tests to run them with different inputs, reducing code duplication and making your tests more flexible and comprehensive.
-
-By incorporating these practices, along with the Given-When-Then pattern, we can make our test suite more efficient, effective, and manageable as part of our development process. The key is to consider the specific needs and challenges of our testing environment and to apply the methods and patterns that provide the most benefit in our context.
+Notice that `shouldVerifyCreatedLoanOrder` uses a helper method `createLoanOrderAndReturnId` in its Given section. This is not the same as depending on another test. The helper is called within the test itself, so each test still controls its own setup and can run independently, in any order. The Given section is allowed to be complex. What matters is that each test has exactly one When and one Then.
 
 
-### Following Consistent Naming Conventions in Your Project
+### Useful Testing Patterns
 
-Adhering to a consistent naming convention across your testing suite is a crucial aspect of maintaining clean and comprehensible code. This practice makes it easier for developers to understand the purpose of a test at a glance and allows for more efficient navigation through the test suite.
+Given-When-Then handles structure, but there are a few patterns that help with the content of each section.
 
-Let's consider the naming of test methods. A good test name should clearly articulate what functionality is being tested and the expected outcome. One common convention is to structure the test name like so: **'methodName_Condition_ExpectedBehavior'**.
+**Custom Assertions** let you replace low-level field-by-field checks with domain-specific, readable assertions. Instead of writing five `assertThat` calls to verify individual fields of a `LoanOrder`, you write `assertThat(loanOrder).hasStatus(VERIFIED).belongsTo(customer)`. This improves readability and reduces duplication across tests. I covered this in detail, including how to build custom assertion classes with AssertJ, in a [dedicated post](/posts/custom-assertions-with-assertj/).
 
-For example, if you are testing the **'withdraw'** method in a **'BankAccount'** class, a test might be named **'withdraw_InsufficientFunds_ThrowsException'**. This clearly communicates that the **'withdraw'** method, when dealing with a condition of insufficient funds, is expected to throw an exception.
+**Fixture Setup** means extracting common test data construction into helper methods or builders, so the Given section stays focused on what is unique to each test case. The `CustomerBuilder.create().build()` pattern from the examples above is a simple version of this.
 
-A consistent naming convention also applies to the organization of your test files. Tests should be grouped logically and clearly labeled so that it's straightforward to find the tests related to a specific component. If you're using a tool that supports it, consider structuring your tests to mirror the structure of your application code. This makes it even easier to locate the tests for a particular piece of functionality.
+**Data-Driven Testing** (parameterized tests in JUnit 5) lets you run the same test logic against many inputs without duplicating the test method. This is especially useful for validation rules, parsers, and anything with clear input/output pairs:
 
-Maintaining consistent naming conventions isn't just about cleanliness—it's about communication. Clear, descriptive names make your tests more understandable to others (and your future self), making your codebase easier to maintain and evolve. By establishing and following these conventions in your project, you can create a more effective and efficient testing environment.
+```java
+@ParameterizedTest
+@CsvSource({
+    "100.00, 12, 10.00",
+    "100.00,  6,  0.00",
+    "250.00, 12, 25.00"
+})
+void shouldCalculateDiscount(String total, int month, String expectedDiscount) {
+    // Given
+    Clock clock = clockFixedToMonth(month);
+    Order order = new Order(new BigDecimal(total));
+    DiscountService service = new DiscountService(clock);
+
+    // When
+    BigDecimal discount = service.calculateDiscount(order);
+
+    // Then
+    assertThat(discount).isEqualByComparingTo(expectedDiscount);
+}
+```
+
+Three test cases, zero duplication.
 
 
-### Avoiding False Negatives in Testing
+### Following Consistent Naming Conventions
 
-While clarity in tests is key, it is equally important to trust our tests. In testing terminology, a **false negative** occurs when a test *passes* even though the code under test is actually broken -- in other words, the test fails to detect a real bug. (This follows the convention where a "negative" test result means "no bug found." A *false* negative therefore means the "no bug found" signal is wrong.) False negatives can lead to missed bugs and give a false sense of confidence. This is often due to poorly constructed tests or those that pass without the correct logic.
+Readable tests need readable names. A good test name answers three questions: what is being tested, under what conditions, and what the expected outcome is. One convention that works well is **methodName_condition_expectedBehavior**:
 
-To counter this, we must ensure our tests pass only when the right logic is in place and all assertions hold true. This not only improves readability, but also enhances test reliability, reinforcing our confidence in the test results.
+* `withdraw_insufficientFunds_throwsException`
+* `calculateDiscount_decemberOrder_returnsTenPercent`
+* `verifyPerson_missingIdentity_returnsVerificationFailed`
 
-Consider the following example, where a test passes without any implementation:
+The exact format matters less than consistency. Pick a convention, document it, and follow it across the entire project. When every test in a suite follows the same pattern, scanning a list of failures in CI immediately tells you what went wrong and where.
+
+Test file organization follows a similar principle. Mirror the structure of your application code so that finding the tests for a given class is trivial. If `DiscountService` lives in `com.example.billing`, its tests belong in `com.example.billing.DiscountServiceTest`.
+
+
+### Avoiding False Negatives
+
+A test suite you cannot trust is worse than no test suite at all. A **false negative** occurs when a test passes even though the code under test is broken. The test says "no bug found," but that signal is wrong. False negatives erode confidence quietly: every bug that slips through makes the team trust the suite a little less, until eventually nobody pays attention to green builds.
+
+Consider this example:
 
 ```java
 public class SimpleVerification implements Verification {
@@ -137,40 +224,39 @@ public class SimpleVerification implements Verification {
     }
 }
 
-// Test that passes even without implementation
 @Test
 void shouldPassSimpleVerification() {
     // Given
     Customer customer = buildCustomer();
-    CustomerVerifier service = new CustomerVerifier(new TestVerificationService(), buildSimpleVerification(), new TestBadServiceWrapper());
+    CustomerVerifier service = new CustomerVerifier(
+        new TestVerificationService(), buildSimpleVerification(), new TestBadServiceWrapper()
+    );
+
     // When
     CustomerVerificationResult result = service.verifyPerson(customer);
+
+    // Then
     assertThat(result.getStatus())
         .isEqualTo(CustomerVerificationResult.Status.VERIFICATION_FAILED);
 }
 ```
 
-In this example, the test shouldPassSimpleVerification() passes even without the implementation of the method someLogicResolvingToBoolean(). This leads to a false negative, as the test passes despite the lack of implementation.
+The `passes` method is not implemented. It blindly returns `false`, and the test asserts on `VERIFICATION_FAILED`, which happens to match. The test is green, but it is not testing anything meaningful.
 
-**Solutions to Avoid False Negatives**
+Three practices help prevent this:
 
-To avoid these kinds of false negatives, consider the following practices:
+* **Check that the test fails without your logic.** Before calling a test "done," comment out or stub the production code. If the test still passes, it is not exercising what you think it is.
 
-* **Check if the test works without your logic**: Make sure your tests fail when the logic they're testing is not implemented. This way, you ensure that the tests are indeed checking the correct logic.
+* **Reverse your assertions.** Flip `isEqualTo(VERIFIED)` to `isNotEqualTo(VERIFIED)`. If the test still passes, something is wrong.
 
-* **Reverse assertions to make sure the test fails**: If you reverse your assertions and the test still passes, then the test is not effective. By ensuring the test fails when assertions are reversed, you confirm the test's reliability.
-
-* **Use a build tool to check if tests are being run:** Sometimes, tests may not run due to configuration issues, leading to a false sense of security. Using a build tool can help ensure that all tests are indeed running.
+* **Verify that tests actually run.** Build tool misconfigurations (wrong naming patterns, excluded packages) can silently skip tests. Check your CI logs to confirm the test count matches expectations.
 
 
-By ensuring your tests are correctly designed and run as expected, you can minimize the risk of false negatives, increasing the reliability of your software testing practices.
+### Keeping Cyclomatic Complexity Low
 
+All of the practices above become harder to apply when the production code itself is tangled. **Cyclomatic complexity** measures the number of independent paths through a piece of code. High complexity means more branches to test, more edge cases to cover, and more chances for a test to miss a path.
 
-### Avoiding High Cyclomatic Complexity
-
-Cyclomatic complexity is a software metric that quantifies the number of linearly independent paths through a program's source code. In simpler terms, it measures how complex your code is, based on the number of different paths execution could take through it. High cyclomatic complexity means that there are many different paths through the code, which can make the code hard to understand, test, and maintain.
-
-Let's take a look at an example. Consider the following piece of code:
+Here is a method with deeply nested conditions:
 
 ```java
 public void process(User user, Order order) {
@@ -184,12 +270,9 @@ public void process(User user, Order order) {
         }
     }
 }
-
 ```
 
-This piece of code has a cyclomatic complexity of 5 because there are five potential paths through the code (one for each condition being false, plus one where all conditions are true). This is not only hard to read, but also hard to test because we need to create tests for each of these paths.
-
-We can reduce the cyclomatic complexity by inverting the conditions and returning early, like so:
+This has a cyclomatic complexity of 5. Each nesting level adds another path you need to cover with a test. Inverting the conditions and returning early collapses the structure:
 
 ```java
 public void process(User user, Order order) {
@@ -201,6 +284,9 @@ public void process(User user, Order order) {
 }
 ```
 
-Now, the cyclomatic complexity is 2, making the code easier to understand and test.
+Now the complexity is 2. The code is easier to read, and it is obvious which test cases you need: one where the guard clause triggers and one where processing happens. As a rule of thumb, a cyclomatic complexity above 10 in a single method is a signal that the method is doing too much and should be broken apart.
 
-It's essential to keep cyclomatic complexity in check because it directly impacts the understandability, testability, and maintainability of your code. As a general rule, a cyclomatic complexity above 10 is considered high and should be avoided.
+Keeping production code simple is not a separate concern from testing. It is part of the same discipline. Simple code is testable code, and testable code tends to be better code.
+
+
+> **Related posts**: [Custom Assertions with AssertJ](/posts/custom-assertions-with-assertj/) -- [Key Types of Testing in Software Development](/posts/key-types-of-testing-in-software-development/) -- [Schools of Unit Testing](/posts/schools-of-unit-tests/) -- [The Economics of Software Testing](/posts/economy-of-testing/)

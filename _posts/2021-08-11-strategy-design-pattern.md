@@ -9,192 +9,299 @@ tags:
   - SOLID
 ---
 
-
-#### Understanding and Implementing the Strategy Design Pattern
-
-The Strategy design pattern is a behavioral design pattern that allows you to define a family of algorithms, place each of them in a separate class, and make their objects interchangeable. This pattern simplifies the process of solving the same problem in different ways. A crucial aspect is the intention, which refers to what we want to achieve, rather than how we achieve it.
-
-Each strategy represents a distinct approach to achieving the desired outcome.
-
-Consider this example: we would like to implement a payment processing module.
-
-Now, how many payment methods can you think of?
-Possible payment methods may include:
-* Visa Card
-* Mastercard Card
-* Credit Card
-* PayPal
-* Cash
-* Cryptocurrencies
-
-From the perspective of the person ordering a particular functionality or the code segment responsible for payment, the implementation is not important. The desired outcome is that the payment will be processed.
-
-#### Why Not Just Use if/else or switch?
-
-A naive approach to supporting multiple payment methods might look like this:
+Imagine a checkout service that needs to support credit cards, PayPal, and bank transfers. The first instinct is usually a chain of `if/else` blocks:
 
 ```java
-public void processPayment(String method, int amount) {
-    if ("paypal".equals(method)) {
-        // PayPal-specific logic
-    } else if ("creditcard".equals(method)) {
-        // Credit card-specific logic
-    } else if ("crypto".equals(method)) {
-        // Crypto-specific logic
+public class CheckoutService {
+
+    public void processPayment(String method, BigDecimal amount) {
+        if ("creditcard".equals(method)) {
+            // validate card number, expiry, CVV
+            // call card network API
+            // handle 3-D Secure
+        } else if ("paypal".equals(method)) {
+            // redirect to PayPal
+            // wait for callback
+            // verify token
+        } else if ("bank_transfer".equals(method)) {
+            // generate reference number
+            // initiate SEPA transfer
+        }
     }
-    // ... and on it goes
 }
 ```
 
-This works for two or three methods, but it falls apart quickly. Every new payment method forces me to modify this class, violating the Open/Closed Principle. The method grows into a monolith that is hard to test, hard to read, and easy to break. The Strategy pattern eliminates this branching entirely -- each algorithm lives in its own class, and the caller simply receives the right one.
+This works when there are two methods. It stops working the moment a third or fourth arrives. Every new payment method forces a change to `CheckoutService`, violating the Open/Closed Principle. The method grows into a monolith that is hard to test, hard to read, and easy to break.
 
-#### Structure of the Pattern
+The **Strategy design pattern** eliminates this branching entirely. It is a behavioral pattern that lets you define a family of algorithms, put each one in its own class, and make them interchangeable. The caller does not know or care which concrete algorithm it is using. It only talks through the interface.
 
-The Strategy pattern consists of three key participants:
+### Structure of the Pattern
+
+The Strategy pattern has three participants:
 
 1. **Strategy interface** -- declares the contract that all concrete strategies must fulfill.
 2. **Concrete strategies** -- individual classes that implement the interface, each encapsulating a specific algorithm.
-3. **Context class** -- holds a reference to a Strategy object and delegates the work to it. The context does not know which concrete strategy it is using; it only interacts through the interface.
+3. **Context class** -- holds a reference to a Strategy and delegates the work to it. The context never knows which concrete strategy it is using.
 
-<ADD>diagram of Strategy pattern structure showing Strategy interface, ConcreteStrategyA/B, and Context class with a strategy reference</ADD>
+### Implementation
 
-#### Implementation
+I will stick with the payment example. The goal is a design where `CheckoutService` can process a payment through any method without containing a single `if` branch.
 
-First, I need to create an interface for the strategy. In this case, the interface is responsible for processing the payment amount passed as an argument.
+#### The Strategy Interface
 
 ```java
-/**
- * Common interface for all strategies.
- */
-public interface PayStrategy {
+public interface PaymentStrategy {
 
-    boolean pay(int paymentAmount);
+    PaymentResult pay(BigDecimal amount);
 }
 ```
 
-The `PayStrategy` interface defines a single method `pay(int paymentAmount)` that returns a boolean. Every concrete payment method will implement this contract.
+`PaymentResult` is a simple value object that tells the caller whether the payment succeeded and carries a transaction ID:
 
-Now, I must create concrete implementations of algorithms for payment using one of the methods mentioned earlier, such as PayPal, Credit Card, or Cryptocurrencies.
-
-**PayPal strategy**
 ```java
-import java.util.HashMap;
-import java.util.Map;
+public class PaymentResult {
 
-/**
- * Concrete strategy. Implements PayPal payment method.
- */
-public class PayByPayPal implements PayStrategy {
-    private static final Map<String, String> DATA_BASE = new HashMap<>();
-    private boolean signedIn;
+    private final boolean success;
+    private final String transactionId;
+    private final String message;
 
-    static {
-        DATA_BASE.put("amanda1985", "amanda@ya.com");
-        DATA_BASE.put("qwerty", "john@amazon.eu");
+    public PaymentResult(boolean success, String transactionId, String message) {
+        this.success = success;
+        this.transactionId = transactionId;
+        this.message = message;
     }
 
-    private boolean verify(String email, String password) {
-        setSignedIn(email.equals(DATA_BASE.get(password)));
-        return signedIn;
+    public boolean isSuccess() { return success; }
+    public String getTransactionId() { return transactionId; }
+    public String getMessage() { return message; }
+}
+```
+
+#### Concrete Strategies
+
+**Credit card payment**
+
+```java
+public class CreditCardPayment implements PaymentStrategy {
+
+    private final String cardNumber;
+    private final String expiryDate;
+    private final String cvv;
+
+    public CreditCardPayment(String cardNumber, String expiryDate, String cvv) {
+        this.cardNumber = cardNumber;
+        this.expiryDate = expiryDate;
+        this.cvv = cvv;
     }
 
-    /**
-     * Save customer data for future shopping attempts.
-     */
     @Override
-    public boolean pay(int paymentAmount) {
-        if (signedIn) {
-            System.out.println("Paying " + paymentAmount + " using PayPal.");
-            return true;
-        } else {
-            return false;
+    public PaymentResult pay(BigDecimal amount) {
+        if (!isValidCard()) {
+            return new PaymentResult(false, null, "Invalid card details");
         }
+
+        String transactionId = "CC-" + UUID.randomUUID();
+        String maskedCard = "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
+        System.out.println("Charged " + amount + " to credit card " + maskedCard);
+        return new PaymentResult(true, transactionId, "Credit card payment successful");
     }
 
-    private void setSignedIn(boolean signedIn) {
-        this.signedIn = signedIn;
+    private boolean isValidCard() {
+        return cardNumber != null
+                && cardNumber.length() == 16
+                && expiryDate != null
+                && cvv != null
+                && cvv.length() == 3;
     }
 }
 ```
 
-The `PayByPayPal` class implements `PayStrategy`. It maintains a simple in-memory user database, verifies credentials, and processes the payment only if the user is signed in.
+**PayPal payment**
 
-<br>
-
-**CreditCard strategy**
 ```java
-/**
- * Concrete strategy. Implements credit card payment method.
- */
-public class PayByCreditCard implements PayStrategy {
+public class PayPalPayment implements PaymentStrategy {
 
-    private CreditCard card;
+    private final String email;
+    private final String authToken;
 
-    /**
-     * After card validation we can charge customer's credit card.
-     */
+    public PayPalPayment(String email, String authToken) {
+        this.email = email;
+        this.authToken = authToken;
+    }
+
     @Override
-    public boolean pay(int paymentAmount) {
-        if (cardIsPresent()) {
-            System.out.println("Paying " + paymentAmount + " using Credit Card.");
-            card.setAmount(card.getAmount() - paymentAmount);
-            return true;
-        } else {
-            return false;
+    public PaymentResult pay(BigDecimal amount) {
+        if (!isAuthenticated()) {
+            return new PaymentResult(false, null, "PayPal authentication failed");
         }
+
+        String transactionId = "PP-" + UUID.randomUUID();
+        System.out.println("Charged " + amount + " via PayPal account " + email);
+        return new PaymentResult(true, transactionId, "PayPal payment successful");
     }
 
-    private boolean cardIsPresent() {
-        return card != null;
+    private boolean isAuthenticated() {
+        return email != null && authToken != null && !authToken.isBlank();
     }
 }
 ```
 
-The `PayByCreditCard` class also implements `PayStrategy`. It validates that a credit card is present, prints the payment amount, and deducts the cost from the card balance.
+Both strategies receive everything they need through the constructor. No mutable state, no hidden `verify()` calls that clients might forget. Each class is self-contained and independently testable.
 
-<br>
+#### The Context: CheckoutService
 
-#### The Context: Order Class
-
-The missing piece that ties everything together is the **Context** class. In this example, it is the `Order` class. The context does not implement any payment logic itself -- it delegates that responsibility to whatever `PayStrategy` it receives.
+The context does not implement any payment logic itself. It delegates to whatever `PaymentStrategy` it receives:
 
 ```java
-/**
- * Order class. Doesn't know the concrete payment method (strategy) user has
- * picked. It uses common strategy interface to delegate collecting payment data
- * to strategy object. It can be used to save order to database.
- */
-public class Order {
-    private int totalCost = 0;
-    private boolean isClosed = false;
+public class CheckoutService {
 
-    public void processOrder(PayStrategy strategy) {
-        // Here we could collect and store payment data from the strategy.
+    private PaymentStrategy paymentStrategy;
+
+    public CheckoutService(PaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
     }
 
-    public void setTotalCost(int cost) { this.totalCost += cost; }
+    public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
+    }
 
-    public int getTotalCost() { return totalCost; }
+    public PaymentResult checkout(BigDecimal amount) {
+        System.out.println("Processing order for " + amount + "...");
+        PaymentResult result = paymentStrategy.pay(amount);
 
-    public boolean isClosed() { return isClosed; }
+        if (result.isSuccess()) {
+            System.out.println("Order completed. Transaction: " + result.getTransactionId());
+        } else {
+            System.out.println("Payment failed: " + result.getMessage());
+        }
 
-    public void setClosed() { isClosed = true; }
+        return result;
+    }
 }
 ```
 
-The `Order` class holds `totalCost` and `isClosed` state. Its `processOrder(PayStrategy strategy)` method accepts any strategy that implements the `PayStrategy` interface. This is the core of the pattern: the `Order` does not know or care whether the payment goes through PayPal, a credit card, or cryptocurrency. It only knows that it can call the strategy to handle the payment, keeping the order logic completely decoupled from payment logic.
+`CheckoutService` does not know whether the payment goes through a credit card, PayPal, or anything else. It only knows that it can call `pay()` on its strategy. Adding a new payment method (say, cryptocurrency) means creating one new class that implements `PaymentStrategy`. Nothing in `CheckoutService` changes.
 
-#### When to Use the Strategy Pattern
+### End-to-End Example
+
+Here is a complete scenario that creates a checkout, processes a payment, and swaps the strategy at runtime:
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+        // Pay with credit card
+        PaymentStrategy creditCard = new CreditCardPayment("4111111111111111", "12/26", "123");
+        CheckoutService checkout = new CheckoutService(creditCard);
+        checkout.checkout(new BigDecimal("49.99"));
+
+        // Customer changes their mind and wants to pay with PayPal instead
+        PaymentStrategy paypal = new PayPalPayment("john@example.com", "pp-auth-token-abc");
+        checkout.setPaymentStrategy(paypal);
+        checkout.checkout(new BigDecimal("49.99"));
+    }
+}
+```
+
+Output:
+
+```
+Processing order for 49.99...
+Charged 49.99 to credit card **** **** **** 1111
+Order completed. Transaction: CC-a1b2c3d4-...
+
+Processing order for 49.99...
+Charged 49.99 via PayPal account john@example.com
+Order completed. Transaction: PP-e5f6g7h8-...
+```
+
+The key takeaway: `CheckoutService` was never modified. The behavior changed because a different strategy was injected.
+
+### Strategy with Lambdas (Java 8+)
+
+Because `PaymentStrategy` has a single abstract method, it is a **functional interface**. That means I can skip the concrete class entirely and pass a lambda:
+
+```java
+CheckoutService checkout = new CheckoutService(amount -> {
+    String txId = "CRYPTO-" + UUID.randomUUID();
+    System.out.println("Sent " + amount + " in BTC");
+    return new PaymentResult(true, txId, "Crypto payment successful");
+});
+
+checkout.checkout(new BigDecimal("0.005"));
+```
+
+This is convenient for one-off strategies, testing, or cases where the algorithm is short enough that a dedicated class would be overkill. For anything with real validation or state, I still prefer a full class. Lambdas are great for keeping things concise, but a 30-line lambda defeats the purpose.
+
+You can also make the functional interface explicit with the `@FunctionalInterface` annotation:
+
+```java
+@FunctionalInterface
+public interface PaymentStrategy {
+
+    PaymentResult pay(BigDecimal amount);
+}
+```
+
+The annotation is not required for lambda usage, but it prevents someone from accidentally adding a second abstract method and breaking all the lambda call sites.
+
+### Strategy with Spring Dependency Injection
+
+In a Spring application, I do not want to manually instantiate strategies with `new`. Spring can collect all `PaymentStrategy` beans into a `Map` keyed by their bean name, which makes strategy selection clean and configuration-driven.
+
+First, mark each strategy as a Spring component with a meaningful name:
+
+```java
+@Component("creditcard")
+public class CreditCardPayment implements PaymentStrategy {
+    // ... same as before
+}
+
+@Component("paypal")
+public class PayPalPayment implements PaymentStrategy {
+    // ... same as before
+}
+```
+
+Then inject them as a map in the service:
+
+```java
+@Service
+public class CheckoutService {
+
+    private final Map<String, PaymentStrategy> strategies;
+
+    public CheckoutService(Map<String, PaymentStrategy> strategies) {
+        this.strategies = strategies;
+    }
+
+    public PaymentResult checkout(String method, BigDecimal amount) {
+        PaymentStrategy strategy = strategies.get(method);
+        if (strategy == null) {
+            throw new IllegalArgumentException("Unknown payment method: " + method);
+        }
+        return strategy.pay(amount);
+    }
+}
+```
+
+Spring automatically populates the map with all beans that implement `PaymentStrategy`. The key is the bean name (the string I passed to `@Component`), and the value is the bean instance. Adding a new payment method is now purely additive: create a new `@Component`, and it appears in the map without touching `CheckoutService`.
+
+This is one of those spots where the Strategy pattern and dependency injection reinforce each other. The pattern defines the contract. DI handles the wiring.
+
+### When to Use the Strategy Pattern
 
 * **Multiple algorithms for the same task.** When I have several ways to perform an operation (sorting, compression, payment, notification) and the choice depends on context or configuration.
-* **Eliminating conditional logic.** When a class contains multiple conditional branches (`if/else`, `switch`) that select behavior based on type -- each branch is a candidate for a strategy.
+* **Eliminating conditional logic.** When a class contains multiple conditional branches (`if/else`, `switch`) that select behavior based on type, each branch is a candidate for a strategy.
 * **Runtime flexibility.** When I need to swap algorithms at runtime without modifying the classes that use them.
 * **Isolating algorithm-specific data.** When different algorithms require different auxiliary data structures that should not leak into the main class.
 
-#### When Not to Use It
+### When Not to Use It
 
 * **Only two simple variants exist and they are unlikely to change.** The overhead of an interface and multiple classes can be overkill if the logic is trivial.
 * **Clients do not need to know about different strategies.** If the algorithm selection is purely internal and static, a simpler approach (like a template method) may suffice.
-* **Modern alternatives fit better.** In Java 8+, I can often pass a `Function` or lambda instead of creating a full strategy class, especially when the strategy is a single method.
+* **A lambda will do.** In Java 8+, if the strategy is a single method with no state, passing a `Function` or lambda is simpler than creating a dedicated class.
 
-With the Strategy pattern, I can use any strategy that implements my interface. Moreover, a class's behavior or algorithm can be changed at runtime. This design pattern falls under the behavioral pattern category.
+The Strategy pattern is one of the most practical patterns I reach for. It keeps classes focused, makes testing straightforward (just pass a mock strategy), and turns conditional spaghetti into clean, extensible code.
+
+> **Related posts**: [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/), [Inversion of Control and Dependency Injection](/posts/inversion-of-control-and-the-dependency-injection/)
