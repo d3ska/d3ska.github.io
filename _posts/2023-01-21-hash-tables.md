@@ -162,4 +162,4 @@ for (Map.Entry<String, Integer> entry : tree.entrySet()) {
 
 When to choose: reach for `HashMap` when order does not matter, it is the fastest option. Use `LinkedHashMap` when you need to preserve insertion order or build an LRU cache. Pick `TreeMap` when you need keys in sorted order or plan to run range queries.
 
-> **Related posts**: [Hashing](/posts/hashing/), [Arrays: Static and Dynamic Implementations](/posts/arrays/), [Java equals and hashCode contract](/posts/java-equals-and-hashcode-contract/)
+> **Related posts**: [Hashing](/posts/hashing/), [Arrays: Static and Dynamic Implementations](/posts/arrays/), [Java equals and hashCode contract](/posts/java-equals-and-hashCode-contract/)
