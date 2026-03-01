@@ -13,9 +13,9 @@ The **Builder** is a creational design pattern that lets you construct complex o
 
 ### The Problem: Telescoping Constructors
 
-Imagine you have an item that is quite complicated to create and has many possible combinations. For example, it could be a car. Some cars will be in the basic version, while others may have many additional features.
+Imagine you need to create an object that is complex and comes in many configurations. For example, a car. Some cars will be in the basic version, while others may have many additional features.
 
-You might think about creating a class with common fields that others will extend as they have additional functions. This leads to many classes extending the Car class: `CarWithAutopilot`, `CarWithSteeringWheel`, `CarInSportVersion`. Not a scalable solution.
+One approach is to create a class with common fields and then extend it for each variation. This quickly leads to a class explosion: `CarWithAutopilot`, `CarWithSteeringWheel`, `CarInSportVersion`. Not a scalable solution.
 
 Another idea might be to create just one class, `Car`, which will have all the possibilities as fields: `hasAutopilot`, `isSportVersion`, `hasSteeringWheel`, `additionalWarranty`, `soundSystem`, and so on. If we create a base car, most constructor parameters will be null or false, which is both messy and error-prone. This is the classic **telescoping constructor** problem: constructors with ever-growing parameter lists.
 
@@ -160,8 +160,18 @@ public class Car {
         }
 
         private void validateCarObject(Car car) {
-            //Do some basic validations to check
-            //if Car object does not break any assumption of system
+            if (car.getSeats() < 1 || car.getSeats() > 9) {
+                throw new IllegalStateException(
+                    "Seat count must be between 1 and 9, got: " + car.getSeats());
+            }
+            if (car.getCarType() == CarType.SPORTS_CAR && car.getSeats() > 2) {
+                throw new IllegalStateException(
+                    "Sports cars cannot have more than 2 seats");
+            }
+            if (car.getAdditionalWarranty() < 0) {
+                throw new IllegalStateException(
+                    "Additional warranty cannot be negative");
+            }
         }
     }
 }
@@ -188,6 +198,131 @@ public static void main(String[] args) {
 
 Notice how the required parameters go into the Builder's constructor, while optional ones are set through fluent methods. If an optional parameter is not set, it keeps its default value. No nulls, no confusion about which argument is which.
 
+### Validation in the Builder
+
+The `build()` method is the natural place to enforce invariants. If the caller creates an impossible combination, they get a clear error at construction time, not a mysterious bug later at runtime.
+
+```java
+// This will throw IllegalStateException:
+// "Sports cars cannot have more than 2 seats"
+Car invalid = new Car.Builder(SPORTS_CAR, new Engine(6.0, 0), AUTOMATIC, 5)
+        .build();
+```
+
+This is one of the key advantages over a plain constructor. With a constructor that takes eight arguments, you typically validate each parameter in isolation. The builder can validate cross-field rules, like "sports cars must have at most 2 seats", because all fields are fully populated before `build()` returns.
+
+If you prefer not to throw exceptions (for example, in a context where invalid input is expected and should be handled gracefully), you can return an `Optional` or a result type instead:
+
+```java
+public Optional<Car> buildIfValid() {
+    Car car = new Car(this);
+    try {
+        validateCarObject(car);
+        return Optional.of(car);
+    } catch (IllegalStateException e) {
+        return Optional.empty();
+    }
+}
+```
+
+I tend to prefer the exception approach for domain objects where invalid state indicates a programming error. The `Optional` approach makes more sense when parsing user input or external data where failures are routine.
+
+### Builders and Class Hierarchies
+
+One common pain point is using the builder pattern with inheritance. If `Car` has a subclass `ElectricCar`, how do you make the builder work with both?
+
+The naive approach, having `ElectricCar.Builder` extend `Car.Builder`, breaks the fluent API. When you call a method defined on the parent builder, it returns `Car.Builder`, not `ElectricCar.Builder`. You lose access to the child-specific methods:
+
+```java
+// This does NOT compile: additionalWarranty() returns Car.Builder,
+// which has no batteryCapacity() method
+ElectricCar e = new ElectricCar.Builder(CITY_CAR, new Engine(0, 300), AUTOMATIC, 5)
+        .additionalWarranty(2)
+        .batteryCapacity(75)  // compile error
+        .build();
+```
+
+The solution is the **recursive generics** (or "self-type") trick. The parent builder declares a generic type parameter that refers to the concrete builder subclass:
+
+```java
+public abstract class Car {
+
+    // ... fields omitted for brevity
+
+    protected abstract static class Builder<T extends Builder<T>> {
+
+        private final CarType carType;
+        private final Engine engine;
+        private final Transmission transmission;
+        private final int seats;
+        private int additionalWarranty;
+
+        public Builder(CarType carType, Engine engine,
+                       Transmission transmission, int seats) {
+            this.carType = carType;
+            this.engine = engine;
+            this.transmission = transmission;
+            this.seats = seats;
+        }
+
+        @SuppressWarnings("unchecked")
+        protected T self() {
+            return (T) this;
+        }
+
+        public T additionalWarranty(int additionalWarranty) {
+            this.additionalWarranty = additionalWarranty;
+            return self();
+        }
+
+        public abstract Car build();
+    }
+}
+```
+
+```java
+public class ElectricCar extends Car {
+
+    private final int batteryCapacityKwh;
+
+    private ElectricCar(Builder builder) {
+        super(builder);
+        this.batteryCapacityKwh = builder.batteryCapacityKwh;
+    }
+
+    public static class Builder extends Car.Builder<Builder> {
+
+        private int batteryCapacityKwh;
+
+        public Builder(CarType carType, Engine engine,
+                       Transmission transmission, int seats) {
+            super(carType, engine, transmission, seats);
+        }
+
+        public Builder batteryCapacity(int kwh) {
+            this.batteryCapacityKwh = kwh;
+            return this;
+        }
+
+        @Override
+        public ElectricCar build() {
+            return new ElectricCar(this);
+        }
+    }
+}
+```
+
+Now the fluent chain works correctly regardless of call order:
+
+```java
+ElectricCar tesla = new ElectricCar.Builder(CITY_CAR, new Engine(0, 300), AUTOMATIC, 5)
+        .additionalWarranty(2)   // returns ElectricCar.Builder, not Car.Builder
+        .batteryCapacity(75)
+        .build();
+```
+
+Joshua Bloch covers this idiom in *Effective Java* (Item 2). It is worth noting that this adds complexity and is only justified when you genuinely need builder inheritance. For most cases, a flat builder per class is simpler and sufficient.
+
 ### When to Use the Builder Pattern
 
 * **Telescoping constructors.** When a constructor has many parameters (especially optional ones), the builder makes construction readable and self-documenting.
@@ -208,3 +343,5 @@ Notice how the required parameters go into the Builder's constructor, while opti
 
 * The overall complexity of the code increases since the pattern requires creating additional classes.
 * If the object has only a few fields, a builder adds unnecessary indirection. A simple constructor or static factory method may be a better fit.
+
+> **Related posts**: [Static Factory Method](/posts/static-factory-method/), [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/)

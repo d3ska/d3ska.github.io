@@ -174,166 +174,166 @@ All 13 posts fully rewritten on 2026-02-28.
 
 ---
 
-## Priority 3: Enhancement (Score 7-7.5/10)
+## Priority 3: Enhancement (Score 7-7.5/10) ✅ COMPLETED
 
 These posts are solid but have specific gaps worth filling.
 
-### Trees (7/10)
+### Trees (~~7/10~~ → 8.5/10)
 **File:** `_posts/2023-03-14-trees.md`
-- [ ] Add TreeNode implementation code
-- [ ] Add BST insert/delete/search implementations
-- [ ] Show at least recursive inorder traversal (don't only link to other post)
-- [ ] Explain WHY balanced trees are O(log n) (height = log n)
-- [ ] Add heap section (heaps are tree-based)
-- [ ] Fix opening capitalization error
-- [ ] Consider showing one rotation example for self-balancing trees
+- [x] Add TreeNode implementation code
+- [x] Add BST insert/delete/search implementations
+- [x] Show at least recursive inorder traversal (don't only link to other post)
+- [x] Explain WHY balanced trees are O(log n) (height = log n)
+- [x] Add heap section (heaps are tree-based)
+- [x] Fix opening capitalization error
+- [x] Consider showing one rotation example for self-balancing trees
 
-### Builder Design Pattern (7/10)
+### Builder Design Pattern (~~7/10~~ → 8.5/10)
 **File:** `_posts/2021-09-18-builder-design-pattern.md`
-- [ ] Fill in `validateCarObject()` with actual validation logic
-- [ ] Show what happens when validation fails (exception or Optional)
-- [ ] Discuss builder interaction with class hierarchies (common pain point)
-- [ ] Consider replacing car example with a more original domain
-- [ ] Fix awkward phrasing on line 16-18
+- [x] Fill in `validateCarObject()` with actual validation logic
+- [x] Show what happens when validation fails (exception or Optional)
+- [x] Discuss builder interaction with class hierarchies (common pain point)
+- [x] Consider replacing car example with a more original domain
+- [x] Fix awkward phrasing on line 16-18
 
-### Logarithm (7/10)
+### Logarithm (~~7/10~~ → 8.5/10)
 **File:** `_posts/2022-12-18-logarithm.md`
-- [ ] Replace weak opening with forced joke
-- [ ] Establish notation convention in first paragraph
-- [ ] Replace `&nbsp;` spacing hacks with proper code blocks
-- [ ] Add base conversion formula to explain why base doesn't matter in Big O
-- [ ] Better transition to sorting algorithm table
-- [ ] Either integrate real-world examples (decibels, Richter) into narrative or cut them
+- [x] Replace weak opening with forced joke
+- [x] Establish notation convention in first paragraph
+- [x] Replace `&nbsp;` spacing hacks with proper code blocks
+- [x] Add base conversion formula to explain why base doesn't matter in Big O
+- [x] Better transition to sorting algorithm table
+- [x] Either integrate real-world examples (decibels, Richter) into narrative or cut them
 
-### SOLID Principles (7/10)
+### SOLID Principles (~~7/10~~ → 8.5/10)
 **File:** `_posts/2021-08-10-solid-the-first-5-principles-of-object-oriented-design.md`
-- [ ] Add discussion of when SOLID can be over-applied/over-engineered
-- [ ] Deepen LSP: explain WHY FlyingBird solution is better from substitutability perspective
-- [ ] Consider replacing canonical examples (Bird/Ostrich, Book/BookPrinter) with original ones
-- [ ] Connect code snippets: show how pieces work together
-- [ ] Fix missing article on line 22
+- [x] Add discussion of when SOLID can be over-applied/over-engineered
+- [x] Deepen LSP: explain WHY FlyingBird solution is better from substitutability perspective
+- [x] Consider replacing canonical examples (Bird/Ostrich, Book/BookPrinter) with original ones
+- [x] Connect code snippets: show how pieces work together
+- [x] Fix missing article on line 22
 
-### Aggregate Pattern (7/10)
+### Aggregate Pattern (~~7/10~~ → 8.5/10)
 **File:** `_posts/2022-08-19-aggregate-pattern.md`
-- [ ] **Complete the post** (currently ends abruptly mid-section around line 104)
-- [ ] Add working code example of Order/OrderLineItem aggregate
-- [ ] Explain eventual consistency through domain events (currently just mentioned)
-- [ ] Add "when NOT to use" section (when a simple entity is sufficient)
-- [ ] Discuss common mistake: making aggregates too large
+- [x] **Complete the post** (currently ends abruptly mid-section around line 104)
+- [x] Add working code example of Order/OrderLineItem aggregate
+- [x] Explain eventual consistency through domain events (currently just mentioned)
+- [x] Add "when NOT to use" section (when a simple entity is sufficient)
+- [x] Discuss common mistake: making aggregates too large
 
-### Schools of Unit Testing (7/10)
+### Schools of Unit Testing (~~7/10~~ → 8.5/10)
 **File:** `_posts/2023-06-27-schools-of-unit-tests.md`
-- [ ] Replace textbook-like opening with engaging hook
-- [ ] Add concrete code example demonstrating Pilimon's heuristic
-- [ ] Add decision tree or flowchart for choosing which school
-- [ ] Take a clearer stance in conclusion (Classic/Sociable is generally preferred in modern testing)
-- [ ] Add personal experience and real-world anecdotes
-- [ ] Cross-reference @Mock vs @MockBean post
+- [x] Replace textbook-like opening with engaging hook
+- [x] Add concrete code example demonstrating Pilimon's heuristic
+- [x] Add decision tree or flowchart for choosing which school
+- [x] Take a clearer stance in conclusion (Classic/Sociable is generally preferred in modern testing)
+- [x] Add personal experience and real-world anecdotes
+- [x] Cross-reference @Mock vs @MockBean post
 
-### Leader Election (7/10)
+### Leader Election (~~7/10~~ → 8.5/10)
 **File:** `_posts/2023-05-08-leader-election.md`
-- [ ] Add ZooKeeper or etcd code example for leader election
-- [ ] Explain Paxos and Raft at high level (currently just name-dropped)
-- [ ] Add failure detection and lease/timeout mechanisms
-- [ ] Replace "sophisticated" filler with specific description of consensus algorithms
+- [x] Add ZooKeeper or etcd code example for leader election
+- [x] Explain Paxos and Raft at high level (currently just name-dropped)
+- [x] Add failure detection and lease/timeout mechanisms
+- [x] Replace "sophisticated" filler with specific description of consensus algorithms
 
-### Depth First Search (7/10)
+### Depth First Search (~~7/10~~ → 8.5/10)
 **File:** `_posts/2022-09-17-depth-first-search-in-java.md`
-- [ ] Add graph DFS code with visited set for cycle handling
-- [ ] Clarify title/opening: currently promises graph DFS but only delivers tree DFS
-- [ ] Explain stack vs call stack connection for iterative versions
-- [ ] Add concrete example for DFS vs BFS comparison
-- [ ] Discuss DFS limitations (infinite loops without visited, bad for shortest paths)
-- [ ] Improve informal opening ("It's very popular")
+- [x] Add graph DFS code with visited set for cycle handling
+- [x] Clarify title/opening: currently promises graph DFS but only delivers tree DFS
+- [x] Explain stack vs call stack connection for iterative versions
+- [x] Add concrete example for DFS vs BFS comparison
+- [x] Discuss DFS limitations (infinite loops without visited, bad for shortest paths)
+- [x] Improve informal opening ("It's very popular")
 
-### Hashing (7/10)
+### Hashing (~~7/10~~ → 8.5/10)
 **File:** `_posts/2023-04-24-hashing.md`
-- [ ] **FIX:** Remove recommendation of MD5 and SHA-1 (cryptographically broken). Recommend xxHash, MurmurHash3, or SHA-256
-- [ ] Add actual consistent hashing implementation (TreeMap-based ring)
-- [ ] Explain virtual nodes concept in depth
-- [ ] Replace oversimplified manual hash calculation with realistic example
-- [ ] Explain how rendezvous hashing weights are computed
+- [x] **FIX:** Remove recommendation of MD5 and SHA-1 (cryptographically broken). Recommend xxHash, MurmurHash3, or SHA-256
+- [x] Add actual consistent hashing implementation (TreeMap-based ring)
+- [x] Explain virtual nodes concept in depth
+- [x] Replace oversimplified manual hash calculation with realistic example
+- [x] Explain how rendezvous hashing weights are computed
 
-### Rate Limiting (7/10)
+### Rate Limiting (~~7/10~~ → 8.5/10)
 **File:** `_posts/2023-05-17-rate-limiting.md`
-- [ ] Add token bucket or sliding window implementation code (e.g., Redis-based)
-- [ ] Add comparison guidance: when to choose each of the 5 algorithms
-- [ ] Reduce formal/wordy opening
-- [ ] Connect DoS/DDoS section to the rest of the post (currently disconnected)
-- [ ] Remove low-value analogies section at end
-- [ ] Add distributed rate limiting challenges discussion
+- [x] Add token bucket or sliding window implementation code (e.g., Redis-based)
+- [x] Add comparison guidance: when to choose each of the 5 algorithms
+- [x] Reduce formal/wordy opening
+- [x] Connect DoS/DDoS section to the rest of the post (currently disconnected)
+- [x] Remove low-value analogies section at end
+- [x] Add distributed rate limiting challenges discussion
 
-### Caching (System Design) (7/10)
+### Caching (System Design) (~~7/10~~ → 8.5/10)
 **File:** `_posts/2023-04-14-caching.md`
-- [ ] Add cache-aside pattern code example (Redis or Memcached)
-- [ ] Clarify write-around strategy explanation
-- [ ] Add thundering herd / cache stampede discussion
-- [ ] Add cache warming strategies
-- [ ] Replace passive opening ("is utilized to speed up")
-- [ ] Better integrate CDN section with rest of post
+- [x] Add cache-aside pattern code example (Redis or Memcached)
+- [x] Clarify write-around strategy explanation
+- [x] Add thundering herd / cache stampede discussion
+- [x] Add cache warming strategies
+- [x] Replace passive opening ("is utilized to speed up")
+- [x] Better integrate CDN section with rest of post
 
-### equals and hashCode (7/10)
+### equals and hashCode (~~7/10~~ → 8.5/10)
 **File:** `_posts/2021-09-05-java-equals-and-hashCode-contract.md`
-- [ ] Expand `instanceof` vs `getClass()` into its own section with concrete examples
-- [ ] Add HashMap example showing consequences of broken hashCode contract (duplicate keys)
-- [ ] Remove `<br>` tag on line 49
-- [ ] Strengthen conclusion (currently just repeats earlier content)
-- [ ] Fix missing article on line 15
+- [x] Expand `instanceof` vs `getClass()` into its own section with concrete examples
+- [x] Add HashMap example showing consequences of broken hashCode contract (duplicate keys)
+- [x] Remove `<br>` tag on line 49
+- [x] Strengthen conclusion (currently just repeats earlier content)
+- [x] Fix missing article on line 15
 
-### Synchronized vs Volatile (7/10)
+### Synchronized vs Volatile (~~7/10~~ → 8.5/10)
 **File:** `_posts/2023-04-26-java-synchronized-vs-volatile.md`
-- [ ] Add motivating opening (currently jumps straight into execution control definition)
-- [ ] Show the race condition that volatile DOESN'T solve (`count++` read-modify-write)
-- [ ] Add double-checked locking as a volatile use case
-- [ ] Add visual diagram: thread caches vs main memory
-- [ ] Simplify dense sentence on line 114 about happens-before
-- [ ] Add performance comparison between synchronized vs volatile vs atomic
+- [x] Add motivating opening (currently jumps straight into execution control definition)
+- [x] Show the race condition that volatile DOESN'T solve (`count++` read-modify-write)
+- [x] Add double-checked locking as a volatile use case
+- [x] Add visual diagram: thread caches vs main memory
+- [x] Simplify dense sentence on line 114 about happens-before
+- [x] Add performance comparison between synchronized vs volatile vs atomic
 
-### Complexity Analysis (7.5/10)
+### Complexity Analysis (~~7.5/10~~ → 8.5/10)
 **File:** `_posts/2022-11-14-complexity-analysis.md`
-- [ ] Remove or update outdated "10^8 operations" rule of thumb
-- [ ] Add compelling real-world motivation (why O(n^2) vs O(n log n) matters)
-- [ ] Rewrite weak opening
-- [ ] Clarify which space complexity definition you'll use
-- [ ] Use consistent code formatting (pick Java, not pseudocode mix)
+- [x] Remove or update outdated "10^8 operations" rule of thumb
+- [x] Add compelling real-world motivation (why O(n^2) vs O(n log n) matters)
+- [x] Rewrite weak opening
+- [x] Clarify which space complexity definition you'll use
+- [x] Use consistent code formatting (pick Java, not pseudocode mix)
 
-### Strings (7.5/10)
+### Strings (~~7.5/10~~ → 8.5/10)
 **File:** `_posts/2023-02-12-strings.md`
-- [ ] Fix heading inconsistency (line 11: `####` should be `###`)
-- [ ] Explain that `String.length()` counts UTF-16 code units, not characters (emoji bug)
-- [ ] Add pathological regex example (`(a+)+b` against "aaaaaaaaaaaaa!")
-- [ ] Clarify that `==` working for string literals is an accident of the string pool, not by design
-- [ ] Mention Java 7 string pool migration from PermGen to heap
-- [ ] Add StringBuilder vs StringBuffer distinction
+- [x] Fix heading inconsistency (line 11: `####` should be `###`)
+- [x] Explain that `String.length()` counts UTF-16 code units, not characters (emoji bug)
+- [x] Add pathological regex example (`(a+)+b` against "aaaaaaaaaaaaa!")
+- [x] Clarify that `==` working for string literals is an accident of the string pool, not by design
+- [x] Mention Java 7 string pool migration from PermGen to heap
+- [x] Add StringBuilder vs StringBuffer distinction
 
-### Comparable and Comparator (7.5/10)
+### Comparable and Comparator (~~7.5/10~~ → 8.5/10)
 **File:** `_posts/2021-09-04-comparable-and-comparator-interfaces.md`
-- [ ] **FIX:** Remove copy-paste error on line 67 (`carSingleton()` from bean scopes post)
-- [ ] Add TreeSet example showing what happens when compareTo is inconsistent with equals
-- [ ] Add motivating example before jumping into definitions
+- [x] **FIX:** Remove copy-paste error on line 67 (`carSingleton()` from bean scopes post)
+- [x] Add TreeSet example showing what happens when compareTo is inconsistent with equals
+- [x] Add motivating example before jumping into definitions
 
-### Load Balancers (7.5/10)
+### Load Balancers (~~7.5/10~~ → 8.5/10)
 **File:** `_posts/2023-04-19-load-balancers.md`
-- [ ] Remove "Pure Random" strategy (no real load balancer uses this) or label it as theoretical
-- [ ] Add Nginx or HAProxy config snippet
-- [ ] Add sticky sessions / session persistence discussion
-- [ ] Add connection draining during deployments
-- [ ] Quantify "limit to how much a single server can be enhanced"
+- [x] Remove "Pure Random" strategy (no real load balancer uses this) or label it as theoretical
+- [x] Add Nginx or HAProxy config snippet
+- [x] Add sticky sessions / session persistence discussion
+- [x] Add connection draining during deployments
+- [x] Quantify "limit to how much a single server can be enhanced"
 
-### Polling and Streaming (7.5/10)
+### Polling and Streaming (~~7.5/10~~ → 8.5/10)
 **File:** `_posts/2023-05-11-polling-and-streaming.md`
-- [ ] Add WebSocket handshake code example
-- [ ] Add SSE EventSource API example
-- [ ] Add backpressure handling discussion
-- [ ] Make "streaming via sockets" less abstract with concrete example
-- [ ] Restructure to acknowledge long polling earlier in the progression
+- [x] Add WebSocket handshake code example
+- [x] Add SSE EventSource API example
+- [x] Add backpressure handling discussion
+- [x] Make "streaming via sockets" less abstract with concrete example
+- [x] Restructure to acknowledge long polling earlier in the progression
 
-### Request-Response vs Pub-Sub (7.5/10)
+### Request-Response vs Pub-Sub (~~7.5/10~~ → 8.5/10)
 **File:** `_posts/2023-09-23-request-response-vs-publish-subscribe.md`
-- [ ] Add Kafka producer/consumer code example
-- [ ] Explain what a partition is (currently assumes knowledge)
-- [ ] Expand backpressure from parenthetical mention to its own section
-- [ ] Clarify that request-response isn't always stateless (gRPC example)
+- [x] Add Kafka producer/consumer code example
+- [x] Explain what a partition is (currently assumes knowledge)
+- [x] Expand backpressure from parenthetical mention to its own section
+- [x] Clarify that request-response isn't always stateless (gRPC example)
 
 ---
 

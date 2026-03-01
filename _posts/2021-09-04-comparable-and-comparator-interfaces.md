@@ -10,7 +10,9 @@ tags:
   - Interfaces
 ---
 
-Java provides two interfaces for ordering objects: `Comparable` and `Comparator`. Both serve the same goal (defining an order between objects), but they differ in where the comparison logic lives and how many sort orders you can define.
+Imagine you have a list of `Student` objects and you need to sort them by age. Later, a new requirement comes in: sort them by name instead. Then another: sort by student number. Java provides two interfaces for defining order between objects, `Comparable` and `Comparator`, and choosing the right one depends on whether you need a single default ordering or multiple interchangeable ones.
+
+Both serve the same goal (defining an order between objects), but they differ in where the comparison logic lives and how many sort orders you can define.
 
 ### Comparable
 
@@ -162,3 +164,82 @@ These additions make sorting code significantly shorter and more readable, and t
 | Sort orders | Single (natural order) | Multiple |
 | Modifies the class | Yes (class implements the interface) | No (comparison is external) |
 | Typical use | Default ordering for the class | Alternative or ad-hoc orderings |
+
+### When compareTo Is Inconsistent with equals
+
+I mentioned earlier that `compareTo` should be consistent with `equals`. This is more than a theoretical concern. Sorted collections like `TreeSet` use `compareTo` (not `equals`) to determine whether two elements are duplicates. If two objects are different according to `equals` but `compareTo` returns 0, a `TreeSet` will silently drop one of them.
+
+Here is a concrete example. Consider a `Student` class where `compareTo` compares only by age, but `equals` checks both name and age:
+
+```java
+public class Student implements Comparable<Student> {
+
+    private final String name;
+    private final int age;
+
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public int compareTo(Student other) {
+        return Integer.compare(this.age, other.age);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student)) return false;
+        Student student = (Student) o;
+        return age == student.age && Objects.equals(name, student.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+
+    @Override
+    public String toString() {
+        return name + " (age " + age + ")";
+    }
+}
+```
+
+Now watch what happens when we add two students with the same age but different names:
+
+```java
+Student john = new Student("John", 25);
+Student anna = new Student("Anna", 25);
+
+System.out.println(john.equals(anna));       // false
+System.out.println(john.compareTo(anna));    // 0
+
+Set<Student> hashSet = new HashSet<>();
+hashSet.add(john);
+hashSet.add(anna);
+System.out.println("HashSet size: " + hashSet.size()); // 2
+
+Set<Student> treeSet = new TreeSet<>();
+treeSet.add(john);
+treeSet.add(anna);
+System.out.println("TreeSet size: " + treeSet.size()); // 1 — Anna is lost!
+```
+
+`HashSet` uses `equals` and `hashCode`, so it correctly stores both students. `TreeSet` uses `compareTo`, sees that `john.compareTo(anna) == 0`, and treats Anna as a duplicate.
+
+The fix is to make `compareTo` consistent with `equals` by including all fields that participate in equality. In this case, adding a secondary comparison on `name` solves the problem:
+
+```java
+@Override
+public int compareTo(Student other) {
+    int ageResult = Integer.compare(this.age, other.age);
+    if (ageResult != 0) return ageResult;
+    return this.name.compareTo(other.name);
+}
+```
+
+The `TreeSet` Javadoc explicitly warns about this: "the ordering imposed by a comparator should be consistent with equals if it is to correctly implement the Set interface." In my experience, this is one of the more common subtle bugs in Java, because everything appears to work correctly until someone swaps a `HashSet` for a `TreeSet` and data silently disappears.
+
+> **Related posts**: [Java equals and hashCode contract](/posts/java-equals-and-hashCode-contract/), [BigDecimal and BigInteger in Java](/posts/bigdecimal-and-biginteger/)

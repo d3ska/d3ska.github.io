@@ -9,21 +9,11 @@ tags:
   - DDoS
 ---
 
-Rate limiting is a pivotal technique employed to manage and control the number of incoming and outgoing requests
-interacting with a system. Not only does it serve as a defensive shield against denial-of-service (DoS) attacks, but it
-also facilitates a fair distribution of resources among users, ensuring a smooth and uninterrupted service for all. The
-application of rate limiting can be diverse, extending to different levels such as IP-address, user-account, or even a
-geographic region. Moreover, this strategy can be implemented in a tiered structure, for example, limiting a particular
-network request to 1 per second, 5 per 10 seconds, and 10 per minute.
+Imagine your API starts getting hammered. Maybe it is a misbehaving client retrying in a tight loop, a bot scraping every endpoint, or an actual attack. Without any controls in place, a single source of excessive traffic can exhaust your server resources, degrade performance for legitimate users, and even bring the whole system down.
 
-Beyond its preventative role against cyber threats, rate limiting also brings about other significant benefits. It helps
-maintain system stability by preventing overuse or misuse of resources, thus reducing the risk of system failures. It
-can also protect sensitive information from being exposed to brute force attacks. Additionally, rate limiting aids in
-controlling costs associated with third-party APIs that charge based on the number of requests.
+**Rate limiting** is the technique of controlling how many requests a client can make to a system within a given time window. It is one of the most fundamental defense mechanisms in system design, serving multiple purposes at once: protecting against denial-of-service attacks, ensuring fair resource distribution among users, preventing abuse of expensive operations, and controlling costs when your system depends on third-party APIs that charge per request.
 
-Without rate limiting, systems are left vulnerable to malicious actors who can flood them with superfluous requests,
-potentially causing disruptions or complete shutdowns. Rate limiting serves as both a security measure and an
-essential component for maintaining the robustness, performance, and financial viability of a system.
+Rate limits can be applied at different granularities (per IP address, per user account, per API key, or even per geographic region) and can be structured in tiers. For example, you might allow 1 request per second, 5 per 10 seconds, and 10 per minute for the same endpoint.
 
 When a client exceeds the configured rate limit, the server responds with an HTTP **429 Too Many Requests** status code. This signals to the client that it has sent too many requests in a given time window and should back off before retrying. Well-designed APIs also include rate-limiting headers in their responses to help clients self-regulate:
 
@@ -31,6 +21,21 @@ When a client exceeds the configured rate limit, the server responds with an HTT
 * **X-RateLimit-Remaining**: The number of requests still available before the limit is reached.
 * **X-RateLimit-Reset**: The time (usually a Unix timestamp) when the rate limit window resets.
 * **Retry-After**: Included in 429 responses, indicating how many seconds the client should wait before making another request.
+
+
+### Rate Limiting as a Defense Against DoS and DDoS
+
+One of the primary motivations for rate limiting is defending against denial-of-service attacks. In a **DoS attack**, a single attacker floods the system with excessive traffic, aiming to make it unavailable to legitimate users. Rate limiting can be effective here because all the malicious traffic originates from one source, making it straightforward to detect and throttle.
+
+![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/dos-lighty-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/dos-lighty-dark.png){: .dark }
+
+A **DDoS attack** (Distributed Denial-of-Service) is a more complex variant where the traffic comes from thousands of different machines, often a botnet. This makes it significantly harder to mitigate with rate limiting alone, because each individual source may appear to be sending a reasonable number of requests. Per-IP rate limits help, but they are not sufficient on their own. Defending against DDoS typically requires a combination of rate limiting, traffic analysis, CDN-level protection (e.g., Cloudflare, AWS Shield), and IP reputation systems.
+
+![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/ddos-lighty.png){: .light }
+![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/ddos-lighty-dark.png){: .dark }
+
+The key takeaway is that rate limiting is a necessary layer of defense, but for distributed attacks, it needs to be part of a broader strategy.
 
 
 ### Rate Limiting Algorithms
@@ -47,6 +52,132 @@ Several algorithms are commonly used to implement rate limiting, each with diffe
 
 * **Sliding Window Counter**: A hybrid of the fixed window counter and sliding window log. It combines the counters from the current and previous windows, weighting the previous window's count by the overlap proportion. This provides a good approximation of a true sliding window with lower memory usage than the log approach.
 
+#### Choosing the Right Algorithm
+
+There is no single best algorithm. The right choice depends on your traffic patterns and operational constraints:
+
+| Algorithm | Burst Tolerance | Memory Usage | Accuracy | Complexity |
+|---|---|---|---|---|
+| Token Bucket | High (up to bucket size) | Low (counter + timestamp) | Good | Low |
+| Leaky Bucket | None (smooths traffic) | Low (counter + queue) | Good | Low |
+| Fixed Window Counter | Moderate (boundary burst issue) | Very low (one counter per window) | Approximate | Very low |
+| Sliding Window Log | None | High (stores every timestamp) | Exact | Moderate |
+| Sliding Window Counter | Moderate | Low (two counters) | Good approximation | Low |
+
+If your system needs to tolerate occasional bursts (e.g., a user loading a dashboard that fires 10 API calls at once), the **token bucket** is usually the best fit. If you need a smooth, predictable output rate (e.g., writing to a rate-limited downstream service), the **leaky bucket** is preferable. For simple use cases where near-exact accuracy is not critical, the **fixed window counter** is the easiest to implement. The **sliding window counter** offers a good middle ground: better accuracy than fixed windows with minimal additional complexity. The **sliding window log** provides exact accuracy but at the cost of higher memory usage, which may be impractical at scale.
+
+
+### Token Bucket Implementation in Java
+
+The token bucket is the most commonly used algorithm in practice, so it is worth understanding how it works in code. Here is a thread-safe implementation:
+
+```java
+public class TokenBucketRateLimiter {
+
+    private final int maxTokens;
+    private final double refillRatePerSecond;
+    private double availableTokens;
+    private long lastRefillTimestamp;
+
+    public TokenBucketRateLimiter(int maxTokens, double refillRatePerSecond) {
+        this.maxTokens = maxTokens;
+        this.refillRatePerSecond = refillRatePerSecond;
+        this.availableTokens = maxTokens;
+        this.lastRefillTimestamp = System.nanoTime();
+    }
+
+    public synchronized boolean tryAcquire() {
+        refill();
+        if (availableTokens >= 1) {
+            availableTokens -= 1;
+            return true;
+        }
+        return false;
+    }
+
+    private void refill() {
+        long now = System.nanoTime();
+        double elapsedSeconds = (now - lastRefillTimestamp) / 1_000_000_000.0;
+        double tokensToAdd = elapsedSeconds * refillRatePerSecond;
+        availableTokens = Math.min(maxTokens, availableTokens + tokensToAdd);
+        lastRefillTimestamp = now;
+    }
+}
+```
+
+Usage is straightforward. You create a limiter and call `tryAcquire()` before processing each request:
+
+```java
+// Allow 10 requests per second, with bursts up to 20
+TokenBucketRateLimiter limiter = new TokenBucketRateLimiter(20, 10.0);
+
+public void handleRequest(HttpServletRequest request, HttpServletResponse response) {
+    if (!limiter.tryAcquire()) {
+        response.setStatus(429);
+        response.setHeader("Retry-After", "1");
+        return;
+    }
+    // process the request normally
+}
+```
+
+This implementation works well for a single application instance. For distributed systems, you would replace the in-memory state with a shared store like Redis, which I discuss in the next section.
+
+
+### Distributed Rate Limiting
+
+Rate limiting on a single server is relatively simple: you keep counters in memory and the problem is solved. Things get significantly more complicated when your application runs across multiple instances behind a load balancer. If each instance maintains its own counters, a client can effectively multiply its allowed rate by the number of instances.
+
+The standard solution is to use a **centralized data store**, typically Redis, to maintain rate limit state. Redis is a natural fit because it is fast (sub-millisecond latency), supports atomic operations, and provides built-in key expiration via TTL.
+
+A basic Redis-based token bucket might use a Lua script to atomically check and decrement the token count:
+
+```lua
+-- KEYS[1] = rate limit key (e.g., "rate:user:123")
+-- ARGV[1] = max tokens
+-- ARGV[2] = refill rate per second
+-- ARGV[3] = current timestamp in milliseconds
+
+local key = KEYS[1]
+local max_tokens = tonumber(ARGV[1])
+local refill_rate = tonumber(ARGV[2])
+local now = tonumber(ARGV[3])
+
+local bucket = redis.call('HMGET', key, 'tokens', 'last_refill')
+local tokens = tonumber(bucket[1]) or max_tokens
+local last_refill = tonumber(bucket[2]) or now
+
+local elapsed = (now - last_refill) / 1000.0
+local new_tokens = math.min(max_tokens, tokens + elapsed * refill_rate)
+
+if new_tokens >= 1 then
+    new_tokens = new_tokens - 1
+    redis.call('HMSET', key, 'tokens', new_tokens, 'last_refill', now)
+    redis.call('EXPIRE', key, math.ceil(max_tokens / refill_rate) + 1)
+    return 1
+else
+    redis.call('HMSET', key, 'tokens', new_tokens, 'last_refill', now)
+    redis.call('EXPIRE', key, math.ceil(max_tokens / refill_rate) + 1)
+    return 0
+end
+```
+
+Using a Lua script ensures that the read-check-update cycle is atomic within Redis, preventing race conditions between concurrent requests.
+
+#### Challenges in Distributed Rate Limiting
+
+Even with a centralized store, distributed rate limiting introduces several challenges:
+
+* **Latency overhead**: Every rate limit check now involves a network round-trip to Redis. For latency-sensitive endpoints, this can be significant. Some systems mitigate this with local "pre-check" caches that allow obviously-within-limit requests to pass without hitting Redis, only consulting the central store when the local count approaches the threshold.
+
+* **Race conditions**: Without atomic operations, two instances could simultaneously read the same counter value, both decide the request is allowed, and both decrement the counter, effectively allowing one extra request. Lua scripts in Redis (or Redis transactions with WATCH/MULTI) solve this, but you need to be deliberate about it.
+
+* **Clock skew**: If your application instances have slightly different system clocks, timestamp-based algorithms (like sliding window log) can produce inconsistent results. Using the Redis server's time (`redis.call('TIME')`) instead of client-side timestamps avoids this problem.
+
+* **Redis availability**: If Redis goes down, you need a fallback strategy. Common approaches include failing open (allowing all requests, sacrificing protection for availability), failing closed (rejecting all requests, sacrificing availability for protection), or falling back to local in-memory rate limiting with relaxed limits.
+
+* **Multi-region deployments**: When your application spans multiple geographic regions, each with its own Redis instance, maintaining a globally consistent rate limit is difficult. Some systems accept per-region limits (effectively multiplying the global limit by the number of regions), while others use asynchronous replication with eventual consistency.
+
 
 ### Where to Implement Rate Limiting
 
@@ -60,30 +191,4 @@ Rate limiting can be applied at different layers of the system architecture, dep
 
 In practice, many systems combine multiple levels. A global rate limit at the API gateway protects the infrastructure, while application-level limits enforce fine-grained, business-specific rules.
 
-
-### DoS Attack
-
-Denial-of-service attack, abbreviated as DoS attack, is a malevolent endeavor where an attacker aims to render a system
-unavailable to its users. This is usually achieved by overloading the system with excessive traffic. Although rate
-limiting can prevent certain types of DoS attacks, others might be considerably more challenging to counter.
-
-![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/dos-lighty-light.png){: .light }
-![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/dos-lighty-dark.png){: .dark }
-
-
-### DDoS Attack
-
-A distributed denial-of-service attack, or DDoS attack, is a more complex form of a DoS attack. In a DDoS attack, the
-overwhelming traffic directed at the target system originates from numerous sources—potentially thousands of
-machines—making it significantly more difficult to prevent or mitigate.
-
-![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/ddos-lighty.png){: .light }
-![img]({{site.url}}/assets/blog_images/2023-05-17-rate-limiting/ddos-lighty-dark.png){: .dark }
-
-
-### Examples and Analogies
-
-To visualize the concept of rate limiting, consider a popular restaurant with a maximum seating capacity. If more customers arrive than the restaurant can accommodate, the excess customers are asked to wait, ensuring the restaurant can effectively serve those already seated. In this scenario, the restaurant's seating capacity is akin to the rate limit, and the customers represent incoming requests to a system.
-
-For DoS and DDoS attacks, imagine a highway filled with cars. In a DoS attack, it's as if a single truck has intentionally blocked all lanes, stopping the flow of traffic. In a DDoS attack, it's like hundreds of cars from different directions converging on the same highway, causing a massive traffic jam.
-
+> **Related posts**: [Load Balancing](/posts/load-balancers/), [Caching](/posts/caching/), [Availability](/posts/availability/)
