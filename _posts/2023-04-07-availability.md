@@ -9,247 +9,130 @@ tags:
   - Redundancy
 ---
 
-#### What is availability?
+On June 2, 2019, Google Cloud Platform went down for four hours and twenty-five minutes. Snapchat, Shopify, Vimeo, Discord, and thousands of smaller services went with it. A single provider's outage cascaded into lost revenue, broken workflows, and frustrated users across the globe. That incident is a textbook reminder of why **availability**, the percentage of time a system is operational and able to serve its intended function, is one of the most important properties in system design.
 
-Availability can be thought of in a couple of ways. One way to consider it is how resistant a system is to failures. For instance, what happens if a server in your system fails? What happens if your database fails? Will your system go down completely, or will it still be operational? This is often described as a system's fault tolerance.
+Availability is really two things at once. It is a measure of **fault tolerance** (what happens when a server crashes, a disk dies, or a network partition splits your cluster?) and it is a contractual promise (how much uptime do you guarantee to your users?). Both perspectives matter, and they feed into each other.
 
-Another way to think about availability is the percentage of time in a given period, like a month or a year, during which a system is operational and capable of satisfying its primary functions.
+Consider airplane flight control software. If that system goes down mid-flight, lives are at risk. Stock exchanges face a different kind of stakes: minutes of downtime erode trust and cost real money. Even consumer products like YouTube or Twitter serve hundreds of millions of daily users, so even brief outages make headlines. The required level of availability varies, but almost every system carries an implicit expectation that it will be there when users need it.
 
-Availability is crucial to consider when evaluating a system. In today's world, most systems have an implied guarantee of availability.
+### Measuring Availability: The Nines
 
-Imagine a system supporting airplane software, which allows an airplane to function properly. If that system were to go down while an airplane is flying, it would be absolutely unacceptable. Similarly, consider stock or crypto exchange systems, where downtime could lead to customers losing trust and money.
+Availability is typically expressed as a percentage of uptime over a year. The industry shorthand uses **"nines"**: 99% is "two nines," 99.9% is "three nines," and so on. The table below shows the levels you will encounter most often.
 
-Even with less critical examples like YouTube or Twitter, downtime would be detrimental, as hundreds of millions of people use these platforms daily.
+| Availability | Common Name | Downtime per Year | Downtime per Month | Downtime per Day |
+|---|---|---|---|---|
+| 99% | Two nines | 3.65 days | 7.31 hours | 14.40 minutes |
+| 99.9% | Three nines | 8.77 hours | 43.83 minutes | 1.44 minutes |
+| 99.95% | Three and a half nines | 4.38 hours | 21.92 minutes | 43.20 seconds |
+| 99.99% | Four nines | 52.60 minutes | 4.38 minutes | 8.64 seconds |
+| 99.999% | Five nines | 5.26 minutes | 26.30 seconds | 864 milliseconds |
 
-Cloud providers such as AWS, Azure, and GCP also need to maintain high availability. If parts of their systems go down, it affects all the businesses and customers relying on their services. For example, in summer 2019, Google Cloud Platform experienced a significant outage that lasted for a few hours, affecting many businesses, including Vimeo.
+The jump from two nines to three nines looks small on paper (99% to 99.9%), but it means going from over three and a half days of annual downtime to under nine hours. Five nines (99.999%) allows roughly five minutes of downtime per year. That is the gold standard, but very few systems actually need it.
 
-In summary, availability is of great importance in system design and operations.
+### What Cloud Providers Actually Promise
 
-<br>
+Major cloud providers publish SLAs for their core services, and the numbers are instructive:
 
-#### How to measure availability?
+| Provider / Service | SLA Target |
+|---|---|
+| AWS S3 | 99.99% |
+| AWS EC2 (single instance) | 99.99% |
+| Google Compute Engine | 99.99% |
+| Azure VMs (single instance) | 99.95% |
+| Azure VMs (availability set) | 99.99% |
 
-Availability is usually measured as the percentage of a system's uptime in a given year.
+When a provider fails to meet the published SLA, customers are typically entitled to **service credits**, partial refunds applied to future bills. AWS, for example, offers a 10% credit if S3 drops below 99.9% and a 25% credit below 99.0%. These credits are not automatic; you usually have to file a claim. But the point is that SLAs carry real financial consequences.
 
-For instance, if a system is up and operational for half of an entire year, then we can say that the system has 50% availability, which is quite poor.
+Notice that even the largest providers commit to four nines for most compute services, not five. That should calibrate your own expectations.
 
-In the industry, most services or systems aim for high availability, so we often measure availability in terms of "nines" rather than exact percentages.
+### The Cost of Each Additional Nine
 
-"Nines" are essentially percentages, but they specifically represent percentages with the number nine. For example, if a system has 99% availability, we can say that the system has two nines of availability because the number nine appears twice in this percentage. Similarly, 99.9% would be considered three nines of availability, and so on.
+There is an exponential relationship between availability and cost. Moving from 99.9% to 99.99% does not cost 0.09% more. In practice it can cost roughly **10x the infrastructure spend**, because each additional nine demands more redundancy, more sophisticated failover, cross-region replication, and more engineering time to test and maintain all of it.
 
-This terminology is a standard way that people discuss availability in the industry.
+Five nines of availability is achievable, but it requires investment in redundant infrastructure at every layer, automated failover that works without human intervention, and an on-call culture that can respond to incidents in seconds. For most applications, three nines or three and a half nines (99.9% to 99.95%) is the right target. Spending 10x your infrastructure budget to shave a few hours of annual downtime only makes sense when the cost of that downtime truly justifies it (financial trading, healthcare, aviation).
 
-Below you can find a chart from Wikipedia that showcases a range of popular availability percentages, which can help illustrate the differences between various levels of system availability.
+### SLAs, SLOs, and SLIs
 
-<table style="width:100%">
-  <tr>
-    <th><b>Availability %</b></th>
-    <th><b>Downtime per year</b></th>
-    <th><b>Downtime per month</b></th>
-    <th><b>Downtime per week</b></th>
-    <th><b>Downtime per day</b></th>
-  </tr>
-  <tr>
-    <td>55.5555555% ("nine fives")</td>
-    <td>162.33 days</td>
-    <td>13.53 days</td>
-    <td>74.92 hours</td>
-    <td>10.67 hours</td>
-  </tr>  
-  <tr>
-    <td><b>90% ("one nine")</b></td>
-    <td><b>36.53 days</b></td>
-    <td><b>73.05 hours</b></td>
-    <td><b>16.80 hours</b></td>
-    <td><b>2.40 hours</b></td>
-  </tr>
-  <tr>
-    <td>95% ("one and half nines")</td>
-    <td>18.26 days</td>
-    <td>36.53 hours</td>
-    <td>8.40 hours</td>
-    <td>1.20 hours</td>
-  </tr>
-  <tr>
-    <td><b>97%</b></td>
-    <td><b>10.96 days</b></td>
-    <td><b>21.92 hours</b></td>
-    <td><b>5.04 hours</b></td>
-    <td><b>43.20 minutes</b></td>
-  </tr>
-  <tr>
-    <td>98%</td>
-    <td>7.31 days</td>
-    <td>14.61 hours</td>
-    <td>3.36 hours</td>
-    <td>28.80 minutes</td>
-  </tr>
-  <tr>
-    <td><b>99% ("two nines")</b></td>
-    <td><b>3.65 days</b></td>
-    <td><b>7.31 hours</b></td>
-    <td><b>1.68 hours</b></td>
-    <td><b>14.40 minutes</b></td>
-  </tr>
-  <tr>
-    <td>99.5% ("two and a half nines")</td>
-    <td>1.83 days</td>
-    <td>3.65 hours</td>
-    <td>50.40 minutes</td>
-    <td>7.20 minutes</td>
-  </tr>
-  <tr>
-    <td>99.8%</td>
-    <td>17.53 hours</td>
-    <td>87.66 minutes</td>
-    <td>20.16 minutes</td>
-    <td>2.88 minutes</td>
-  </tr>
-  <tr>
-    <td><b>99.9% ("three nines")</b></td>
-    <td><b>8.77 hours</b></td>
-    <td><b>43.83 minutes</b></td>
-    <td><b>10.08 minutes</b></td>
-    <td><b>1.44 minutes</b></td>
-  </tr>
-  <tr>
-    <td>99.95% ("three and a half nines")</td>
-    <td>4.38 hours</td>
-    <td>21.92 minutes</td>
-    <td>5.04 minutes</td>
-    <td>43.20 seconds</td>
-  </tr>
-  <tr>
-    <td><b>99.99% ("four nines")</b></td>
-    <td><b>52.60 minutes</b></td>
-    <td><b>4.38 minutes</b></td>
-    <td><b>1.01 minutes</b></td>
-    <td><b>8.64 seconds</b></td>
-  </tr>
-  <tr>
-    <td>99.995% ("four and a half nines")</td>
-    <td>26.30 minutes</td>
-    <td>2.19 minutes</td>
-    <td>30.24 seconds</td>
-    <td>4.32 seconds</td>
-  </tr>
-  <tr>
-    <td><b>99.999% ("five nines")</b></td>
-    <td><b>5.26 minutes</b></td>
-    <td><b>26.30 seconds</b></td>
-    <td><b>6.05 seconds</b></td>
-    <td><b>864.00 milliseconds</b></td>
-  </tr>
-  <tr>
-    <td><b>99.9999% ("six nines")</b></td>
-    <td><b>31.56 seconds</b></td>
-    <td><b>2.63 seconds</b></td>
-    <td><b>604.80 milliseconds</b></td>
-    <td><b>86.40 milliseconds</b></td>
-  </tr>
-  <tr>
-    <td><b>99.99999% ("seven nines")</b></td>
-    <td><b>3.16 seconds</b></td>
-    <td><b>262.98 milliseconds</b></td>
-    <td><b>60.48 milliseconds</b></td>
-    <td><b>8.64 milliseconds</b></td>
-  </tr>
-  <tr>
-    <td><b>99.999999% ("eight nines")</b></td>
-    <td><b>315.58 milliseconds</b></td>
-    <td><b>26.30 milliseconds</b></td>
-    <td><b>6.05 milliseconds</b></td>
-    <td><b>864.00 microseconds</b></td>
-  </tr>
-  <tr>
-    <td><b>99.9999999% ("nine nines")</b></td>
-    <td><b>31.56 milliseconds</b></td>
-    <td><b>2.63 milliseconds</b></td>
-    <td><b>604.80 microseconds</b></td>
-    <td><b>86.40 microseconds</b></td>
-  </tr>
-</table>
+These three terms are often confused, but they form a clear hierarchy.
 
+A **Service Level Indicator (SLI)** is the raw metric you measure: request latency at the 99th percentile, error rate, or uptime percentage over a rolling window. SLIs are the data.
 
-As you can see, even though 99% availability seems impressive, being down for three and a half days or more per year is still quite problematic and might be considered unacceptable. For systems that involve life-and-death situations, such downtime is undoubtedly unacceptable. Even for services like Facebook or YouTube, which serve billions of users, that amount of downtime is too high.
+A **Service Level Objective (SLO)** is the internal target you set against an SLI. For example, "99.95% of requests will return a successful response within 200ms over any 30-day window." SLOs are your engineering goals.
 
-Five nines of availability (99.999%) is often considered the gold standard for availability. If your system achieves this level of availability, it can be regarded as a highly available system.
+A **Service Level Agreement (SLA)** is the external, often legally binding contract with your customers. It defines what happens when the SLO is not met: service credits, refunds, or contract termination. SLAs are typically set slightly below the SLO to provide a safety margin. If your internal SLO is 99.95%, your published SLA might promise 99.9%.
 
-<br>
+#### Error Budgets
 
-A **Service Level Agreement** and **Service Level Objective** are related concepts used to define and measure the quality of service provided by a service provider.
+An **error budget** is the inverse of the SLO. If your SLO is 99.95% availability over 30 days, you have a budget of 0.05% of that period (roughly 21 minutes and 55 seconds) for acceptable downtime. As long as you stay within budget, teams can ship features aggressively. When the budget is nearly exhausted, the focus shifts to reliability work. This concept, popularized by Google's SRE practice, turns availability from a vague aspiration into a concrete, trackable resource that balances feature velocity against stability.
 
-#### SLA (Service Level Agreement)
-An SLA is a formal, legally binding contract between a service provider and a client that outlines the expected level of service, performance metrics, and responsibilities of both parties. It specifies measurable targets such as availability, response time, and throughput, as well as consequences for not meeting these targets, such as refunds or service credits.
+### Eliminating Single Points of Failure
 
-#### SLO (Service Level Objective)
-An SLO is a specific, measurable goal or target within an SLA that defines a particular aspect of the service quality. SLOs serve as benchmarks to evaluate the service provider's performance and ensure that the agreed-upon service levels are met. Examples of SLOs include system availability (e.g., 99.9% uptime), maximum response time for support requests, or error rates.
+A **single point of failure (SPOF)** is any component whose failure brings down the entire system. Achieving high availability starts with identifying every SPOF and adding redundancy.
 
+Consider a typical three-tier web application:
 
-<br>
-While availability is a critical consideration in system design, it's not always of utmost importance. Achieving five nines of availability (99.999%) isn't always necessary, as high availability comes with trade-offs. Ensuring a high level of availability can be challenging and resource-intensive.
+```
+Clients -> Load Balancer -> App Servers -> Database
+```
 
-When designing a system, it's essential to carefully evaluate whether your system requires high availability or if only specific components need it. This assessment helps allocate resources effectively and prioritize the most critical components for high availability while allowing other parts to function with lower levels of redundancy. Ultimately, balancing the need for high availability with the system's overall requirements and constraints is crucial for efficient and sustainable system design.
+In the simplest deployment, each tier is a SPOF. Here is how to address each one:
 
-For example, consider a payment processing system like Stripe or Visa. In such a system, the transaction processing component is critical and requires high availability to ensure uninterrupted service for customers making payments. Downtime or failures in this component could result in lost revenue and negatively impact the user experience.
+1. **Load balancer**: Deploy a pair of load balancers in an active/passive or active/active configuration. Use a virtual IP (VIP) or DNS-based failover so that if one load balancer dies, traffic routes to the other. Cloud providers handle this transparently with managed load balancers (AWS ALB, GCP Cloud Load Balancing).
 
-On the other hand, there may be secondary components like an analytics dashboard or reporting tools that, while important, do not need the same level of high availability. These components can tolerate occasional downtime without significantly impacting the overall system performance or user experience.
+2. **Application servers**: Run multiple instances behind the load balancer. If one crashes, the load balancer stops routing traffic to it. Kubernetes takes this further by automatically restarting failed pods and rescheduling them onto healthy nodes.
 
-<br>
+3. **Database**: Set up primary-replica replication. The primary handles writes, one or more replicas handle reads, and if the primary fails, a replica is promoted. Managed services like Amazon RDS Multi-AZ automate this promotion.
 
+4. **The load balancer's load balancer problem**: You might worry that even the redundant pair of load balancers is a SPOF. In practice, DNS round-robin, anycast routing, or cloud-managed services handle this layer so you rarely need to build it yourself.
 
-#### How to achieve HA system?
+The key insight is that redundancy must be applied at every layer. A system with three redundant app servers but a single database is only as available as that database.
 
-Conceptually, achieving a high availability (HA) system is straightforward. First and foremost, you need to ensure that your system doesn't have single points of failure (SPOFs). These are points that, if they fail, the entire system fails. Keep in mind that even team members with specialized knowledge can be considered SPOFs.
+Worth noting: SPOFs are not always technical. A single team member who holds all the institutional knowledge about a critical system is also a SPOF. Document runbooks, share on-call responsibilities, and cross-train.
 
-To eliminate SPOFs, you can introduce redundancy. Redundancy involves duplicating, triplicating, or even further multiplying certain parts of the system.
+### Passive Redundancy
 
-For instance, if you have a simple system where clients interact with a server and the server communicates with a database, the server is a single point of failure. If it gets overloaded or goes down for any reason, the entire system fails.
+In **passive redundancy**, a primary component is backed up by a standby that takes over when the primary fails. There are three common standby strategies:
 
-To enhance availability and eliminate the SPOF, you can add more servers and a load balancer between clients and servers to distribute the load across multiple servers.
+- **Cold standby**: The backup is offline and powered down. When the primary fails, the standby must be started, configured, and synchronized before serving traffic. Recovery time is the longest, often minutes or more. This is the cheapest option.
+- **Warm standby**: The backup is running and periodically synchronized with the primary, but not actively serving traffic. On failure, it needs a brief promotion step (updating DNS, promoting a database replica). Recovery is faster, typically seconds to a few minutes.
+- **Hot standby**: The backup is running, fully synchronized, and ready to take over instantly. Failover can happen automatically with near-zero downtime. This is the most expensive option but provides the fastest recovery.
 
-However, the load balancer itself could become a single point of failure, so it should also be replicated and run on multiple servers.
+Examples include redundant power supplies, database replication with a standby replica, or a backup server that takes over when the primary fails.
 
-<br>
+### Active Redundancy
 
-#### Passive Redundancy
-In passive redundancy, a primary system/component is backed up by a secondary (standby) system/component that takes over when the primary fails. There are several standby strategies, each with different recovery characteristics:
+In **active redundancy**, multiple components work in parallel and share the workload simultaneously. If one fails, the remaining components absorb its share of the traffic. Active redundancy can also improve performance and throughput under normal conditions, since all nodes contribute rather than sitting idle.
 
-* **Cold standby**: The backup system is offline and powered down. When the primary fails, the standby must be started and configured before it can serve traffic. Recovery time is the longest of the three, often measured in minutes or longer. This approach is the cheapest to maintain.
-* **Warm standby**: The backup system is running and periodically synchronized with the primary, but it is not actively serving traffic. On failure, it needs a brief promotion step (e.g., updating DNS or promoting a database replica). Recovery is faster than cold standby, typically measured in seconds to a few minutes.
-* **Hot standby**: The backup system is running, fully synchronized, and ready to take over instantly. Failover can happen automatically with near-zero downtime. This is the most expensive option but provides the fastest recovery.
+Examples include multiple load-balanced application servers, RAID configurations for data storage, and redundant network connections across multiple ISPs.
 
-Examples include redundant power supplies, database replication with a standby database, or a backup server that takes over when the primary server fails.
-
-#### Active Redundancy
-In active redundancy, multiple systems/components work in parallel and share the workload, ensuring continued operation even if one or more components fail. Active redundancy may also provide load balancing and improved performance. Examples include redundant network connections, RAID configurations for data storage, or multiple load-balanced servers providing the same service.
-
-#### High Availability Technologies
+### High Availability Technologies
 
 In practice, several widely adopted technologies help achieve high availability:
 
-* **Load balancers** (such as Nginx, HAProxy, or cloud-native solutions like AWS ALB) distribute traffic across multiple backend servers and automatically route around unhealthy instances.
-* **Database replication** (primary-replica setups in PostgreSQL, MySQL, or managed services like Amazon RDS Multi-AZ) ensures that a copy of the data is always available for failover.
-* **Container orchestration** platforms like Kubernetes maintain desired pod replica counts, automatically restarting failed containers and rescheduling them onto healthy nodes.
+- **Load balancers** (Nginx, HAProxy, or cloud-native solutions like AWS ALB) distribute traffic across multiple backend servers and automatically route around unhealthy instances.
+- **Database replication** (primary-replica setups in PostgreSQL, MySQL, or managed services like Amazon RDS Multi-AZ) ensures a copy of the data is always available for failover.
+- **Container orchestration** platforms like Kubernetes maintain desired pod replica counts, automatically restarting failed containers and rescheduling them onto healthy nodes.
 
-#### Monitoring and Alerting
+### Monitoring and Alerting
 
-Redundancy alone does not guarantee high availability. Without proper **monitoring and alerting**, failures can go undetected, and recovery processes may never be triggered. At a minimum, an HA system should include health checks for all critical components, dashboards that surface real-time system status, and automated alerts (via tools like Prometheus, Grafana, Datadog, or PagerDuty) that notify on-call engineers when thresholds are breached. The faster a team detects a failure, the faster it can respond -- whether automatically or through manual intervention.
+Redundancy alone does not guarantee high availability. Without proper **monitoring and alerting**, failures can go undetected and recovery processes may never trigger.
 
-It's also important to mention that you'll want to have a rigorous process in place to handle system failures, as they might require human intervention. For instance, if servers in your system crash, you'll need a person to bring them back online, and it's crucial to establish processes that ensure timely recovery. So, keeping that in mind is essential for maintaining high availability in your system.
+At a minimum, an HA system should include health checks for all critical components, dashboards that surface real-time system status, and automated alerts (via tools like Prometheus, Grafana, Datadog, or PagerDuty) that notify on-call engineers when thresholds are breached. The faster a team detects a failure, the faster it can respond, whether automatically or through manual intervention.
 
-<br>
+It is also important to have rigorous incident response processes in place. If servers crash, you need clear runbooks, defined escalation paths, and on-call rotations that ensure someone is always available to act. Availability is not just a technical property; it is an organizational one.
 
-#### Trade-offs
+### Trade-offs
 
-Like many aspects of programming, achieving availability also involves trade-offs, such as:
+High availability is not free. Every additional nine comes with costs that must be weighed against the value of the uptime it provides.
 
-* **Cost**: Higher availability typically requires redundant resources, such as additional servers, storage, and networking infrastructure, leading to increased operational costs.
+- **Cost**: Higher availability requires redundant servers, storage, networking infrastructure, multi-region deployments, and the engineering hours to build and maintain all of it. As discussed above, each additional nine roughly multiplies infrastructure cost by 10x.
 
-* **Complexity**: Implementing fault tolerance, failover, and load balancing mechanisms to achieve high availability can introduce complexity into the system architecture, making it harder to understand, maintain, and troubleshoot.
+- **Complexity**: Implementing failover, health checking, leader election, and data replication adds architectural complexity. More moving parts means more potential failure modes and harder debugging.
 
-* **Performance**: Highly available systems may require distributing data across multiple nodes or geographic locations, which can increase latency and reduce overall performance.
+- **Performance**: Replicating data across nodes or geographic regions adds latency. Synchronous replication, which is needed for strong consistency, is especially expensive in terms of response time.
 
-* **Consistency**: In distributed systems, maintaining high availability may involve sacrificing strong consistency for eventual consistency or using weaker consistency models, which can impact application logic and data integrity.
+- **Consistency**: This is where the **CAP theorem** becomes relevant. In a distributed system, a network partition forces a choice between availability and consistency. Most highly available systems choose availability and accept **eventual consistency**, meaning replicas may serve slightly stale data during failures. This is an acceptable trade-off for many applications (social media feeds, product catalogs), but not for others (bank account balances, inventory counts for the last item in stock). Understanding where your application falls on this spectrum is critical.
 
-In summary, while high availability is crucial for many systems, it's essential to carefully consider the trade-offs involved and balance them against the specific requirements and constraints of your application.
+The right availability target depends on what your system does, who depends on it, and what downtime actually costs. A payment processing system like Stripe needs near-perfect uptime for its transaction pipeline, but its internal analytics dashboard can tolerate occasional blips. Design for the availability each component actually requires, not the highest number you can think of.
+
+> **Related posts**: [Load Balancing](/posts/load-balancers/), [Replication And Sharding](/posts/replication-and-sharding/), [Network Protocols](/posts/network-protocols/)

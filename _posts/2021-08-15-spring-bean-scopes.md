@@ -9,226 +9,231 @@ tags:
   - Java
 ---
 
-#### Bean Scopes Define the Runtime Context Availability
+Imagine you inject the same bean into two controllers. Do they share state? If one request modifies a field on the bean, does the next request see that change? The answer depends entirely on the bean's **scope**.
 
-The Spring framework defines 6 types of bean scopes:
+Spring creates and manages beans for you, but you need to tell it how long each bean should live and how many instances should exist. That is what scopes are for. Get it wrong and you end up with thread-safety bugs in production, leaked session data between users, or objects that silently share mutable state.
 
-* singleton.
-* prototype.
-* request.
-* session.
-* application.
-* websocket.
+The Spring Framework defines six built-in scopes:
 
-The last four scopes mentioned (request, session, application, and websocket) are only available in a web-aware application.
+* singleton
+* prototype
+* request
+* session
+* application
+* websocket
 
-Additionally, there is the possibility to create custom bean scopes.
+The last four (request, session, application, and websocket) are only available in web-aware application contexts. On top of these, you can also create custom scopes for specialized needs.
+
+> **Related posts**: [Singleton Pattern](/posts/singleton-pattern/) and [Inversion of Control and Dependency Injection](/posts/inversion-of-control-and-the-dependency-injection/)
 
 ### Singleton
 
-When a bean is defined with the singleton scope, the container creates an instance of the bean only once. The framework returns that instance each time the bean is requested by your application code. Singleton is also the default bean scope in Spring if no other scope is defined.
+**Singleton** is the default scope. When a bean is defined with this scope, the container creates exactly one instance and returns that same instance every time the bean is requested. If you don't specify a scope, singleton is what you get.
 
 ```java
 @Bean
-public ConnectionFactory connectionFactory(){
+public ConnectionFactory connectionFactory() {
     return new ConnectionFactory();
 }
 ```
 
-This would work exactly the same as:
+This behaves identically to the explicit version:
 
 ```java
 @Bean
 @Scope("singleton")
-public ConnectionFactory connectionFactory(){
+public ConnectionFactory connectionFactory() {
     return new ConnectionFactory();
 }
 ```
 
-We can also use a constant instead of a string value as follows:
+You can also use the constant `ConfigurableBeanFactory.SCOPE_SINGLETON` instead of the string literal:
 
 ```java
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 ```
 
-Singleton scope is typically used for:
-* database connections
-* connections with devices using serial port communication
-* libraries operating throughout the life of the program, e.g., Log4j
-* etc.
+Because there is only one instance shared across the entire application context, singleton beans must be stateless or thread-safe. This makes them a natural fit for services, repositories, and other objects that don't hold per-request or per-user data.
 
 ### Prototype
 
-When a bean is created with the prototype scope, the framework returns a different instance every time it is requested from the container. The prototype scope is defined by setting the value prototype to the @Scope annotation in the bean definition:
+With the **prototype** scope, Spring creates a brand new instance every time the bean is requested from the container. Once the bean is handed off, Spring no longer manages its lifecycle, so you are responsible for cleanup.
 
 ```java
 @Bean
 @Scope("prototype")
-public Car carSingleton(){
-    return new Car();
+public TaskProcessor taskProcessor() {
+    return new TaskProcessor();
 }
 ```
 
-We can also use a constant like we did for the singleton scope:
+The constant form works the same way:
 
 ```java
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 ```
 
-Prototype scope is typically used for:
-* stateful beans that hold conversation or per-request data
-* objects that are expensive to keep around and should be garbage-collected after use
-* beans injected into different contexts where each consumer needs its own isolated instance
+Prototype scope is a good choice when each consumer needs its own isolated instance. Think of stateful objects that accumulate per-request data, or short-lived workers that should be garbage-collected after use. Because each injection gets a fresh object, you avoid the thread-safety headaches of shared mutable state.
 
 ### Request
 
-The request scope defines a single bean with a lifecycle tied to a single HTTP request. For every HTTP request, a new instance of the bean is created from the single bean definition. This scope is only valid in the context of a web-aware Spring ApplicationContext.
+The **request** scope ties a bean's lifecycle to a single HTTP request. A fresh instance is created for every incoming request and destroyed when the request completes.
 
 ```java
 @Bean
 @Scope(value = WebApplicationContext.SCOPE_REQUEST,
         proxyMode = ScopedProxyMode.TARGET_CLASS)
-public UserData requestScopeUserData() {
-    return new UserData();
+public AuditContext requestScopedAuditContext() {
+    return new AuditContext();
 }
 ```
 
+#### Why proxyMode is necessary
 
-The **proxyMode** attribute is necessary because there is no active request at the time of the web application context instantiation. Spring creates a proxy to be injected as a dependency and instantiates the target bean when needed in a request.
+You might wonder why `proxyMode` is needed here. The issue is a lifecycle mismatch. A singleton controller is created once at application startup. A request-scoped bean, on the other hand, does not exist yet at that point because there is no active HTTP request. If Spring tried to inject a real request-scoped bean into the controller during startup, it would fail with an exception.
 
-We can also use a **@RequestScope** composed annotation as a shortcut for the above definition:
+The solution is a **proxy**. Spring injects a lightweight stand-in object that looks like the real bean. When your code actually calls a method on it during a request, the proxy delegates to the real request-scoped instance that is bound to the current HTTP request. This way the singleton controller can hold a reference to something, and the right instance is resolved lazily at runtime.
+
+You can simplify the definition with the `@RequestScope` composed annotation, which sets the proxy mode for you:
 
 ```java
 @Bean
 @RequestScope
-public UserData requestScopeUserData() {
-    return new UserData();
+public AuditContext requestScopedAuditContext() {
+    return new AuditContext();
 }
 ```
 
-Now, let's create a controller that references this bean:
+Injecting it into a controller with constructor injection looks like this:
 
 ```java
-public class SecurityInterceptor {
-    @Resource(name = "requestScopeUserData")
-    private UserData userData;
+@RestController
+public class OrderController {
 
+    private final AuditContext auditContext;
+
+    @Autowired
+    public OrderController(AuditContext auditContext) {
+        this.auditContext = auditContext;
+    }
 }
 ```
 
-Request scope is typically used for:
-* storing per-request audit or logging metadata
-* holding user-specific input validation state during a single request
-* accumulating request-scoped diagnostics or tracing information
+Request scope is typically used for storing per-request audit or logging metadata, holding user-specific validation state during a single request, or accumulating request-scoped diagnostics and tracing information.
 
 ### Session
 
-The session scope defines a single bean with a lifecycle tied to an HTTP Session. Like the request scope, the session scope is applicable to beans in web applications.
+The **session** scope ties a bean to an HTTP session. The same instance is returned for all requests within the same session, and a new instance is created for each new session.
 
 ```java
 @Bean
 @Scope(value = WebApplicationContext.SCOPE_SESSION,
         proxyMode = ScopedProxyMode.TARGET_CLASS)
-public UserData sessionScopedBean() {
-    return new UserData();
+public ShoppingCart sessionScopedCart() {
+    return new ShoppingCart();
 }
 ```
 
-We can define the bean with the session scope in a similar manner:
+The same lifecycle mismatch applies here. The singleton controller outlives any individual session, so Spring needs a proxy for the same reason described in the request scope section. The shorthand annotation works here too:
 
 ```java
 @Bean
 @SessionScope
-public UserData sessionScopedBean() {
-    return new UserData();
+public ShoppingCart sessionScopedCart() {
+    return new ShoppingCart();
 }
 ```
 
-Controller that references this bean:
+Injecting it with constructor injection:
 
 ```java
-public class ScopesController {
-    @Resource(name = "sessionScopedBean")
-    private UserData userData;
+@RestController
+public class CartController {
 
+    private final ShoppingCart cart;
+
+    @Autowired
+    public CartController(ShoppingCart cart) {
+        this.cart = cart;
+    }
 }
 ```
 
-Session scope is typically used for:
-* shopping carts in e-commerce applications
-* user preferences or settings that persist across multiple requests within a session
-* multi-step form wizards where data must survive between page navigations
-
+Session scope is the classic choice for shopping carts, user preferences that persist across multiple requests, and multi-step form wizards where data must survive between page navigations.
 
 ### Application
 
-The application scope creates the bean instance for the lifecycle of a ServletContext. This is similar to the singleton scope, but there is an important difference concerning the scope of the bean. It is a singleton per ServletContext, not per Spring ApplicationContext (of which there may be several in any given web application). It is also exposed and therefore visible as a ServletContext attribute.
+The **application** scope creates one bean instance for the lifecycle of a `ServletContext`. This sounds similar to singleton, but there is an important distinction. A singleton bean is scoped per Spring `ApplicationContext`, and a single web application can contain multiple application contexts. An application-scoped bean is a singleton per `ServletContext`, meaning it is shared across all Spring `ApplicationContext` instances running in the same web application. It is also exposed as a `ServletContext` attribute.
 
 ```java
 @Bean
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION,
         proxyMode = ScopedProxyMode.TARGET_CLASS)
-public UserData applicationScopedBean() {
-    return new UserData();
+public FeatureFlags applicationScopedFlags() {
+    return new FeatureFlags();
 }
 ```
 
-Or use a special annotation:
+Or with the shorthand annotation:
 
 ```java
 @Bean
 @ApplicationScope
-public UserData applicationScopedBean() {
-    return new UserData();
+public FeatureFlags applicationScopedFlags() {
+    return new FeatureFlags();
 }
 ```
 
-Controller that references this bean:
+Injecting it:
 
 ```java
-public class ScopesController {
-    @Resource(name = "applicationScopedBean")
-    private UserData userData;
+@RestController
+public class FeatureController {
 
+    private final FeatureFlags featureFlags;
+
+    @Autowired
+    public FeatureController(FeatureFlags featureFlags) {
+        this.featureFlags = featureFlags;
+    }
 }
 ```
 
-Application scope is typically used for:
-* global configuration or feature flags shared across the entire web application
-* application-wide counters or statistics
-* shared resources that must be accessible by multiple Spring ApplicationContexts in the same ServletContext
+Application scope is typically used for global configuration, feature flags, or shared resources that need to be accessible across multiple Spring application contexts within the same `ServletContext`.
 
+### WebSocket
 
-### Websocket
-
-Finally, let's create the bean with the websocket scope:
+The **websocket** scope ties a bean to the lifecycle of a WebSocket session. A new instance is created for each WebSocket connection and destroyed when the session ends.
 
 ```java
 @Bean
 @Scope(scopeName = "websocket",
         proxyMode = ScopedProxyMode.TARGET_CLASS)
-public UserData applicationScopedBean() {
-    return new UserData();
+public ChatSession websocketScopedChat() {
+    return new ChatSession();
 }
 ```
 
+This scope is useful for per-connection chat state, user-specific notification queues tied to a live connection, or real-time collaboration data such as cursor positions or document edits.
 
-The Spring Framework provides a WebSocket API that you can use to write client- and server-side applications that handle WebSocket messages. You can declare a Spring-managed bean in the websocket scope. Those beans live as long as the WebSocket session they belong to.
+### Quick Reference
 
-A new bean instance is created for each WebSocket session, and the bean is destroyed when the session ends.
+Here is a summary table to help you pick the right scope:
 
-Websocket scope is typically used for:
-* per-connection chat state or message history
-* user-specific notification queues tied to a live connection
-* real-time collaboration data such as cursor positions or document edits
+| Scope | Instances | Thread-safe? | Typical use case |
+|---|---|---|---|
+| singleton | 1 per ApplicationContext | No (shared) | Stateless services, repositories |
+| prototype | New per injection | Yes (not shared) | Stateful, short-lived objects |
+| request | 1 per HTTP request | Yes (request-bound) | Per-request audit data, validation state |
+| session | 1 per HTTP session | Depends | Shopping carts, user preferences |
+| application | 1 per ServletContext | No (shared) | Global config, feature flags |
+| websocket | 1 per WebSocket session | Depends | Chat state, connection-specific data |
 
 ### Creating Custom Bean Scopes
 
-In addition to the built-in bean scopes provided by Spring, it is also possible to create your own custom bean scopes. This can be useful when you need to manage bean instances according to specific requirements that are not covered by the existing scopes.
+The six built-in scopes cover the most common scenarios, but sometimes you need something more specific. Spring allows you to define your own scope by implementing the `org.springframework.beans.factory.config.Scope` interface.
 
-To create a custom bean scope, you need to implement the `org.springframework.beans.factory.config.Scope` interface. This interface defines the contract for managing the lifecycle of a bean in the custom scope.
-
-Here is a minimal example of a custom scope that stores beans in a thread-local context:
+Here is a practical example: a **thread scope** that gives each thread its own instance of a bean. This can be useful in batch processing or scheduled tasks where each thread needs isolated state.
 
 ```java
 public class ThreadScope implements Scope {
@@ -264,7 +269,9 @@ public class ThreadScope implements Scope {
 }
 ```
 
-Once the scope class is ready, we need to register it with the Spring container:
+The `get` method is the heart of it. When Spring needs a bean in this scope, it checks the current thread's local map. If the bean already exists for this thread, it returns it. Otherwise, it calls the `ObjectFactory` to create a new one and stores it.
+
+Once the scope class is ready, you register it with the Spring container using a `BeanFactoryPostProcessor`:
 
 ```java
 @Configuration
@@ -277,12 +284,12 @@ public class CustomScopeConfig implements BeanFactoryPostProcessor {
 }
 ```
 
-After registration, beans can use the custom scope like any built-in one:
+After registration, you can use the custom scope like any built-in one:
 
 ```java
 @Component
 @Scope("thread")
-public class MyThreadScopedBean {
-    // ...
+public class BatchJobContext {
+    // Each thread gets its own instance
 }
 ```
