@@ -12,8 +12,8 @@ Data structures are the building blocks of efficient software. You do not need t
 
 The diagram below shows how the structures relate to each other. Dashed arrows indicate "implements" or "builds on" relationships.
 
-![Data structure relationships]({{site.url}}/assets/blog_images/2023-03-18-data-structures-compendium/ds-relationships-light.svg){: .light }
-![Data structure relationships]({{site.url}}/assets/blog_images/2023-03-18-data-structures-compendium/ds-relationships-dark.svg){: .dark }
+![Data structure relationships]({{site.url}}/assets/blog_images/2023-03-18-data-structures-compendium/ds-relationships-light.png){: .light }
+![Data structure relationships]({{site.url}}/assets/blog_images/2023-03-18-data-structures-compendium/ds-relationships-dark.png){: .dark }
 
 ### Suggested Learning Path
 
