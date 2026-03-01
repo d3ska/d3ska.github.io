@@ -133,4 +133,10 @@ PACELC provides a more nuanced framework for reasoning about distributed system 
 
 In summary, understanding the CAP theorem involves evaluating the trade-offs between consistency, availability, and partition tolerance based on the specific requirements and goals of the system. The choice will depend on the nature of the application and its tolerance for data inconsistency or unavailability during partition events.
 
+### References
+
+* Seth Gilbert and Nancy Lynch, "Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services," ACM SIGACT News 33, no. 2 (2002)
+* Martin Kleppmann, *Designing Data-Intensive Applications* (O'Reilly, 2017)
+* Daniel Abadi, "Consistency Tradeoffs in Modern Distributed Database System Design," IEEE Computer 45, no. 2 (2012)
+
 > **Related posts**: [Availability](/posts/availability/), [Replication And Sharding](/posts/replication-and-sharding/), [SQL vs NoSQL Databases](/posts/sql-vs-no-sql-databases/)

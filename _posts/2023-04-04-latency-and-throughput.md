@@ -105,4 +105,9 @@ Increasing throughput is about enabling the system to handle more total work in 
 
 7. **Rate limiting**. Paradoxically, rate limiting can improve overall throughput by preventing resource exhaustion and cascading failures during traffic spikes. By shedding excess load gracefully, the system continues to serve the majority of requests instead of collapsing under pressure.
 
+### References
+
+* Jeff Dean, [Latency Numbers Every Programmer Should Know](https://colin-scott.github.io/personal_website/research/interactive_latency.html) (interactive version maintained by Colin Scott)
+* John D. Little, "A Proof for the Queuing Formula: L = λW," Operations Research 9, no. 3 (1961)
+
 > **Related posts**: [Load Balancing](/posts/load-balancers/), [Caching](/posts/caching/), [Availability](/posts/availability/), [Polling And Streaming](/posts/polling-and-streaming/)

@@ -173,4 +173,10 @@ public class BillingApplication {
 
 Under the hood, Curator uses ZooKeeper's **ephemeral sequential nodes** to implement the election. Each participant creates an ephemeral node under the leader path, and the participant with the lowest sequence number becomes the leader. When that participant's session ends, its ephemeral node disappears, the next participant in sequence takes over, and the cycle continues. This is why ZooKeeper-based leader election is so reliable: it piggybacks on ZooKeeper's session guarantees and its consensus protocol (Zab) for the ephemeral node semantics.
 
+### References
+
+* Diego Ongaro and John Ousterhout, [In Search of an Understandable Consensus Algorithm](https://raft.github.io/raft.pdf) (Raft paper, 2014)
+* Leslie Lamport, "The Part-Time Parliament," ACM Transactions on Computer Systems 16, no. 2 (1998)
+* Patrick Hunt et al., [ZooKeeper: Wait-free Coordination for Internet-scale Systems](https://www.usenix.org/legacy/events/atc10/tech/full_papers/Hunt.pdf) (USENIX ATC, 2010)
+
 > **Related posts**: [Replication And Sharding](/posts/replication-and-sharding/), [Availability](/posts/availability/), [CAP Theorem](/posts/cap-theorem/)

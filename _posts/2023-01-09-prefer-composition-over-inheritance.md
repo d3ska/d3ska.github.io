@@ -254,5 +254,10 @@ Other cases where inheritance makes sense:
 
 A practical rule of thumb: if you catch yourself extending a class just to borrow a few methods, stop and compose instead. Create an interface, inject the dependency, and keep your options open.
 
+### References
+
+* Erich Gamma et al., *Design Patterns: Elements of Reusable Object-Oriented Software* (Addison-Wesley, 1994)
+* Joshua Bloch, *Effective Java* (Addison-Wesley, 3rd edition, 2018), Item 18: "Favor composition over inheritance"
+
 > **Related posts**: [Core concepts behind OOP](/posts/core-concepts-behind-oop/), [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/), [Composition, Aggregation and Association](/posts/association-composition-aggregation/)
 

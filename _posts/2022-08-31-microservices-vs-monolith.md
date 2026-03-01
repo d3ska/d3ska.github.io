@@ -159,4 +159,10 @@ This gradual approach avoids the "big bang" database migration that so often der
 
 I highly encourage you to visit the blog of [Kamil Grzybek](https://www.kamilgrzybek.com/), who is a specialist in that topic.
 
+### References
+
+* Sam Newman, *Building Microservices: Designing Fine-Grained Systems* (O'Reilly, 2nd edition, 2021)
+* Martin Fowler, [Microservices](https://martinfowler.com/articles/microservices.html) (2014)
+* Martin Fowler, [MonolithFirst](https://martinfowler.com/bliki/MonolithFirst.html)
+
 > **Related posts**: [Request-Response vs Publish-Subscribe](/posts/request-response-vs-publish-subscribe/), [What is coupling?](/posts/what-is-coupling/), [Defining Software Architecture](/posts/defining-software-architecture/)

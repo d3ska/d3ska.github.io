@@ -453,4 +453,10 @@ The key question is always: does this abstraction make the code easier to unders
 
 A good rule of thumb: apply SOLID when you feel pain (a class is hard to test, a change ripples through many files, a new requirement forces you to modify existing code). Don't apply it preemptively to code that is simple and stable.
 
+### References
+
+* Robert C. Martin, *Agile Software Development: Principles, Patterns, and Practices* (Prentice Hall, 2003)
+* Robert C. Martin, [SOLID Relevance](https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html) (The Clean Code Blog, 2020)
+* Barbara Liskov, "Data Abstraction and Hierarchy," SIGPLAN Notices 23, no. 5 (1988)
+
 > **Related posts**: [Inversion of Control and Dependency Injection](/posts/inversion-of-control-and-the-dependency-injection/)

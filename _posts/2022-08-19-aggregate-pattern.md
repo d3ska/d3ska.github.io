@@ -493,4 +493,10 @@ Similarly, if your system is a straightforward data pipeline where objects flow 
 
 I have also seen teams apply Aggregates in read-heavy reporting systems where the primary concern is querying, not enforcing rules. In those cases, a simpler read model (possibly backed by CQRS) is more appropriate. Aggregates shine on the write side of a system, where consistency matters.
 
+### References
+
+* Eric Evans, *Domain-Driven Design: Tackling Complexity in the Heart of Software* (Addison-Wesley, 2003)
+* Vaughn Vernon, *Implementing Domain-Driven Design* (Addison-Wesley, 2013)
+* Vaughn Vernon, [Effective Aggregate Design](https://www.dddcommunity.org/library/vernon_2011/) (three-part series, DDD Community, 2011)
+
 > **Related posts**: [Specification Design Pattern](/posts/specification-design-pattern/), [Microservices vs Monolith](/posts/microservices-vs-monolith/)
