@@ -11,8 +11,6 @@ tags:
 
 Most teams treat testing as overhead. There is never enough time, management wants features yesterday, and business stakeholders see every hour spent on tests as an hour not spent on "real" work. The result is predictable: bugs slip into production, fixes are expensive, and everyone wonders why delivery keeps slowing down.
 
-> **Related post**: For the developer-focused benefits of testing (design feedback, living documentation, refactoring confidence, and legacy code) see [Why Are Tests Essential?](/posts/why-are-tests-essential/).
-
 A common misconception is that developers are paid to write functionality, not tests. This perspective is prevalent in many business environments, where the focus is on delivering features rather than ensuring their reliability. But as the examples below show, skipping tests is not saving money. It is borrowing against a future that charges steep interest.
 
 ### Financial Arguments
@@ -52,3 +50,5 @@ The numbers above are dramatic, but you do not need a billion-dollar outage to m
 None of this requires a formal framework. A simple spreadsheet updated after each sprint or incident is enough to build a compelling story over time.
 
 Writing tests is not just good engineering practice. It is a financially sound decision. The time and resources allocated towards testing save businesses from substantial costs in the long run, while also safeguarding their reputation and customer trust. The question is not whether your team can afford to test. It is whether you can afford not to.
+
+> **Related posts**: [Why Are Tests Essential?](/posts/why-are-tests-essential/), [Key Types of Testing in Software Development](/posts/key-types-of-testing-in-software-development/)

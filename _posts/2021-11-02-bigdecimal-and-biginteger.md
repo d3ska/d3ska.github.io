@@ -159,3 +159,5 @@ Use **BigDecimal** when you need exact decimal arithmetic: monetary values, tax 
 Use **BigInteger** when you need integers larger than `long` can hold: cryptographic calculations, combinatorics, or any domain with very large whole numbers.
 
 For everything else, `int`, `long`, and `double` are simpler and faster.
+
+> **Related posts**: [Comparable and Comparator Interfaces](/posts/comparable-and-comparator-interfaces/), [Strings](/posts/strings/)

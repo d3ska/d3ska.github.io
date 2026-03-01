@@ -68,32 +68,39 @@ In the single-developer scenario, one might argue that it was a rather poor inve
 
 We've made a conscious decision to refactor our system. What's next? I suggest answering the following questions and taking these steps, which I personally find helpful.
 
-1. **What problem are we trying to solve? Name it.**<br>
-We can't proceed with refactoring if we don't know our driving force. We need to identify what we want to improve or eliminate. Is it higher testability, readability, better latency, or speeding up the time required to introduce new features by reducing coupling and making teams more autonomous, among other things? So, once again, name the problem you're trying to solve.
+1. **What problem are we trying to solve? Name it.**
+
+   We can't proceed with refactoring if we don't know our driving force. We need to identify what we want to improve or eliminate. Is it higher testability, readability, better latency, or speeding up the time required to introduce new features by reducing coupling and making teams more autonomous, among other things? So, once again, name the problem you're trying to solve.
 
 
-2. **Choose the appropriate solution.** <br>
-There are likely several solutions or ways to achieve our goal. In such cases, consider the different possibilities for addressing the problem and select the one that best suits your driver and context. What are the pros and cons of each, and what are the trade-offs?
+2. **Choose the appropriate solution.**
+
+   There are likely several solutions or ways to achieve our goal. In such cases, consider the different possibilities for addressing the problem and select the one that best suits your driver and context. What are the pros and cons of each, and what are the trade-offs?
 
 
-3. **Plan the changes.** <br>
-Identify what needs to be changed and where. Will it affect other parts of the system? Determine where to start and finish the refactoring. Be aware of the 'reaction chain' in the context of refactoring. It is essential to begin with the most challenging part of the refactoring plan, also known as the “fail fast” approach. This way, we'll discover sooner if we can complete what we've planned. If our refactoring turns out to be impossible for some reason, we'll likely find out early rather than at the end.<br>
-Answer the following questions to help guide your approach:
+3. **Plan the changes.**
+
+   Identify what needs to be changed and where. Will it affect other parts of the system? Determine where to start and finish the refactoring. Be aware of the 'reaction chain' in the context of refactoring. It is essential to begin with the most challenging part of the refactoring plan, also known as the "fail fast" approach. This way, we'll discover sooner if we can complete what we've planned. If our refactoring turns out to be impossible for some reason, we'll likely find out early rather than at the end.
+
+   Answer the following questions to help guide your approach:
    * Where should the change be made?
    * What is the impact of the change?
    * What are the observable behaviors of the change?
 
 
-4. **Ensure the safety of the change.** <br>
-Refactoring involves changing the code's structure without altering its observable behavior. To make sure the observable behavior doesn't change, confirm that proper tests covering the behavior exist; if not, write them. The more legacy and coupled a system is, the more likely it is that the only sensible solution is to write tests at higher layers, like controllers.
+4. **Ensure the safety of the change.**
+
+   Refactoring involves changing the code's structure without altering its observable behavior. To make sure the observable behavior doesn't change, confirm that proper tests covering the behavior exist; if not, write them. The more legacy and coupled a system is, the more likely it is that the only sensible solution is to write tests at higher layers, like controllers.
 
 
-5. **Perform the refactoring.** <br>
-After ensuring the safety of the change by creating tests for observable behaviors, proceed with the refactoring, running tests periodically to ensure nothing breaks and that you're moving in the right direction.
+5. **Perform the refactoring.**
+
+   After ensuring the safety of the change by creating tests for observable behaviors, proceed with the refactoring, running tests periodically to ensure nothing breaks and that you're moving in the right direction.
 
 
-6. **Observe the effect.** <br>
-After completing the planned changes, step back and evaluate the process from a broader perspective. Answering the following questions may be helpful:
+6. **Observe the effect.**
+
+   After completing the planned changes, step back and evaluate the process from a broader perspective. Answering the following questions may be helpful:
    * What has changed?
    * Will this change make future features easier or harder to implement?
    * Were there any trade-offs?
@@ -219,8 +226,6 @@ void shouldCalculateDriversFlatFee() {
    assertThat(new Money(50)).isEqualTo(calculatedFee);
 }
 ```
-
-<br>
 
 **Tests are green, and our new concept has been successfully connected!** 
 

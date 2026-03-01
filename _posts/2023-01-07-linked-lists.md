@@ -36,8 +36,6 @@ Summarizing, array elements are stored back to back in memory, while linked list
 
 **When to prefer a linked list over an array:** Linked lists excel when you need frequent insertions and deletions at known positions (head, tail, or a node you already have a reference to), since these operations are O(1) once you have the reference. Arrays, on the other hand, are the better choice when you need fast random access by index (O(1) vs O(n) for a linked list) or when memory locality matters for cache performance.
 
-<br>
-
 ## Single Linked List
 
 The following are a singly linked list's standard operations and their corresponding time complexities:
@@ -50,8 +48,6 @@ The following are a singly linked list's standard operations and their correspon
 - Inserting / Removing a middle node: O(n) to access + O(1)
 - Searching for a value: O(n)
 
-<br>
-
 ## Doubly Linked List
 
 A **doubly linked list** is a linked list where each node holds pointers to both the next and the previous node, allowing traversal in both directions. The defining characteristic is the two pointers per node, not how the list itself is managed. That said, most doubly linked list implementations also maintain references to both the head and the tail. Because you can follow the `prev` pointer from the tail, operations at both ends of the list become O(1).
@@ -63,8 +59,6 @@ A **doubly linked list** is a linked list where each node holds pointers to both
 - Inserting / Removing the tail: O(1)
 - Inserting / Removing a middle node: O(n) to access + O(1)
 - Searching for a value: O(n)
-
-<br>
 
 ### Implementing Insertion and Deletion
 
@@ -125,8 +119,6 @@ public static void insertAfter(Node node, int value) {
 
 These four operations cover the vast majority of linked list manipulation you will encounter. Notice the pattern: any operation where you already have a reference to the target position is O(1), while anything that requires finding a position first is O(n).
 
-<br>
-
 ### Sentinel Nodes
 
 A **sentinel node** (also called a dummy node) is a technique that simplifies insertion and deletion logic by eliminating special-case null checks for the head. Instead of starting with `head = null`, you initialize the list with a dummy node whose value is unused. All real elements hang off `sentinel.next`, so the head of the list is never null and you never need to handle "insert into empty list" as a separate branch.
@@ -153,8 +145,6 @@ public void deleteByValue(int value) {
 ```
 
 Notice how both methods treat every case uniformly. There is no `if (head == null)` and no need to return a new head. This pattern is especially useful inside interview problems where juggling head-pointer edge cases leads to bugs.
-
-<br>
 
 ### Circular Linked Lists
 
@@ -205,8 +195,6 @@ while (current != null) {
 ```
 
 The correct pattern is to use a `do...while` loop (as shown in `traverseCircular` above) or to save the starting node and stop when you see it again. Always be deliberate about your stopping condition when working with circular structures.
-
-<br>
 
 ### Common Linked List Problems
 

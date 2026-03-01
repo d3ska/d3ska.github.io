@@ -147,3 +147,5 @@ De Morgan's Laws are not about making code shorter. They are about picking the f
 The transformation is mechanical, which means you can apply it confidently without worrying about introducing bugs. When you spot a conditional that's hard to parse because of scattered negations, try applying De Morgan's Laws and see if the result reads better.
 
 Modern IDEs like IntelliJ IDEA and Eclipse can apply De Morgan's transformation automatically as a refactoring action. In IntelliJ, placing the cursor on a `&&` or `||` operator and pressing Alt+Enter will offer to negate the expression for you. It is a quick way to explore which form reads best without doing the rewrite by hand.
+
+> **Related posts**: [Core concepts behind OOP](/posts/core-concepts-behind-oop/)

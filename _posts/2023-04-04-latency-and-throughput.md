@@ -10,8 +10,6 @@ tags:
 
 Latency and throughput are the two most important measures of the performance of a system.
 
-<br>
-
 ### Latency
 
 Latency essentially measures the time it takes for data to travel through a system, specifically, the duration required for data to move from one point in the system to another.
@@ -27,7 +25,7 @@ For example, if you are:
 - **Reading 1 MB from SSD**: 1,000 μs (1 ms)
 - **Transfer 1 MB over Network (1 Gbps)**: 10,000 μs (10 ms)
 - **Reading 1 MB from HDD**: 20,000 μs (20 ms)
-- **Inter-Continental Round Trip for packet**: 150,000 μs (150 ms) <br>
+- **Inter-Continental Round Trip for packet**: 150,000 μs (150 ms)
 
 When measuring latency in production systems, looking at the average alone can be misleading. **Tail latency** (the latency experienced by the slowest requests, typically measured at the 95th percentile (p95) or 99th percentile (p99)) often reveals problems that averages hide. For example, a service might have a median latency of 5 ms but a p99 latency of 500 ms, meaning 1 in 100 requests takes 100 times longer than usual. Tail latency matters because at scale, nearly every user session will encounter at least one slow request. This is why SLA definitions frequently reference percentile-based latency targets (e.g., "p99 latency must remain below 200 ms") rather than averages.
 
@@ -39,9 +37,6 @@ Consider a service backed by a database connection pool of 50 connections. At lo
 
 The same pattern shows up in other places: garbage collection pauses that freeze the application for hundreds of milliseconds under memory pressure, network buffers that fill up when bandwidth is saturated, or thread pools that run out of available workers. The takeaway is that latency is not a fixed property of a system. It is a function of load, and understanding how it degrades under pressure is just as important as knowing its best-case value.
 
-
-<br>
-
 ### Throughput
 
 In simpler terms, throughput refers to the amount of work a machine can perform within a specific time frame. Generally, when discussing throughput, we focus on the volume of data that can be transferred from one point in a system to another within a certain period.
@@ -51,9 +46,6 @@ Throughput is commonly measured in units like gigabytes per second, kilobytes pe
 You can think of throughput as a bottleneck, where only a certain number of bytes can be accommodated within a given time frame, such as seconds. This capacity limitation is essentially what throughput represents.
 
 As a concrete example, consider a web server capable of handling 10,000 requests per second (10k RPS). That is its throughput. If traffic spikes to 15,000 RPS, the server becomes a bottleneck. Requests start queuing, latencies climb, and some requests may time out entirely. Increasing throughput (by scaling horizontally with more servers, for instance) relieves that bottleneck and allows the system to serve all incoming traffic.
-
-
-<br>
 
 ### Summary
 
@@ -65,8 +57,6 @@ Consider two contrasting examples:
 
 In essence, we cannot make assumptions about latency or throughput based solely on the other. They are independent dimensions of system performance that both deserve careful attention during design.
 
-<br>
-
 ### Little's Law: Connecting Latency, Throughput, and Concurrency
 
 While latency and throughput are independent measures, there is an elegant formula that ties them together with a third quantity: concurrency. **Little's Law** states that **L = λ × W**, where **L** is the average number of concurrent requests in the system, **λ** (lambda) is throughput measured in requests per second, and **W** is the average latency in seconds per request. Despite its simplicity, this relationship is one of the most powerful tools in a system designer's toolkit.
@@ -76,8 +66,6 @@ Let's make it concrete. Imagine a server handling 100 requests per second (λ = 
 This has direct implications for **capacity planning**. If your database connection pool maxes out at 50 connections and each query takes 100 ms on average, your maximum throughput is 50 / 0.1 = 500 queries per second. Want more throughput? You either need to reduce query latency or increase the pool size. Little's Law makes the trade-off explicit.
 
 What makes the law especially useful is its universality. It holds regardless of request distribution, arrival patterns, or service discipline (FIFO, priority queue, round-robin, it does not matter). Whether you are sizing a thread pool, provisioning database connections, or estimating the number of worker processes for a task queue, Little's Law gives you a reliable starting point.
-
-<br>
 
 ### How to Improve Latency
 
@@ -98,8 +86,6 @@ Reducing latency is about shortening the time each individual operation takes to
 7. **Async processing**. Offload non-critical work such as sending emails, generating reports, or updating analytics to background queues. The user-facing request returns immediately while the heavy lifting happens out of band.
 
 One final reminder: optimizing the average is not enough. Focus on **tail latency** at p95 and p99 to ensure a consistent user experience. A fast median means little if one in every hundred requests takes ten seconds.
-
-<br>
 
 ### How to Improve Throughput
 

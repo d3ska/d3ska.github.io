@@ -13,8 +13,6 @@ tags:
 
 Nowadays most people perceive monoliths as something bad and microservices as something that must be adopted. The truth is that both have their pros and cons, and the right choice depends on the context of the project.
 
-<br>
-
 #### Monolith
 
 A monolith is a system with exactly one deployment unit and one code base. All business logic, data access, and UI concerns live together inside a single deployable artifact.
@@ -36,8 +34,6 @@ A monolith is a system with exactly one deployment unit and one code base. All b
 * **Lack of flexibility** -- the project is tightly coupled to the technology stack. A change in the framework or language affects the entire application, and you cannot choose the most suitable technology for individual parts.
 * **Deployment** -- a small change requires the redeployment of the entire application.
 * **Team coordination at scale** -- when many teams share a single code base, merge conflicts, broken builds, and stepping on each other's changes become a daily reality. Release coordination turns into a bottleneck: every team has to align on a single deployment schedule, and one team's delay blocks everyone else.
-
-<br>
 
 #### Modular Monolith
 
@@ -82,8 +78,6 @@ The `api` packages contain only interfaces and DTOs. The `internal` packages hol
 * **Better-organized dependencies** -- explicit module boundaries prevent the tangled dependency graph that classic monoliths tend to grow over time.
 * **Clearer team responsibilities** -- each team owns one or more modules, which improves collaboration and accountability.
 
-<br>
-
 #### Microservices
 
 Microservices take the concept of modules a step further: each service has its own code base, its own database, and its own deployment pipeline. They are small, independently deployable applications that communicate with each other over the network.
@@ -122,8 +116,6 @@ A distributed monolith gives you the worst of both worlds. You pay the full oper
 
 This usually happens when teams split the monolith along technical layers (a "service" for the API, one for business logic, one for data access) rather than along business domain boundaries. It can also happen when services communicate through a shared database instead of well-defined APIs. Before moving to microservices, it is worth asking whether the team has the discipline and tooling to keep services genuinely independent. If not, a modular monolith is often the safer choice.
 
-<br>
-
 #### Summary
 
 The decision of which architecture to choose depends on the context of the project. A modular monolith makes dependencies more manageable within the application and improves developer interoperability on its modular components, but for small projects the overhead may not be worth the investment.
@@ -135,8 +127,6 @@ Some helping questions:
 * What is the primary architectural driver, and what would be the most suitable approach?
 * Is it resilience? Is it scalability? Do we actually need it yet?
 * What do we want to optimize, and what would be the trade-off of that decision?
-
-<br>
 
 #### Migrating: The Strangler Fig Pattern
 
@@ -153,8 +143,6 @@ In practice, the implementation typically follows these steps:
 
 The key insight is that at every step the system is fully functional. There is no "halfway migrated" state where things are broken. You are always running either the old code or the new code for a given feature, never both at the same time in a confusing hybrid.
 
-<br>
-
 #### Database Splitting Strategy
 
 One of the hardest parts of migrating from a monolith to microservices is untangling the database. In a monolith, all modules typically share a single database and query each other's tables freely. You cannot simply extract a service and give it its own database overnight, because dozens of joins and shared queries may depend on those tables.
@@ -166,8 +154,6 @@ A practical approach is to do this in stages:
 3. **Separate databases.** Once a module is extracted into its own microservice, it gets its own database instance entirely. At this point, the service owns its data completely and can choose the database technology that fits its needs best.
 
 This gradual approach avoids the "big bang" database migration that so often derails monolith-to-microservices transitions. Each step can be validated independently, and you can pause at any stage if the current level of separation is sufficient for your needs.
-
-<br>
 
 #### Recommendation
 

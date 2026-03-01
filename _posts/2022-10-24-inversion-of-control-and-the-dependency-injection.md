@@ -225,7 +225,7 @@ class SongConfig {
 
 Spring picks up the configuration, creates the beans, and injects them in the correct order. The `SongLister` bean receives the `SongsProvider` through constructor injection, exactly as if we had wired it manually.
 
-> **Related post:** [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/)
+> **Related posts**: [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/)
 
 ### References
 

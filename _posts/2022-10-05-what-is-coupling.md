@@ -10,20 +10,14 @@ tags:
 
 In the object-oriented paradigm, coupling refers to the degree of direct knowledge that one element has of another. We generally divide coupling into **tight** and **loose**.
 
-<br>
-We can refer to monolith architecture as an example: a classic monolith is typically tightly coupled, whereas a modular monolith is loosely coupled (assuming the modules are separated correctly). <br>
+We can refer to monolith architecture as an example: a classic monolith is typically tightly coupled, whereas a modular monolith is loosely coupled (assuming the modules are separated correctly).
 But let's think about a less abstract example -- a phone and a remote control. What would you do if the battery in your new iPhone dies? You would probably buy a new phone because replacing the battery is difficult and expensive.
 On the other hand, what would you do if your TV remote stopped working? You would simply get new batteries and replace them in seconds.
 
 The phone represents tight coupling -- the battery is sealed inside, inseparable from the device. The remote represents loose coupling -- the batteries are an interchangeable component behind a simple interface (the battery compartment). Well-designed software components behave like the remote: you can swap out their dependencies without dismantling the whole system.
 
-<br>
-<br>
-
 ![img]({{site.url}}/assets/blog_images/2022-10-05-what-is-coupling/coupling-ilustration-light.png){: .light }
 ![img]({{site.url}}/assets/blog_images/2022-10-05-what-is-coupling/coupling-ilustration-dark.png){: .dark }
-
-<br>
 
 ##### Why is coupling bad most of the time?
 
@@ -59,20 +53,20 @@ If you want a more precise way to talk about coupling, look into **connascence**
 
 ##### A Different Look at Coupling
 
-But tight and loose coupling -- what does that mean in the context of our code? <br>
+But tight and loose coupling -- what does that mean in the context of our code?
 I gained a much better understanding of this topic after watching a conference talk by Lukasz Szydlo,
 which can be found [here](https://www.youtube.com/watch?v=Jy6eS9QHJOM).
 
 
-Let's briefly walk through that concept. <br>
+Let's briefly walk through that concept.
 We can separate coupling in our code into four levels, ranging from tightly coupled to loosely coupled. We can
 determine which level our code is at by answering the following questions in the context of the piece of code we
 are working on:
 
-**How** is it done? <br>
-**Where** does it take place? <br>
-**Who** is doing it? <br>
-**What** happened? <br>
+**How** is it done?  
+**Where** does it take place?  
+**Who** is doing it?  
+**What** happened?
 
 We should strive for a situation where our part of the system cannot answer at least three of those questions (How? Where? Who?).
 
@@ -84,9 +78,6 @@ We should strive for a situation where our part of the system cannot answer at l
 | Who? | **V** | **V** | **V** | X | X |
 | What? | **V** | **V** | **V** | **V** | X |
 
-<br>
-<br>
-
 ###### Local method
 ```java
 public class SaleService {
@@ -96,14 +87,11 @@ public class SaleService {
     }
 }
 ```
-This is the highest level of coupling -- the local method. SaleService knows everything about the other operation. <br>
-**HOW** - implementation of the method <br>
-**WHERE** - in my instance <br>
-**WHO** - 'me' - EmailSender <br>
+This is the highest level of coupling -- the local method. SaleService knows everything about the other operation.  
+**HOW** - implementation of the method  
+**WHERE** - in my instance  
+**WHO** - 'me' - EmailSender  
 **WHAT** - email will be sent
-
-
-<br>
 
 ###### Local instance
 ```java
@@ -117,14 +105,12 @@ public class SaleService {
 }
 ```
 
-~~**HOW** - implementation of the method~~ <br>
-**WHERE** - in my instance <br>
-**WHO** - 'me' - EmailSender <br>
+~~**HOW** - implementation of the method~~  
+**WHERE** - in my instance  
+**WHO** - 'me' - EmailSender  
 **WHAT** - email will be sent
 
 We are not aware of how it will be done, since it is handled by a different class.
-
-<br>
 
 ###### External instance
 ```java
@@ -142,14 +128,12 @@ public class SaleService {
 }
 ```
 
-~~**HOW** - implementation of the method~~ <br>
-~~**WHERE** - in my instance~~ <br>
-**WHO** - 'me' - EmailSender <br>
+~~**HOW** - implementation of the method~~  
+~~**WHERE** - in my instance~~  
+**WHO** - 'me' - EmailSender  
 **WHAT** - email will be sent
 
 We decreased coupling further, and "where" is also gone. We no longer contain the object itself -- we hold only a reference to it. It lives somewhere, but we don't know where.
-
-<br>
 
 ###### Configurable instance (Dependency Injection)
 ```java
@@ -167,18 +151,15 @@ public class SaleService {
 }
 ```
 
-~~**HOW** - implementation of the method~~ <br>
-~~**WHERE** - in my instance~~ <br>
-~~**WHO** - 'me' - EmailSender~~ <br>
+~~**HOW** - implementation of the method~~  
+~~**WHERE** - in my instance~~  
+~~**WHO** - 'me' - EmailSender~~  
 **WHAT** - email will be sent
 
 This example also uses dependency injection, but the key difference is that we are injecting an interface rather than a concrete implementation. Because of that, we eliminate the knowledge of *who* will perform the sending.
 It might be this library or another, or we might be dispatching an event to an external service. We know an email will be sent, but we don't know by whom.
 This level of coupling is the most common, and in most cases it is perfectly acceptable.
 But we can make it even weaker...
-
-
-<br>
 
 ###### Notification
 ```java
@@ -196,12 +177,14 @@ public class SaleService {
 }
 ```
 
-~~**HOW** - implementation of the method~~ <br>
-~~**WHERE** - in my instance~~ <br>
-~~**WHO** - 'me' - EmailSender~~ <br>
+~~**HOW** - implementation of the method~~  
+~~**WHERE** - in my instance~~  
+~~**WHO** - 'me' - EmailSender~~  
 ~~**WHAT** - email will be sent~~
 
 With notification, we are not telling the system what to do -- we are telling it what happened.
 We have no awareness of what the reaction to our event will be.
 Perhaps the client will receive an SMS, or an email, or a push notification, or all of them.
 We simply announce what happened and let the subscribers decide how to handle it.
+
+> **Related posts**: [Cohesion](/posts/cohesion/), [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/)

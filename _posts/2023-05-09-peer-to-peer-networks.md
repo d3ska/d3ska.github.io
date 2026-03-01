@@ -60,3 +60,5 @@ Even in P2P networks, peers need a way to find each other initially. Two common 
 * **Bootstrap nodes.** A small set of well-known nodes that new peers contact to learn about other peers in the network. Once a peer has discovered enough neighbors, it no longer needs the bootstrap nodes. This is how most DHT-based systems handle initial peer discovery.
 
 Neither approach contradicts the P2P model. The data transfer and processing remain distributed; only the initial discovery step involves a known endpoint.
+
+> **Related posts**: [Network Protocols](/posts/network-protocols/), [Leader Election](/posts/leader-election/), [Hashing](/posts/hashing/)

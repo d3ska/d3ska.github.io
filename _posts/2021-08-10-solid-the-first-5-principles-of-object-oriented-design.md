@@ -453,4 +453,4 @@ The key question is always: does this abstraction make the code easier to unders
 
 A good rule of thumb: apply SOLID when you feel pain (a class is hard to test, a change ripples through many files, a new requirement forces you to modify existing code). Don't apply it preemptively to code that is simple and stable.
 
-> **Related post:** [Inversion of Control and Dependency Injection](/posts/inversion-of-control-and-the-dependency-injection/)
+> **Related posts**: [Inversion of Control and Dependency Injection](/posts/inversion-of-control-and-the-dependency-injection/)

@@ -56,3 +56,5 @@ These are more specialized, but they come up often enough that you should at lea
 
 * **Tries (Prefix Trees)** -- tree-like structures optimized for storing and searching strings by their prefixes. Tries excel at problems involving autocomplete, spell-checking, and IP routing, offering O(m) lookup time where m is the length of the key.
 * **Sets** -- collections that store unique elements with no duplicates. In Java, `HashSet` gives you O(1) average-case add, remove, and contains operations, while `TreeSet` keeps elements sorted and offers O(log n) for the same operations. Reach for a set whenever you need to enforce uniqueness or perform membership checks efficiently.
+
+> **Related posts**: [Complexity Analysis](/posts/complexity-analysis/), [Big O Notation](/posts/big-o-notation/)
