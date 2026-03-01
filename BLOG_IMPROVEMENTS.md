@@ -109,7 +109,7 @@ All 13 posts fully rewritten on 2026-02-28.
 - [x] Add suggested learning path/order (arrays -> linked lists -> hash tables -> trees -> graphs)
 - [x] Make descriptions consistent in style and specificity
 - [x] Move heaps from "additional" to main section (they're fundamental)
-- [ ] Add structure relationship diagram
+- [x] Add structure relationship diagram
 - [x] Add missing structures: sets, segment trees
 - [x] Consider whether this post adds value beyond the auto-generated category page; if not, either enrich it or remove it
 
