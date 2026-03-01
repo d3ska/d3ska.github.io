@@ -10,6 +10,11 @@ tags:
 
 Data structures are the building blocks of efficient software. You do not need to know every one, but a solid grasp of the fundamentals and when to reach for each will take you a long way. This page serves as both an index and a learning roadmap for the data structures and related topics I have written about.
 
+The diagram below shows how the structures relate to each other. Dashed arrows indicate "implements" or "builds on" relationships.
+
+![Data structure relationships]({{site.url}}/assets/blog_images/2023-03-18-data-structures-compendium/ds-relationships-light.svg){: .light }
+![Data structure relationships]({{site.url}}/assets/blog_images/2023-03-18-data-structures-compendium/ds-relationships-dark.svg){: .dark }
+
 ### Suggested Learning Path
 
 If you are starting from scratch, I recommend reading them in roughly this order: foundational concepts first (complexity analysis, memory, Big O), then linear structures (arrays, linked lists, stacks and queues), then associative structures (hash tables, strings), and finally non-linear structures (trees, graphs). The foundations section gives you the vocabulary and mental models you need to reason about everything that follows.
