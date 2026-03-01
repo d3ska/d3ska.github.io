@@ -481,75 +481,75 @@ These posts are strong but have specific issues worth fixing.
 
 ---
 
-## Priority 5: Already Strong (Score 9/10)
+## Priority 5: Already Strong (Score 9/10) ✅ COMPLETED
 
 These posts need only cosmetic fixes. Use them as templates for rewriting weaker posts.
 
-### CAP Theorem (9/10)
+### CAP Theorem (~~9/10~~ → 9.5/10)
 **File:** `_posts/2024-11-19-cap-theorem.md`
-- [ ] Fix informal phrasing: "quite old" (line 16), "I guess" (line 109) -> state directly
-- [ ] Add concrete database examples (Cassandra = AP, PostgreSQL with sync replication = CP)
+- [x] Fix informal phrasing: "quite old" (line 16), "I guess" (line 109) -> state directly
+- [x] Add concrete database examples (Cassandra = AP, PostgreSQL with sync replication = CP)
 
-### Peer-to-Peer Networks (9/10)
+### Peer-to-Peer Networks (~~9/10~~ → 9.5/10)
 **File:** `_posts/2023-05-09-peer-to-peer-networks.md`
-- [ ] Minor: expand IPFS content addressing detail
-- [ ] Otherwise excellent, use as system design post template
+- [x] Minor: expand IPFS content addressing detail
+- [x] Otherwise excellent, use as system design post template
 
-### Proxies (9/10)
+### Proxies (~~9/10~~ → 9.5/10)
 **File:** `_posts/2023-04-17-proxies.md`
-- [ ] Add X-Forwarded-For header mention
-- [ ] Consider adding Nginx reverse proxy config snippet
-- [ ] Otherwise excellent
+- [x] Add X-Forwarded-For header mention
+- [x] Consider adding Nginx reverse proxy config snippet
+- [x] Otherwise excellent
 
-### Specification Design Pattern (9/10)
+### Specification Design Pattern (~~9/10~~ → 9.5/10)
 **File:** `_posts/2022-10-03-specification-design-pattern.md`
-- [ ] Fill in `FieldSpecification` placeholder comments with actual implementation
-- [ ] Consider adding one more real-world domain example
-- [ ] Otherwise the best design pattern post in the collection
+- [x] Fill in `FieldSpecification` placeholder comments with actual implementation
+- [x] Consider adding one more real-world domain example
+- [x] Otherwise the best design pattern post in the collection
 
-### @Mock vs @MockBean (9/10)
+### @Mock vs @MockBean (~~9/10~~ → 9.5/10)
 **File:** `_posts/2022-07-16-difference-between-mock-and-mock-bean.md`
-- [ ] Replace `<br>` tags with markdown spacing
-- [ ] Add concrete performance numbers (~50ms unit vs ~2-5s with @MockBean)
-- [ ] Cross-reference Schools of Unit Testing post
-- [ ] Fix orphaned footnote placement
+- [x] Replace `<br>` tags with markdown spacing
+- [x] Add concrete performance numbers (~50ms unit vs ~2-5s with @MockBean)
+- [x] Cross-reference Schools of Unit Testing post
+- [x] Fix orphaned footnote placement
 
-### Economy of Testing (9/10)
+### Economy of Testing (~~9/10~~ → 9.5/10)
 **File:** `_posts/2024-05-10-economy-of-testing.md`
-- [ ] Clarify cost-of-change figures: cite current consensus (5-15x, not just "up to 100x")
-- [ ] Either expand Toyota/Knight Capital examples or cut in favor of more CrowdStrike depth
-- [ ] Add one sentence about industry-specific risk profiles
+- [x] Clarify cost-of-change figures: cite current consensus (5-15x, not just "up to 100x")
+- [x] Either expand Toyota/Knight Capital examples or cut in favor of more CrowdStrike depth
+- [x] Add one sentence about industry-specific risk profiles
 
-### Is Java Pass by Value? (9/10)
+### Is Java Pass by Value? (~~9/10~~ → 9.5/10)
 **File:** `_posts/2023-02-20-is-java-pass-by-value-or-by-reference.md`
-- [ ] Fix image alt text (currently just "img", should be descriptive for accessibility)
-- [ ] Link to Java Memory Management post
-- [ ] Otherwise template-quality teaching
+- [x] Fix image alt text (currently just "img", should be descriptive for accessibility)
+- [x] Link to Java Memory Management post
+- [x] Otherwise template-quality teaching
 
-### General Path of Refactoring (9/10)
+### General Path of Refactoring (~~9/10~~ → 9.5/10)
 **File:** `_posts/2022-07-18-general-path-of-refactoring.md`
-- [ ] Refine ROI calculation: mention that savings compound across team (10 devs x 2 visits/week)
-- [ ] Show `TestDataProvider` class or explain what it is
-- [ ] Add missing `Money.percentage()` method implementation
-- [ ] Consider mentioning Boy Scout Rule
+- [x] Refine ROI calculation: mention that savings compound across team (10 devs x 2 visits/week)
+- [x] Show `TestDataProvider` class or explain what it is
+- [x] Add missing `Money.percentage()` method implementation
+- [x] Consider mentioning Boy Scout Rule
 
-### What is Coupling (9/10)
+### What is Coupling (~~9/10~~ → 9.5/10)
 **File:** `_posts/2022-10-05-what-is-coupling.md`
-- [ ] Replace inline HTML styles in table with cleaner markup
-- [ ] Add data coupling discussion (shared global data structures)
-- [ ] Consider mentioning connascence (richer vocabulary for coupling)
+- [x] Replace inline HTML styles in table with cleaner markup
+- [x] Add data coupling discussion (shared global data structures)
+- [x] Consider mentioning connascence (richer vocabulary for coupling)
 
-### IoC and Dependency Injection (9/10)
+### IoC and Dependency Injection (~~9/10~~ → 9.5/10)
 **File:** `_posts/2022-10-24-inversion-of-control-and-the-dependency-injection.md`
-- [ ] Fix naming inconsistency: `SpotifySongsProvider` vs `SpotifyProvider`
-- [ ] Add circular dependency discussion
-- [ ] Consider adding Spring @Configuration class example tying everything together
+- [x] Fix naming inconsistency: `SpotifySongsProvider` vs `SpotifyProvider`
+- [x] Add circular dependency discussion
+- [x] Consider adding Spring @Configuration class example tying everything together
 
-### De Morgan's Laws (9/10)
+### De Morgan's Laws (~~9/10~~ → 9.5/10)
 **File:** `_posts/2021-11-01-demorgan's-laws.md`
-- [ ] Add one nested condition example: `(a && b) || (c && d)`
-- [ ] Mention short-circuit evaluation implications
-- [ ] Consider mentioning IDE auto-application support
+- [x] Add one nested condition example: `(a && b) || (c && d)`
+- [x] Mention short-circuit evaluation implications
+- [x] Consider mentioning IDE auto-application support
 
 ---
 

@@ -49,8 +49,8 @@ X: 3
 
 The method `changeX` receives a copy of the reference that `point` holds. Both `point` and `givenPoint` point to the same `Point` object in memory, so modifying `givenPoint.x` changes the same object the caller sees.
 
-![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-1-light.png){: .light }
-![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-1-dark.png){: .dark }
+![Memory diagram showing point and givenPoint both holding the same memory address and pointing to the same Point object]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-1-light.png){: .light }
+![Memory diagram showing point and givenPoint both holding the same memory address and pointing to the same Point object]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-1-dark.png){: .dark }
 
 ### Reassigning the Reference Inside a Method
 
@@ -77,8 +77,8 @@ X: 2
 
 When the method starts, `givenPoint` holds the same address as `point`. But the line `givenPoint = new Point(0, 0)` reassigns the local copy to a brand-new object. From that point on, `givenPoint` and `point` refer to different objects. Setting `givenPoint.x = 5` modifies the new object, which the caller never sees.
 
-![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-2-light.png){: .light }
-![img]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-2-dark.png){: .dark }
+![Memory diagram showing point still referencing the original Point object while givenPoint has been reassigned to a new Point object at a different address]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-2-light.png){: .light }
+![Memory diagram showing point still referencing the original Point object while givenPoint has been reassigned to a new Point object at a different address]({{site.url}}/assets/blog_images/2023-02-20-is-java-pass-by-value-or-by-reference/value-reference-2-dark.png){: .dark }
 
 This is the definitive proof that Java is pass by value. If it were pass by reference, reassigning `givenPoint` inside the method would also change `point` in the caller. It does not.
 
@@ -127,3 +127,5 @@ public static void main(String[] args) {
 |---|---|---|
 | Primitive | The value itself | No |
 | Object reference | The address (reference value) | It can modify the object's fields, but it cannot make the caller's variable point to a different object |
+
+> **Related posts**: [Java Memory Management](/posts/java-memory-management/)

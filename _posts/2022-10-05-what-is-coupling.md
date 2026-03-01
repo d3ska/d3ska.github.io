@@ -49,6 +49,14 @@ There is another form of coupling worth mentioning: **temporal coupling**. This 
 
 For example, if you must call `init()` before `process()`, and the compiler does not prevent you from calling `process()` first, you have temporal coupling. This is a common source of subtle bugs. The solution is to design APIs so that illegal call sequences become impossible -- for instance, by having `init()` return the object that exposes `process()`.
 
+##### Data Coupling
+
+Another common form of coupling appears when modules communicate by sharing data structures. If two services both read from and write to the same database table, or if multiple consumers depend on the shape of an API response, they are **data-coupled**. The danger is that changing the structure in one place (renaming a column, removing a field) silently breaks every dependent module. This is especially prevalent in systems that share database schemas, Protobuf definitions, or API contracts across team boundaries. The mitigation is to treat shared data structures as public APIs: version them, evolve them carefully, and avoid exposing internal representations.
+
+##### Connascence: A Richer Vocabulary for Coupling
+
+If you want a more precise way to talk about coupling, look into **connascence**. Connascence describes the different ways two components can be coupled, ranked by strength. **Connascence of name** is the weakest form: two components must agree on a name (a method name, a queue name). **Connascence of type** means they must agree on a data type. At the stronger end, **connascence of identity** means two components must reference the exact same object instance. The general rule is the same as with coupling: prefer weaker forms over stronger ones, and limit the scope of any connascence to the smallest boundary possible.
+
 ##### A Different Look at Coupling
 
 But tight and loose coupling -- what does that mean in the context of our code? <br>
@@ -69,49 +77,12 @@ are working on:
 We should strive for a situation where our part of the system cannot answer at least three of those questions (How? Where? Who?).
 
 
-<table style="width:100%">
-  <caption>Coupling levels</caption>
-  <tr>
-    <th></th>
-    <th>Local method</th>
-    <th>Local instance</th>
-    <th>External instance</th>
-    <th>Configurable instance (DI)</th>
-    <th>Notification</th>
-  </tr>
-  <tr>
-    <td>How?</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: red">X</td>
-    <td style="text-align:center; color: red">X</td>
-    <td style="text-align:center; color: red">X</td>
-    <td style="text-align:center; color: red">X</td>
-  </tr>
-  <tr>
-    <td>Where?</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: red">X</td>
-    <td style="text-align:center; color: red">X</td>
-    <td style="text-align:center; color: red">X</td>
-  </tr>
-  <tr>
-   <td>Who?</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: red">X</td>
-    <td style="text-align:center; color: red">X</td>
-  </tr>
-  <tr>
-    <td>What?</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: green">V</td>
-    <td style="text-align:center; color: red">X</td>
-   </tr>
-</table>
+| | Local method | Local instance | External instance | Configurable instance (DI) | Notification |
+|---|:---:|:---:|:---:|:---:|:---:|
+| How? | **V** | X | X | X | X |
+| Where? | **V** | **V** | X | X | X |
+| Who? | **V** | **V** | **V** | X | X |
+| What? | **V** | **V** | **V** | **V** | X |
 
 <br>
 <br>

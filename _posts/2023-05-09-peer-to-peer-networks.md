@@ -17,7 +17,7 @@ In a traditional client-server architecture, a central server owns the data and 
 
 **Blockchain and cryptocurrencies.** Bitcoin, Ethereum, and other blockchain networks are P2P systems. Every node maintains a copy of the ledger and validates new transactions. There is no central authority. Consensus protocols (Proof of Work, Proof of Stake) replace the trust that a central server would normally provide.
 
-**Distributed storage.** The InterPlanetary File System (IPFS) uses P2P for decentralized file storage. Files are split into blocks, each identified by its content hash, and distributed across participating nodes. Retrieving a file means fetching blocks from whichever peers have them, providing redundancy and resilience.
+**Distributed storage.** The InterPlanetary File System (IPFS) uses P2P for decentralized file storage. Files are split into blocks, each identified by its content hash, and distributed across participating nodes. This is called **content addressing**: content is identified by what it is (its hash) rather than where it is stored, so the same file served by different peers always has the same address. Retrieving a file means fetching blocks from whichever peers have them, providing redundancy and resilience.
 
 **Messaging.** P2P enables communication without centralized servers. Briar routes messages through the Tor network without relying on any central infrastructure, and Tox provides direct peer-to-peer encrypted messaging. Note that while apps like Signal use end-to-end encryption, they still rely on centralized servers for message routing and are not true P2P systems.
 

@@ -46,7 +46,7 @@ class SongLister {
     private final SongsProvider provider;
 
     public SongLister() {
-        this.provider = new SpotifyProvider();
+        this.provider = new SpotifySongsProvider();
     }
 }
 ```
@@ -54,7 +54,7 @@ class SongLister {
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/concrete-implementation-constructor-initializing-light.png){: .light }
 ![img]({{site.url}}/assets/blog_images/2022-24-10-inversion-of-control-and-the-dependency-injection/concrete-implementation-constructor-initializing-dark.png){: .dark }
 
-This is better, but `SongLister` still depends on `SpotifyProvider`. If we want to use a different source of songs (say, a local file for development or a different streaming service in production), we have to change the class. We would like providers to be interchangeable plugins, but by directly instantiating one, we lose that flexibility.
+This is better, but `SongLister` still depends on `SpotifySongsProvider`. If we want to use a different source of songs (say, a local file for development or a different streaming service in production), we have to change the class. We would like providers to be interchangeable plugins, but by directly instantiating one, we lose that flexibility.
 
 ### What Is Inversion of Control?
 
@@ -98,7 +98,7 @@ class SongLister {
 The caller decides which implementation to use:
 
 ```java
-SongLister lister = new SongLister(new SpotifyProvider());
+SongLister lister = new SongLister(new SpotifySongsProvider());
 // or for local development:
 SongLister lister = new SongLister(new LocalFileProvider());
 ```
@@ -151,6 +151,12 @@ class SongLister {
 }
 ```
 
+### Circular Dependencies
+
+One pitfall to watch out for with dependency injection is **circular dependencies**: A depends on B, and B depends on A. When a DI container tries to create A, it needs B first, but creating B requires A, which has not been created yet. The container cannot resolve this cycle and will fail at startup (in Spring, you get a `BeanCurrentlyInCreationException`).
+
+The best solution is to redesign the dependency graph so the cycle does not exist. Usually a circular dependency signals that two classes are too tightly coupled and some responsibility should be extracted into a third class. If redesigning is not immediately practical, other options include introducing an interface to break the cycle or using lazy initialization (`@Lazy` in Spring) so that one of the dependencies is resolved through a proxy and only created when first accessed. Treat lazy initialization as a temporary workaround, not a permanent fix.
+
 ### Dependency Injection in Spring
 
 Spring is the most widely used DI framework in the Java ecosystem. It manages object creation and lifecycle through its **application context** (the IoC container) and injects dependencies based on configuration or annotations.
@@ -198,6 +204,26 @@ class SongLister {
 ```
 
 Field injection is the most concise syntax, but it carries all the disadvantages described earlier. The only scenario where it is generally acceptable is in test classes, where brevity outweighs the design concerns.
+
+You can also wire beans explicitly using a `@Configuration` class. This is useful when you need to configure third-party classes or want all wiring logic in one place:
+
+```java
+@Configuration
+class SongConfig {
+
+    @Bean
+    SongsProvider songsProvider() {
+        return new SpotifySongsProvider();
+    }
+
+    @Bean
+    SongLister songLister(SongsProvider songsProvider) {
+        return new SongLister(songsProvider);
+    }
+}
+```
+
+Spring picks up the configuration, creates the beans, and injects them in the correct order. The `SongLister` bean receives the `SongsProvider` through constructor injection, exactly as if we had wired it manually.
 
 > **Related post:** [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/)
 

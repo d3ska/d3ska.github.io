@@ -13,7 +13,7 @@ tags:
 
 #### What is CAP theorem?
 
-That statement is quite old, as it was first presented as a conjecture in 2000 by Eric Brewer at a conference named 'Principles of Distributed Computing', where the presentation was titled 'Towards robust distributed systems'. Two years later, in 2002, Seth Gilbert and Nancy Lynch formally proved the conjecture, elevating it from an educated intuition to a proven theorem.
+The CAP theorem was formally introduced in 2000, when Eric Brewer presented it as a conjecture at a conference named 'Principles of Distributed Computing', where the presentation was titled 'Towards robust distributed systems'. Two years later, in 2002, Seth Gilbert and Nancy Lynch formally proved the conjecture, elevating it from an educated intuition to a proven theorem.
 That's why its alternative name is the Brewer theorem.
 The presentation can be found [here](https://people.eecs.berkeley.edu/~brewer/cs262b-2004/PODC-keynote.pdf).
 
@@ -104,9 +104,20 @@ It is important to note that in distributed systems, the CA model prioritizes Co
 
 <br>
 
+#### Real-World CAP Classifications
+
+It helps to map these categories to actual databases:
+
+- **AP (Availability + Partition Tolerance):** Cassandra, DynamoDB, CouchDB. These systems favor availability and will continue serving requests during a partition, at the cost of returning potentially stale data.
+- **CP (Consistency + Partition Tolerance):** PostgreSQL with synchronous replication, etcd, ZooKeeper, HBase. These systems favor consistency and will reject requests or become unavailable rather than return inconsistent data during a partition.
+
+Keep in mind that these classifications are not always absolute. Many databases are configurable (for example, Cassandra can be tuned toward stronger consistency by requiring quorum reads and writes), so the CAP category often depends on how the system is set up rather than being a fixed property of the technology itself.
+
+<br>
+
 #### Choose two out of three, right?
 
-I guess that most people would choose the CA (Consistency and Availability) model, assuming that partitioning events are rare. However, partitioning can and will likely happen eventually, and the chances of it occurring increase over time and with the number of nodes. In such cases, we might not know how to handle it effectively.
+Most people would instinctively choose the CA (Consistency and Availability) model, assuming that partitioning events are rare. However, partitioning can and will likely happen eventually, and the chances of it occurring increase over time and with the number of nodes. In such cases, we might not know how to handle it effectively.
 
 The proper way to understand and think about the CAP theorem is by considering what we want to prioritize when a partition event has already occurred. We need to decide whether to sacrifice consistency to keep the system available or make the system unavailable to preserve consistency. In the end, we would always have a system that is either CP or AP. Of course, CA might still be fulfilled if we don't have network issues, and if there's only a 5% chance of failure and partitioning, then we still have a 95% chance that the system may be CA. However, it's not the same as simply choosing two out of three and forgetting about the third one, the network issues, as that would be a wrong assumption, which also results from [Fallacies of distributed computing](https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing).
 

@@ -268,8 +268,30 @@ class FieldSpecification implements Specification<ShipmentDetails> {
         return evaluate(operator, fieldValue, values);
     }
 
-    // resolveField maps "status" -> candidate.getStatus().name(), etc.
-    // evaluate applies the operator (IN, NONE_MATCH, EQUALS) to the resolved value
+    private Object resolveField(ShipmentDetails candidate, String field) {
+        return switch (field) {
+            case "status" -> candidate.getStatus().name();
+            case "historyActions" -> candidate.getHistory().stream()
+                    .map(h -> h.getAction().name())
+                    .collect(Collectors.toSet());
+            default -> throw new IllegalArgumentException("Unknown field: " + field);
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean evaluate(String operator, Object fieldValue, Set<String> values) {
+        return switch (operator) {
+            case "IN" -> values.contains((String) fieldValue);
+            case "EQUALS" -> values.stream().findFirst()
+                    .map(v -> v.equals(fieldValue))
+                    .orElse(false);
+            case "NONE_MATCH" -> {
+                Set<String> actual = (Set<String>) fieldValue;
+                yield actual.stream().noneMatch(values::contains);
+            }
+            default -> throw new IllegalArgumentException("Unknown operator: " + operator);
+        };
+    }
 }
 ```
 

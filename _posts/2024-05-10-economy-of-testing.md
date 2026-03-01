@@ -21,7 +21,7 @@ When it comes to convincing business stakeholders about the importance of testin
 
 The closer a bug is found to the developer's machine, the cheaper it is to fix. Conversely, the further it gets into the deployment pipeline, the higher the cost of detecting and correcting it.
 
-According to some studies (notably IBM's Systems Sciences Institute and Barry Boehm's cost-of-change curve), the detection of a problem in the maintenance phase can generate costs up to 100 times greater than in the design phase. The exact multiplier is debated (more recent research suggests a smaller but still significant gap), yet the core insight holds: the later a defect is found, the more expensive it is to fix.
+According to some studies (notably IBM's Systems Sciences Institute and Barry Boehm's cost-of-change curve), the detection of a problem in the maintenance phase can generate costs up to 100 times greater than in the design phase. The exact multiplier is debated. Modern research suggests the ratio is more commonly 5-15x for well-managed projects, though it can climb much higher for safety-critical systems. Still, the core insight holds: the later a defect is found, the more expensive it is to fix.
 
 ### Real-World Consequences
 
@@ -29,13 +29,13 @@ The real-world implications of insufficient software testing can be staggering:
 
 * **CrowdStrike (2024):** A faulty content update (Channel File 291) crashed approximately 8.5 million Windows machines worldwide, grounding flights, disrupting hospitals, and taking payment systems offline. Fortune 500 companies alone suffered an estimated $5.4 billion in direct losses. The root cause? No canary or staged rollout for the update, combined with a [bug in the content validator](https://www.crowdstrike.com/en-us/blog/falcon-content-update-preliminary-post-incident-report/) that failed to catch the malformed data before it shipped. A proper validation test suite would have flagged the issue before it ever left CrowdStrike's infrastructure. For a broader overview of the fallout, see the [Wikipedia article](https://en.wikipedia.org/wiki/2024_CrowdStrike-related_IT_outages).
 
-* **Toyota:** A software error in the throttle control system led to unintended acceleration issues and a loss of about 3 billion dollars.
+* **Toyota:** A software error in the throttle control system led to unintended acceleration issues, resulting in recalls of over 9 million vehicles and a loss of about 3 billion dollars. An independent analysis later found over 10,000 global variables and no formal code review process for the safety-critical throttle software.
 
-* **Knight Capital Inc:** A trading glitch caused a loss of over 440 million dollars in 45 minutes.
+* **Knight Capital Inc:** A trading glitch caused a loss of over 440 million dollars in 45 minutes. An untested deployment reactivated dead code on one of eight servers, flooding the market with erroneous orders. The firm nearly went bankrupt and was acquired within months.
 
 ### Beyond Financial Costs
 
-Beyond direct financial consequences, software errors can permanently damage consumer trust in a brand or product. Once lost, this trust can be challenging, if not impossible, to regain. The erosion of trust leads to a long-term decline in customer base and market share, making the true cost of software errors far higher than the immediate financial loss suggests.
+The cost of defects varies dramatically by industry: a bug in a social media app is an inconvenience, while a bug in medical device software or a financial trading system can be life-threatening or result in millions in losses. Beyond direct financial consequences, software errors can permanently damage consumer trust in a brand or product. Once lost, this trust can be challenging, if not impossible, to regain. The erosion of trust leads to a long-term decline in customer base and market share, making the true cost of software errors far higher than the immediate financial loss suggests.
 
 ### A Positive Example: How Testing Prevented Failure
 
