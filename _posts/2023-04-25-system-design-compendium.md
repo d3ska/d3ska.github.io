@@ -8,9 +8,9 @@ tags:
   - Distributed Systems
 ---
 
-System design is the process of defining a system's architecture, components, interfaces, and data flows to satisfy a set of requirements. It covers both functional requirements (what the system should do) and non-functional requirements such as scalability, reliability, and security.
+Whether you are preparing for a system design interview or building production infrastructure, the same core concepts keep showing up: how data moves, where it lives, and what happens when things fail. This compendium collects those concepts in one place so you can build a solid mental model of how large-scale systems work.
 
-Here are the topics that form the foundation of system design:
+### Topics
 
 * [Defining Software Architecture](/posts/defining-software-architecture/) - the principles, patterns, and trade-offs behind structuring maintainable, scalable software systems.
 * [Network Protocols](/posts/network-protocols/) - how machines communicate over networks, covering TCP, UDP, HTTP, and other foundational protocols.
@@ -28,5 +28,39 @@ Here are the topics that form the foundation of system design:
 * [Peer-To-Peer Networks](/posts/peer-to-peer-networks/) - decentralized architectures where nodes share resources directly without relying on a central server.
 * [Polling and Streaming](/posts/polling-and-streaming/) - two approaches for clients to receive updates from servers, each with different latency and resource trade-offs.
 * [Rate Limiting](/posts/rate-limiting/) - controlling the number of requests a client can make to protect systems from overload and abuse.
-* [Microservices vs Monolith](/posts/microservices-vs-monolith/) - comparing two architectural styles for structuring applications and their trade-offs in complexity, deployment, and scaling.
+* [Microservices vs Monolith](/posts/microservices-vs-monolith/) - comparing two architectural styles for structuring applications, with trade-offs in complexity, deployment, and scaling.
 * [Request-Response vs Publish-Subscribe](/posts/request-response-vs-publish-subscribe/) - two fundamental communication patterns for services, differing in coupling, scalability, and failure handling.
+
+### Suggested Reading Order
+
+If you are new to system design, working through these topics in a structured order will help each concept build on the last.
+
+**1. Foundations.** Start here to understand the vocabulary and core metrics.
+- Defining Software Architecture
+- Network Protocols
+- Latency and Throughput
+- Availability
+
+**2. Data and storage.** Learn how data is stored, accessed, and distributed.
+- SQL vs NoSQL Databases
+- Specialized Storage Paradigms
+- Caching
+- Hashing
+- Replication and Sharding
+
+**3. Infrastructure and traffic.** Understand how requests flow through a system.
+- Proxies
+- Load Balancing
+- Rate Limiting
+- Polling and Streaming
+
+**4. Distributed systems.** Dig into the harder problems that come with scale.
+- CAP Theorem
+- Leader Election
+- Peer-To-Peer Networks
+
+**5. Architecture patterns.** Tie it all together with high-level design decisions.
+- Microservices vs Monolith
+- Request-Response vs Publish-Subscribe
+
+You do not need to follow this order strictly. If you already have experience with networking and databases, jumping straight to the distributed systems or architecture sections works fine too.

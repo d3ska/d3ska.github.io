@@ -117,3 +117,47 @@ In practice, many systems use both. A common pattern is a SQL database as the so
 ### NewSQL
 
 **NewSQL** databases aim to bridge the gap between SQL and NoSQL. Databases like **CockroachDB**, **Google Spanner**, and **TiDB** provide the familiar SQL interface and ACID guarantees while supporting horizontal scalability traditionally associated with NoSQL systems. If your application demands both strong consistency and the ability to scale out across many nodes, NewSQL can be a compelling option.
+
+### MongoDB Transactions vs Postgres Transactions
+
+The NoSQL limitations section above mentions that MongoDB added multi-document transactions in version 4.0. This is true, but the details matter. MongoDB's **multi-document transactions** come with real constraints compared to what Postgres offers.
+
+Postgres has decades of investment in its **MVCC (Multi-Version Concurrency Control)** implementation. Transactions are a first-class concept: they are cheap to start, handle complex isolation levels (Read Committed, Repeatable Read, Serializable), and work seamlessly with joins, constraints, and triggers. You rarely think twice about wrapping a set of operations in a transaction.
+
+MongoDB's transaction support is more recent and carries **performance overhead**. Multi-document transactions in MongoDB acquire locks across documents and can increase write latency, especially in sharded clusters where a transaction spans multiple shards. MongoDB also recommends keeping transactions short (under 60 seconds by default) and avoiding them for the majority of operations, preferring single-document atomicity through schema design instead.
+
+In practice, if your workload requires frequent multi-document transactions with strong isolation, Postgres (or another mature SQL database) will handle that more naturally. If your transactions are rare and most writes touch a single document, MongoDB's transaction support is a reasonable safety net rather than a core design pattern.
+
+### Operational Complexity
+
+Both SQL and NoSQL databases demand ongoing operational attention, but the nature of that work differs.
+
+With SQL databases, you will spend time on **schema migrations** (adding columns, changing types, creating indexes on large tables), **connection pooling** (tools like PgBouncer become necessary at scale), and **index tuning** (analyzing slow queries, adding composite indexes, removing unused ones). The upside is that these problems are well-understood, with decades of tooling and documentation.
+
+NoSQL databases shift the operational burden to different areas. **Partition key design** is critical: a poorly chosen partition key in DynamoDB or Cassandra can create hot partitions that throttle your throughput. **Capacity planning** requires thinking about read/write units or cluster sizing upfront rather than relying on a single vertically scaled node. And **eventual consistency** means your application code must handle scenarios where a read does not reflect the latest write, which adds complexity to your application layer rather than the database layer.
+
+Neither side is "easier to operate." The work is just different, and the skills your team already has should factor into your decision.
+
+### Cost of Managed Services
+
+When using cloud-managed databases, the cost models diverge in ways that matter at scale.
+
+**Managed SQL** services (AWS RDS, Google Cloud SQL, Azure Database) charge primarily by instance size and storage. You pick a machine, you pay for it whether it is idle or under full load. This makes costs predictable but means you pay for peak capacity even during off-hours. Read replicas and multi-AZ deployments add roughly linear cost.
+
+**Managed NoSQL** services (DynamoDB, Cosmos DB, Cloud Firestore) often use a **pay-per-request** or **provisioned throughput** model. For simple, high-volume key-value lookups, this can be significantly cheaper at scale because you are paying for what you use. However, costs can spike unpredictably when access patterns change, and complex queries (scans, secondary indexes, cross-partition reads) can become expensive quickly.
+
+A rough rule of thumb: NoSQL managed services tend to be cheaper for high-throughput, simple access patterns. SQL managed services tend to be more cost-effective when your queries are complex and varied, because the cost of running a join on a SQL instance is the same as running a simple SELECT, while the equivalent denormalized NoSQL queries might require multiple reads across different items or collections.
+
+### What Happens When You Choose Wrong
+
+Migrating from SQL to NoSQL (or the other direction) is one of the most painful projects a team can undertake. It is worth understanding the costs up front so you take the initial decision seriously.
+
+**Schema and data transformation** is the first hurdle. Moving from normalized SQL tables to denormalized NoSQL documents (or vice versa) requires rethinking your data model entirely. You cannot simply export rows and import them as documents. Relationships that were expressed through foreign keys need to be flattened into embedded objects or duplicated across collections. Going the other direction, you need to extract structure from flexible documents and enforce constraints that may not have existed before.
+
+**Query rewriting** follows. Every query in your application was written for one paradigm. SQL joins become multiple lookups in NoSQL. NoSQL single-document reads may need to be split across multiple SQL tables. ORMs and data access layers need to be rewritten or replaced. This is not a search-and-replace task.
+
+**Downtime and data integrity risks** are the most dangerous part. A live migration typically requires a period of dual-writing to both old and new databases, followed by a cutover. During this window, you need to keep both systems in sync, handle failures in either system, and validate that no data was lost or corrupted. Even with careful planning, many teams experience data inconsistencies that take weeks to track down.
+
+The lesson is not to avoid NoSQL or SQL, but to invest time in the initial choice. Prototyping your most important queries against both options before committing is far cheaper than migrating later.
+
+> **Related posts**: [Replication And Sharding](/posts/replication-and-sharding/), [CAP Theorem](/posts/cap-theorem/), [Specialized Storage Paradigms](/posts/specialized-storage-paradigms/)

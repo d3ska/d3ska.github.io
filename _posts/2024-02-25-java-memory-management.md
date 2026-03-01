@@ -99,4 +99,52 @@ The JVM ships with several garbage collection algorithms, each optimized for dif
 * **ZGC** (`-XX:+UseZGC`): a low-latency collector designed to keep pause times under a few milliseconds, regardless of heap size. ZGC can handle multi-terabyte heaps and became production-ready in Java 15. Ideal for latency-sensitive applications.
 * **Shenandoah GC** (`-XX:+UseShenandoahGC`): another low-pause-time collector that performs concurrent compaction. Available in OpenJDK builds, it shares similar goals with ZGC but uses a different implementation approach.
 
-Choosing the right GC depends on the application's requirements. Throughput-oriented workloads benefit from Parallel GC, while latency-critical services should consider G1, ZGC, or Shenandoah.
+#### Choosing the Right GC
+
+For most web applications and microservices, **G1 GC** is the right default. It ships as the JVM default since Java 9, handles heaps from a few hundred megabytes to several gigabytes well, and balances throughput with reasonable pause times. Start here unless you have a specific reason not to.
+
+Reach for **ZGC** only if your application has strict latency requirements (sub-millisecond pauses) or operates on very large heaps (tens of gigabytes or more). Trading applications, real-time bidding systems, and interactive services where tail latency matters are good candidates. **Shenandoah** is a viable alternative to ZGC with similar goals. It is available in most OpenJDK distributions and worth benchmarking against ZGC for your specific workload.
+
+**Serial GC** is useful for small heaps (under ~100MB) and containerized applications with limited CPU. If your service runs in a container with a single vCPU, Serial GC may actually outperform the parallel collectors because there is no coordination overhead.
+
+**Parallel GC** remains a good choice for batch processing jobs and offline data pipelines where throughput matters more than pause times.
+
+### Reference Types
+
+Java provides special reference types in `java.lang.ref` that give you more control over how the garbage collector treats objects:
+
+* **SoftReference**: the GC will keep the referenced object alive as long as there is enough memory, but will clear it before throwing an `OutOfMemoryError`. This makes it useful for memory-sensitive caches where you want to hold on to data if possible but can afford to recompute it.
+* **WeakReference**: the GC can reclaim the referenced object at the next collection cycle, regardless of memory pressure. `WeakHashMap` uses this internally to allow entries to be garbage collected when their keys are no longer strongly referenced elsewhere.
+* **PhantomReference**: the referenced object is already finalized and about to be reclaimed. You cannot retrieve the object through a `PhantomReference`. It is used together with a `ReferenceQueue` to perform cleanup actions (releasing native resources, for example) after the object is collected. This is the modern alternative to overriding `finalize()`.
+
+### Common Memory Leak Patterns
+
+Java's garbage collector handles deallocation, but that does not mean memory leaks are impossible. They just look different. A "leak" in Java typically means objects that are still reachable (so the GC cannot collect them) but are no longer useful to the application. A few patterns come up repeatedly:
+
+* **Static collections that grow unbounded**: a `static List` or `static Map` that accumulates entries over time without any eviction. Because the collection itself is reachable from a class (which is reachable from the classloader), nothing in it will ever be garbage collected.
+* **Unclosed resources**: streams, database connections, and HTTP clients that are opened but never closed. These often hold native memory or OS handles outside the heap. Always use try-with-resources.
+* **Non-static inner classes holding outer class references**: an inner class instance implicitly holds a reference to its enclosing object. If the inner class instance outlives the outer object (for example, it is stored in a long-lived collection), the outer object and everything it references cannot be collected. Making the inner class `static` breaks this chain.
+* **ThreadLocal not cleaned up**: `ThreadLocal` values are tied to the thread's lifecycle. In application servers and thread pools where threads are reused, a `ThreadLocal` that is set but never removed can hold on to objects indefinitely.
+
+### Diagnostic Tools
+
+When something goes wrong with memory, you need visibility into what the JVM is actually doing. A few tools are worth knowing:
+
+**jcmd** is a lightweight command-line tool bundled with the JDK. It can query a running JVM without adding significant overhead:
+
+```bash
+# Print heap usage summary (generation sizes, occupancy)
+jcmd <pid> GC.heap_info
+
+# Trigger a heap dump for offline analysis
+jcmd <pid> GC.heap_dump /tmp/heapdump.hprof
+
+# Print class histogram (top memory consumers)
+jcmd <pid> GC.class_histogram
+```
+
+**VisualVM** provides a graphical view of heap usage, thread activity, and GC behavior over time. It can connect to a running JVM locally or remotely and is useful for identifying memory trends during development or load testing.
+
+For analyzing heap dumps (the `.hprof` files produced by `jcmd` or triggered automatically on `OutOfMemoryError` with `-XX:+HeapDumpOnOutOfMemoryError`), **Eclipse MAT** (Memory Analyzer Tool) is the standard. It can parse multi-gigabyte dumps and pinpoint which objects are retaining the most memory through its "dominator tree" and "leak suspects" reports.
+
+> **Related posts**: [Is Java Pass by Value or by Reference?](/posts/is-java-pass-by-value-or-by-reference/), [Concurrency and Parallelism](/posts/concurrency-and-parallelism/), [Memory](/posts/memory/)

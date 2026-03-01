@@ -337,147 +337,147 @@ These posts are solid but have specific gaps worth filling.
 
 ---
 
-## Priority 4: Minor Fixes (Score 8-8.5/10)
+## Priority 4: Minor Fixes (Score 8-8.5/10) ✅ COMPLETED
 
 These posts are strong but have specific issues worth fixing.
 
-### Why Are Tests Essential (8/10)
+### Why Are Tests Essential (~~8/10~~ → 9/10)
 **File:** `_posts/2021-08-09-why-are-tests-essential.md`
-- [ ] Fix image path typo: `writh` -> `write` and date mismatch (2021-08-09 vs 2021-09-09)
-- [ ] Strengthen conclusion with a unique closing thought
+- [x] Fix image path typo: `writh` -> `write` and date mismatch (2021-08-09 vs 2021-09-09)
+- [x] Strengthen conclusion with a unique closing thought
 
-### Observer Design Pattern (8/10)
+### Observer Design Pattern (~~8/10~~ → 9/10)
 **File:** `_posts/2021-08-16-observer-design-pattern.md`
-- [ ] Add memory leak discussion (observers not unsubscribed, weak references)
-- [ ] Add brief thread safety note (concurrent subscribe/notify)
-- [ ] Show unsubscribe in action with code
+- [x] Add memory leak discussion (observers not unsubscribed, weak references)
+- [x] Add brief thread safety note (concurrent subscribe/notify)
+- [x] Show unsubscribe in action with code
 
-### Latency and Throughput (8/10)
+### Latency and Throughput (~~8/10~~ → 9/10)
 **File:** `_posts/2023-04-04-latency-and-throughput.md`
-- [ ] Fix awkward opening header formatting (line 11)
-- [ ] Add a real-world case study showing latency degradation under load
-- [ ] Better integrate cross-links at end
+- [x] Fix awkward opening header formatting (line 11)
+- [x] Add a real-world case study showing latency degradation under load
+- [x] Better integrate cross-links at end
 
-### SQL vs NoSQL (8/10)
+### SQL vs NoSQL (~~8/10~~ → 9/10)
 **File:** `_posts/2023-04-27-sql-vs-no-sql-databases.md`
-- [ ] Add migration challenges: what happens when you chose wrong
-- [ ] Add cost comparison of managed services
-- [ ] Discuss operational complexity differences
-- [ ] Explain implications of MongoDB transactions vs Postgres transactions
+- [x] Add migration challenges: what happens when you chose wrong
+- [x] Add cost comparison of managed services
+- [x] Discuss operational complexity differences
+- [x] Explain implications of MongoDB transactions vs Postgres transactions
 
-### System Design Compendium (8/10)
+### System Design Compendium (~~8/10~~ → 9/10)
 **File:** `_posts/2023-04-25-system-design-compendium.md`
-- [ ] Improve generic intro
-- [ ] Standardize description style across entries
-- [ ] Add recommended reading order and prerequisites
+- [x] Improve generic intro
+- [x] Standardize description style across entries
+- [x] Add recommended reading order and prerequisites
 
-### Static Factory Method (8/10)
+### Static Factory Method (~~8/10~~ → 9/10)
 **File:** `_posts/2022-08-22-static-factory-method.md`
-- [ ] Add subtype selection code example (return different subtypes based on parameters)
-- [ ] Add testing-focused factory methods (`createDefault()`, `createForTest()`)
-- [ ] Clarify confusing sentence on line 46 about returned class not existing
+- [x] Add subtype selection code example (return different subtypes based on parameters)
+- [x] Add testing-focused factory methods (`createDefault()`, `createForTest()`)
+- [x] Clarify confusing sentence on line 46 about returned class not existing
 
-### Java Memory Management (8/10)
+### Java Memory Management (~~8/10~~ → 9/10)
 **File:** `_posts/2024-02-25-java-memory-management.md`
-- [ ] Add GC algorithm selection guidance ("For most web apps, use G1. Reach for ZGC only if...")
-- [ ] Add diagnostic tools: VisualVM, heap dumps, jcmd
-- [ ] Add common memory leak patterns in Java
-- [ ] Mention reference types (soft, weak, phantom)
-- [ ] Link to Pass by Value post to explain where references point
+- [x] Add GC algorithm selection guidance ("For most web apps, use G1. Reach for ZGC only if...")
+- [x] Add diagnostic tools: VisualVM, heap dumps, jcmd
+- [x] Add common memory leak patterns in Java
+- [x] Mention reference types (soft, weak, phantom)
+- [x] Link to Pass by Value post to explain where references point
 
-### Memory (Computer) (8/10)
+### Memory (Computer) (~~8/10~~ → 9/10)
 **File:** `_posts/2022-11-28-memory.md`
-- [ ] Fix inconsistent heading levels (line 57: `####` should be `###`)
-- [ ] Add virtual memory / OS paging section
-- [ ] Add JVM memory model mapping to physical RAM
-- [ ] Fix table access times notation consistency
-- [ ] Clarify cache line example phrasing ("next 15 integers" -> "16 elements total")
+- [x] Fix inconsistent heading levels (line 57: `####` should be `###`)
+- [x] Add virtual memory / OS paging section
+- [x] Add JVM memory model mapping to physical RAM
+- [x] Fix table access times notation consistency
+- [x] Clarify cache line example phrasing ("next 15 integers" -> "16 elements total")
 
-### Arrays (8/10)
+### Arrays (~~8/10~~ → 9/10)
 **File:** `_posts/2022-12-29-arrays.md`
-- [ ] Add proper introduction (currently jumps straight into "two types")
-- [ ] Be specific about growth factors: Java ArrayList = 1.5x, others = 2x
-- [ ] Explain worst-case resizing cost before introducing amortized analysis
-- [ ] Mention variable sliding window pattern
-- [ ] Follow own code comment style guide (`// Given`, `// When`, `// Then`)
+- [x] Add proper introduction (currently jumps straight into "two types")
+- [x] Be specific about growth factors: Java ArrayList = 1.5x, others = 2x
+- [x] Explain worst-case resizing cost before introducing amortized analysis
+- [x] Mention variable sliding window pattern
+- [x] Follow own code comment style guide (`// Given`, `// When`, `// Then`)
 
-### Hash Tables (8/10)
+### Hash Tables (~~8/10~~ → 9/10)
 **File:** `_posts/2023-01-21-hash-tables.md`
-- [ ] Lead opening with O(1) average-case guarantee
-- [ ] Emphasize hashCode/equals consistency requirement (common bug source)
-- [ ] Explain load factor 0.75 trade-off
-- [ ] Fix unbounded static cache in Fibonacci memoization
-- [ ] Connect rolling hash to Rabin-Karp algorithm
-- [ ] Improve ASCII table visualization
+- [x] Lead opening with O(1) average-case guarantee
+- [x] Emphasize hashCode/equals consistency requirement (common bug source)
+- [x] Explain load factor 0.75 trade-off
+- [x] Fix unbounded static cache in Fibonacci memoization
+- [x] Connect rolling hash to Rabin-Karp algorithm
+- [x] Improve ASCII table visualization
 
-### Stacks and Queues (8/10)
+### Stacks and Queues (~~8/10~~ → 9/10)
 **File:** `_posts/2023-02-03-stacks-and-queues.md`
-- [ ] Start with tangible example (undo/redo) instead of abstract ones
-- [ ] Explain WHY ArrayDeque is faster (Stack extends synchronized Vector)
-- [ ] Add concrete priority queue use case (hospital triage, job scheduling)
-- [ ] Expand deque section with stack+queue usage example
-- [ ] Mention circular buffers (ArrayDeque uses one internally)
+- [x] Start with tangible example (undo/redo) instead of abstract ones
+- [x] Explain WHY ArrayDeque is faster (Stack extends synchronized Vector)
+- [x] Add concrete priority queue use case (hospital triage, job scheduling)
+- [x] Expand deque section with stack+queue usage example
+- [x] Mention circular buffers (ArrayDeque uses one internally)
 
-### Microservices vs Monolith (8/10)
+### Microservices vs Monolith (~~8/10~~ → 9/10)
 **File:** `_posts/2022-08-31-microservices-vs-monolith.md`
-- [ ] Add modular monolith code example (Java package structure)
-- [ ] Discuss "distributed monolith" anti-pattern
-- [ ] Expand Strangler Fig pattern with implementation details
-- [ ] Add database splitting guidance for modular monolith
+- [x] Add modular monolith code example (Java package structure)
+- [x] Discuss "distributed monolith" anti-pattern
+- [x] Expand Strangler Fig pattern with implementation details
+- [x] Add database splitting guidance for modular monolith
 
-### Why Business Doesn't Allow Refactoring (8/10)
+### Why Business Doesn't Allow Refactoring (~~8/10~~ → 9/10)
 **File:** `_posts/2022-01-30-why-business-sometimes-doesnt-allow-for-refactoring.md`
-- [ ] Fix title grammar: "Why business is" -> "Why the business is" or "Why businesses are"
-- [ ] Add concrete before/after case study with DORA metrics
-- [ ] Address what to do when business still says no after presenting metrics
-- [ ] Mention prevention through TDD, pair programming, code review
+- [x] Fix title grammar: "Why business is" -> "Why the business is" or "Why businesses are"
+- [x] Add concrete before/after case study with DORA metrics
+- [x] Address what to do when business still says no after presenting metrics
+- [x] Mention prevention through TDD, pair programming, code review
 
-### Concurrency and Parallelism (8/10)
+### Concurrency and Parallelism (~~8/10~~ → 9/10)
 **File:** `_posts/2022-10-12-concurrency-and-parallelism.md`
-- [ ] Add code examples for race condition, deadlock, and starvation (currently just mentioned)
-- [ ] Replace `new Thread()` with ExecutorService/thread pool example
-- [ ] Mention modern concurrency: virtual threads (Project Loom), CompletableFuture
-- [ ] Clarify which workloads benefit from hyper-threading
+- [x] Add code examples for race condition, deadlock, and starvation (currently just mentioned)
+- [x] Replace `new Thread()` with ExecutorService/thread pool example
+- [x] Mention modern concurrency: virtual threads (Project Loom), CompletableFuture
+- [x] Clarify which workloads benefit from hyper-threading
 
-### Core Concepts Behind OOP (8/10)
+### Core Concepts Behind OOP (~~8/10~~ → 9/10)
 **File:** `_posts/2022-10-12-core-concepts-behind-oop.md`
-- [ ] Fix BankAccount: validate non-negative initial balance (breaks own invariant)
-- [ ] Complete StripePaymentProcessor: show how constructor dependencies are used
-- [ ] Define abstract Propulsion class used in Car constructor
-- [ ] Consider adding composition as complementary concept
+- [x] Fix BankAccount: validate non-negative initial balance (breaks own invariant)
+- [x] Complete StripePaymentProcessor: show how constructor dependencies are used
+- [x] Define abstract Propulsion class used in Car constructor
+- [x] Consider adding composition as complementary concept
 
-### Composition over Inheritance (8/10)
+### Composition over Inheritance (~~8/10~~ → 9/10)
 **File:** `_posts/2023-01-09-prefer-composition-over-inheritance.md`
-- [ ] Remove duplicate `#` heading on line 12 (conflicts with front matter title)
-- [ ] Improve Vehicle/Bicycle inheritance example (Bicycle inheriting start() is a strawman)
-- [ ] Add concrete example of when inheritance IS appropriate (AbstractList, template method)
-- [ ] Show concrete encapsulation violation example
+- [x] Remove duplicate `#` heading on line 12 (conflicts with front matter title)
+- [x] Improve Vehicle/Bicycle inheritance example (Bicycle inheriting start() is a strawman)
+- [x] Add concrete example of when inheritance IS appropriate (AbstractList, template method)
+- [x] Show concrete encapsulation violation example
 
-### Defining Software Architecture (8/10)
+### Defining Software Architecture (~~8/10~~ → 9/10)
 **File:** `_posts/2024-08-23-defining-software-architecture.md`
-- [ ] Add ArchUnit fitness function code example
-- [ ] Explain differences between similar characteristics (reliability vs availability, scalability vs elasticity)
-- [ ] Add trade-off discussion: optimizing one characteristic sacrifices another
-- [ ] Show concrete architecture decision example with code or diagram
+- [x] Add ArchUnit fitness function code example
+- [x] Explain differences between similar characteristics (reliability vs availability, scalability vs elasticity)
+- [x] Add trade-off discussion: optimizing one characteristic sacrifices another
+- [x] Show concrete architecture decision example with code or diagram
 
-### BigDecimal and BigInteger (8.5/10)
+### BigDecimal and BigInteger (~~8.5/10~~ → 9/10)
 **File:** `_posts/2021-11-02-bigdecimal-and-biginteger.md`
-- [ ] Clarify valueOf(double) vs new BigDecimal(String) phrasing (line 46)
-- [ ] Add HashSet surprise note: `3.0` and `3.00` are different in equals but same in compareTo
-- [ ] Expand BigInteger section slightly (primality testing is interesting but unexplored)
+- [x] Clarify valueOf(double) vs new BigDecimal(String) phrasing (line 46)
+- [x] Add HashSet surprise note: `3.0` and `3.00` are different in equals but same in compareTo
+- [x] Expand BigInteger section slightly (primality testing is interesting but unexplored)
 
-### Linked Lists (8.5/10)
+### Linked Lists (~~8.5/10~~ → 9/10)
 **File:** `_posts/2023-01-07-linked-lists.md`
-- [ ] **FIX:** Correct doubly linked list definition: it's about next AND previous pointers per node, not head/tail references (line 57)
-- [ ] Quantify pointer memory overhead (4x on 64-bit systems vs arrays)
-- [ ] Show what infinite loop mistake looks like in circular list traversal
-- [ ] Add sentinel node discussion
-- [ ] Ensure consistent null safety across all methods
+- [x] **FIX:** Correct doubly linked list definition: it's about next AND previous pointers per node, not head/tail references (line 57)
+- [x] Quantify pointer memory overhead (4x on 64-bit systems vs arrays)
+- [x] Show what infinite loop mistake looks like in circular list traversal
+- [x] Add sentinel node discussion
+- [x] Ensure consistent null safety across all methods
 
-### Specialized Storage Paradigms (8.5/10)
+### Specialized Storage Paradigms (~~8.5/10~~ → 9/10)
 **File:** `_posts/2023-04-28-specialized-storage-paradigms.md`
-- [ ] Quantify graph DB performance trade-offs (currently vague)
-- [ ] Minor: already one of the strongest posts, use as template for others
+- [x] Quantify graph DB performance trade-offs (currently vague)
+- [x] Minor: already one of the strongest posts, use as template for others
 
 ---
 

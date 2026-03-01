@@ -22,6 +22,9 @@ public class BankAccount {
     private BigDecimal balance;
 
     public BankAccount(BigDecimal initialBalance) {
+        if (initialBalance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Initial balance cannot be negative");
+        }
         this.balance = initialBalance;
     }
 
@@ -75,12 +78,12 @@ public class StripePaymentProcessor implements PaymentProcessor {
     @Override
     public PaymentResult process(PaymentRequest request) {
         // All the complexity is hidden behind this simple method:
-        // - input validation
-        // - currency conversion
         // - communication with Stripe API
         // - retry logic on transient failures
         // - transaction logging
-        return retryPolicy.execute(() -> stripeClient.charge(request));
+        PaymentResult result = retryPolicy.execute(() -> stripeClient.charge(request));
+        logger.log(request, result);
+        return result;
     }
 }
 ```
@@ -92,6 +95,10 @@ The caller simply invokes `processor.process(request)` without any knowledge of 
 **Inheritance** lets a class acquire the fields and methods of another class, creating an IS-A relationship. A Dog IS-A Animal. An ElectricCar IS-A Car.
 
 ```java
+abstract class Propulsion {
+    abstract void engage();
+}
+
 class Car {
 
     private final Propulsion propulsion;
@@ -124,7 +131,7 @@ class ElectricCar extends Car {
 
 Inheritance is powerful but should be used with care. Deep class hierarchies become rigid and hard to change. In many cases, composition (holding a reference to another object) is more flexible.
 
-> **Related post**: [Prefer Composition over Inheritance](/posts/prefer-composition-over-inheritance/)
+> **Related posts**: [Prefer Composition over Inheritance](/posts/prefer-composition-over-inheritance/), [Composition, Aggregation and Association](/posts/association-composition-aggregation/), [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/)
 
 ### Polymorphism
 
