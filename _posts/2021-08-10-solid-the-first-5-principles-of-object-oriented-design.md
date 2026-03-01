@@ -19,7 +19,7 @@ tags:
 
 ### Single-Responsibility Principle
 
-The **Single-Responsibility Principle** (SRP) states that a class should have one and only one reason to change, meaning that a class should have only one job. Let's look at a classic example of a simple book class:
+The **Single-Responsibility Principle** (SRP) states that a class should have one and only one reason to change, meaning that a class should have only one job. Let's look at a classic example with a simple book class:
 
 ```java
 public class Book {
@@ -32,7 +32,7 @@ public class Book {
 }
 ```
 
-We have a class that stores data about books. However, we can only store information, and we can't do much more. Let's add a print method. Now it is possible to print, but this code violates the single-responsibility principle we outlined earlier.
+This class stores data about a book. It has one clear reason to change: if the data model of a book changes. Now suppose someone adds printing responsibilities directly into this class.
 
 ```java
 public class Book {
@@ -51,7 +51,9 @@ public class Book {
 }
 ```
 
-To fix this class in accordance with the single-responsibility principle, we should create a separate class that deals only with printing information about the book.
+Now `Book` has two reasons to change: changes to the book data and changes to how we print. If we switch from console output to a REST API response, we have to touch the same class that holds our domain model. That is a violation of SRP.
+
+To fix this, we extract the printing concern into its own class.
 
 ```java
 public class BookPrinter {
@@ -66,7 +68,9 @@ public class BookPrinter {
 }
 ```
 
-This example illustrates that whether it's logging, validating, emailing, or anything else, we should have separate classes dedicated to a single concern. Don't worry about having more classes; this approach makes it easier to read, refactor, and maintain. Trust me, you wouldn't want to work with classes with thousands of lines.
+Now `Book` stays focused on book data, and `BookPrinter` handles output. The two change for completely independent reasons and can evolve separately. If we later need to add PDF export, we modify (or extend) `BookPrinter` without touching `Book` at all.
+
+This principle applies broadly: whether it's logging, validating, emailing, or anything else, we should have separate classes dedicated to a single concern. Don't worry about having more classes; this approach makes it easier to read, refactor, and maintain. Trust me, you wouldn't want to work with classes with thousands of lines.
 
 > **Takeaway:** Every class should have exactly one reason to change. If you find yourself modifying a class for two unrelated reasons, split it.
 
@@ -74,9 +78,9 @@ This example illustrates that whether it's logging, validating, emailing, or any
 
 The **Open-Closed Principle** (OCP) states that objects or entities should be open for extension but closed for modification.
 
-The code should be written so that, in the case of system development and the emergence of new business requirements, there is no need to change the existing code. If a single change causes many dependent modules to change, then this is a design that is difficult to modify. The OCP principle says that the program should be written so that introduced changes do not cause further changes. When this principle is respected, we add new code but do not change the existing one.
+Think about what happens when a new requirement arrives. If adding that feature means opening up existing, tested classes and editing their internals, every change carries the risk of breaking something that already works. The OCP says we should structure code so that new behavior is added by writing new code, not by modifying old code.
 
-For the OCP principle, the Strategy and Template Method patterns can be used. These are the most popular patterns that support OCP. Example:
+Design patterns like Strategy and Template Method are popular tools for achieving this. Here is a concrete example. Suppose we need a logging system that can send messages to different destinations. We start with an abstraction:
 
 ```java
 public interface MessageLogger {
@@ -85,7 +89,7 @@ public interface MessageLogger {
 }
 ```
 
-We will create separate classes for every different way of logging. The first class will be the Console Logger class, which will log messages to the console.
+Each destination gets its own class that implements this interface. The first one logs messages to the console.
 
 ```java
 public class ConsoleLogger implements MessageLogger {
@@ -96,7 +100,7 @@ public class ConsoleLogger implements MessageLogger {
 }
 ```
 
-The second class, FileLogger, will log data to a file.
+The second one writes to a file.
 
 ```java
 public class FileLogger implements MessageLogger {
@@ -108,15 +112,32 @@ public class FileLogger implements MessageLogger {
 }
 ```
 
-If we need to log to a database tomorrow, we add a new `DatabaseLogger` class that implements `MessageLogger`. The existing classes remain untouched.
+If we need to log to a database tomorrow, we add a new `DatabaseLogger` class that implements `MessageLogger`. The existing `ConsoleLogger` and `FileLogger` remain untouched. Any code that depends on the `MessageLogger` interface works with the new implementation automatically:
+
+```java
+MessageLogger logger = new ConsoleLogger();
+logger.log("Application started");
+
+// Later, switch to file logging without changing any calling code
+logger = new FileLogger();
+logger.log("Application started");
+```
 
 > **Takeaway:** Design your modules so that adding new behavior means writing new code (a new class or implementation), never editing existing, tested code.
 
 ### Liskov Substitution Principle
 
+The **Liskov Substitution Principle** (LSP) is often the least intuitive of the five, but it is arguably the most important for writing reliable polymorphic code.
+
 Robert C. Martin summarizes it: subtypes must be substitutable for their base types.
 
 Barbara Liskov introduced the concept in a 1987 keynote and later formalized it with Jeannette Wing in 1994: if for each object o1 of type S there is an object o2 of type T such that for all programs P defined in terms of T, the behavior of P is unchanged when o1 is substituted for o2, then S is a subtype of T.
+
+In plain terms: if your code works with a base type, it should continue to work correctly with any subtype, no surprises, no special cases.
+
+#### Why It Matters
+
+Consider what happens when LSP is violated. A caller writes code against a base class, trusts its contract, and then at runtime receives a subclass that behaves differently. The result is defensive `instanceof` checks scattered throughout the codebase, or worse, silent bugs.
 
 Let's look at a **bad example**.
 
@@ -134,7 +155,17 @@ The hawk can fly because it is a bird, but what about this:
 class Ostrich extends Bird {}
 ```
 
-Ostrich is a bird, but it can't fly. Ostrich class is a subtype of class Bird, but it shouldn't be able to use the fly method, which means we are breaking the LSP principle.
+An ostrich is a bird, but it cannot fly. The `Ostrich` class is a subtype of `Bird`, but it should not be able to use the `fly` method. This means we are breaking LSP.
+
+The real problem shows up in the calling code. Imagine a method that accepts any `Bird`:
+
+```java
+void makeBirdFly(Bird bird) {
+    bird.fly(); // What happens when bird is an Ostrich?
+}
+```
+
+This code trusts the contract that every `Bird` can `fly()`. When an `Ostrich` is passed in, we have a few bad options: throw an exception (surprising the caller), silently do nothing (hiding a logic error), or force the caller to check `instanceof` before calling `fly()`. All of these defeat the purpose of polymorphism.
 
 Now let's look at a **good example**.
 
@@ -149,11 +180,23 @@ class Hawk extends FlyingBird {}
 class Ostrich extends Bird {}
 ```
 
-> **Takeaway:** Any subclass must honor the contract of its parent. Callers should never need to know which subclass they are working with.
+Why is this better? Because the `fly()` method now only exists on `FlyingBird`, and every subclass of `FlyingBird` genuinely can fly. A method that needs flying behavior asks for a `FlyingBird`, not a generic `Bird`:
+
+```java
+void makeBirdFly(FlyingBird bird) {
+    bird.fly(); // Safe: every FlyingBird honors this contract
+}
+```
+
+The compiler itself prevents us from passing an `Ostrich` to `makeBirdFly()`. We have moved the constraint from runtime (where it causes bugs) to compile time (where it causes a build error). That is the payoff of respecting LSP: the type system works for you rather than against you.
+
+> **Takeaway:** Any subclass must honor the contract of its parent. Callers should never need to know which subclass they are working with. If substituting a subclass changes behavior in unexpected ways, the hierarchy needs rethinking.
 
 ### Interface Segregation Principle
 
-The **Interface Segregation Principle** (ISP) states that no client should be forced to depend on methods it does not use. Imagine an interface with many methods in our codebase and that many of our classes implement this interface, although only some of its methods are relevant to them. In our case, the Athlete interface is an interface with some actions of an athlete:
+The **Interface Segregation Principle** (ISP) states that no client should be forced to depend on methods it does not use. This problem typically arises when a single interface grows to cover too many responsibilities, and implementors end up with empty method bodies or `UnsupportedOperationException` throws just to satisfy the compiler.
+
+Consider an `Athlete` interface that tries to capture everything an athlete might do:
 
 ```java
 public interface Athlete {
@@ -168,7 +211,7 @@ public interface Athlete {
 }
 ```
 
-We have added methods compete, highJump, longJump, and swim. Suppose that John Smith is a professional swimmer. By implementing the Athlete interface, we have to implement methods that John will never use, like high or long jump.
+This interface bundles together competing, swimming, and jumping. Suppose John Smith is a professional swimmer. By implementing the `Athlete` interface, we are forced to implement methods that John will never use, like high jump and long jump. Notice the empty method bodies:
 
 ```java
 public class JohnSmith implements Athlete {
@@ -192,7 +235,7 @@ public class JohnSmith implements Athlete {
 }
 ```
 
-We will follow the interface segregation principle and refactor the original interface:
+Those empty `highJump()` and `longJump()` methods are a code smell. They signal that the interface is too broad. To fix this, we split the original interface along behavioral lines:
 
 ```java
 public interface Athlete {
@@ -219,7 +262,7 @@ public interface JumpingAthlete extends Athlete {
 }
 ```
 
-And therefore, John Smith will not have to implement actions that he is not capable of performing:
+Now John Smith only implements the interface that matches his abilities, with no dead code:
 
 ```java
 public class JohnSmith implements SwimmingAthlete {
@@ -376,10 +419,38 @@ public class Fan implements Switchable {
 }
 ```
 
-Now our code is flexible for changes, and high-level classes don't depend on low-level classes.
+Now our code is flexible. The high-level `ElectricPowerSwitch` depends only on the `Switchable` abstraction. We can wire them together like this:
+
+```java
+Switchable bulb = new LightBulb();
+Switch lightSwitch = new ElectricPowerSwitch(bulb);
+lightSwitch.press(); // LightBulb: Bulb turned on...
+lightSwitch.press(); // LightBulb: Bulb turned off...
+
+Switchable fan = new Fan();
+Switch fanSwitch = new ElectricPowerSwitch(fan);
+fanSwitch.press(); // Fan: Fan turned on...
+```
+
+The same `ElectricPowerSwitch` class controls both devices. Adding a new device (say, a `GarageDoor`) means creating one new class that implements `Switchable`. The switch, the interface, and every existing device stay untouched.
 
 > **Takeaway:** Depend on abstractions (interfaces), not on concrete implementations. This keeps high-level policy decoupled from low-level details.
 
-In practice, wiring all these abstractions by hand becomes tedious in larger applications. Dependency Injection (DI) frameworks such as Spring (Java), Guice (Java), or Dagger (Android/Java) automate this process. They manage object creation and inject the correct implementations at runtime based on configuration or annotations, so you can focus on defining clean interfaces while the framework takes care of the plumbing.
+In practice, wiring all these abstractions by hand becomes tedious in larger applications. **Dependency Injection** (DI) frameworks such as Spring (Java), Guice (Java), or Dagger (Android/Java) automate this process. They manage object creation and inject the correct implementations at runtime based on configuration or annotations, so you can focus on defining clean interfaces while the framework takes care of the plumbing.
+
+### When SOLID Goes Too Far
+
+SOLID principles are guidelines, not laws. Applied without judgment, they can lead to over-engineering that makes a codebase harder to work with rather than easier.
+
+A few signs that SOLID is being over-applied:
+
+* **Premature abstraction.** Creating an interface for a class that has exactly one implementation and no foreseeable reason to have a second one. This adds indirection without adding value. If you have a `UserRepository` interface backed by a single `PostgresUserRepository`, ask yourself whether there is a realistic second implementation. If the answer is "maybe someday," you probably do not need the interface yet.
+* **Explosion of tiny classes.** Taking SRP too literally can scatter related logic across dozens of classes that are hard to navigate. A class with two closely related responsibilities (say, validating and saving a form) might be perfectly fine as a single cohesive unit. SRP is about reasons to change, not about counting methods.
+* **Abstraction layers that mirror each other.** When every concrete class has a matching interface, every service has a matching "port," and you need to navigate five files to understand a single operation, the abstractions are not earning their keep.
+* **Speculative generality.** Applying OCP by designing extension points that nobody actually needs. Writing a plugin system for something that will only ever have one variant adds complexity today for flexibility that may never be used.
+
+The key question is always: does this abstraction make the code easier to understand, test, or extend right now, or am I adding it "just in case"? I have personally refactored codebases where over-application of SOLID created more problems than it solved, with interfaces that had one implementation, factory factories, and service classes that delegated every call to yet another service class.
+
+A good rule of thumb: apply SOLID when you feel pain (a class is hard to test, a change ripples through many files, a new requirement forces you to modify existing code). Don't apply it preemptively to code that is simple and stable.
 
 > **Related post:** [Inversion of Control and Dependency Injection](/posts/inversion-of-control-and-the-dependency-injection/)
