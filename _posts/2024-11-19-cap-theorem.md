@@ -13,7 +13,7 @@ tags:
 
 #### What is CAP theorem?
 
-That statement is quite old, as it was first presented as a conjecture in 2000 by Eric Brewer at a conference named 'Principles of Distributed Computing', where the presentation was titled 'Towards robust distributed systems'. Two years later, in 2002, Seth Gilbert and Nancy Lynch formally proved the conjecture, elevating it from an educated intuition to a proven theorem.
+The CAP theorem was formally introduced in 2000, when Eric Brewer presented it as a conjecture at a conference named 'Principles of Distributed Computing', where the presentation was titled 'Towards robust distributed systems'. Two years later, in 2002, Seth Gilbert and Nancy Lynch formally proved the conjecture, elevating it from an educated intuition to a proven theorem.
 That's why its alternative name is the Brewer theorem.
 The presentation can be found [here](https://people.eecs.berkeley.edu/~brewer/cs262b-2004/PODC-keynote.pdf).
 
@@ -22,8 +22,6 @@ Generally, its statement sounds rather simple, namely every distributed system c
 ![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/venn-diagram-cap-light.png){: .light }
 ![img]({{site.url}}/assets/blog_images/2023-02-19-cap-theorem/venn-diagram-cap-dark.png){: .dark }
 
-
-<br>
 
 #### Consistency
 Consistency in a distributed system is not a binary concept; it's not simply a matter of a system being consistent or inconsistent. Instead, consistency exists along a spectrum ranging from more relaxed to stricter levels. The position of a system on this spectrum influences whether anomalies related to read and write operations may occur.
@@ -64,8 +62,6 @@ In the context of a system, signifies that every functioning node reliably provi
 Is the capability of a distributed system to continue functioning despite communication breakdowns, lost connections between nodes, or even data loss. Essentially, it ensures that the system remains operational when facing network partitions, disruptions between nodes, or data loss events.
 
 
-<br>
-
 
 #### CP (Consistency and Partition tolerance)
 
@@ -80,7 +76,6 @@ If partitioning occurs between the leader and follower nodes in this model, the 
 
 From the perspective of the CAP theorem, this model guarantees consistency, as the transaction was not committed. When requesting data from either the leader or follower nodes, the data will be consistent and have the same nickname. The model also guarantees partitioning tolerance, as the system remains operational even if the connection between the leader and follower nodes is lost. However, the model does not guarantee availability, as even though the node is operational, it returns an error. Therefore, from a CAP perspective, this model guarantees CP (consistency and partition tolerance).
 
-<br>
 
 #### AP (Availability and Partition tolerance)
 
@@ -92,7 +87,6 @@ In this scenario, when the customer requests data from the leader, they will rec
 
 In this model, we guarantee Availability and Partition Tolerance, as even though partitioning occurs, the system still remains operational. However, we sacrifice Consistency to achieve availability, as every node will respond to requests without error, so the client may have no idea that something went wrong. The cost, as mentioned, is consistency, as different nodes may return different data.
 
-<br>
 
 #### CA (Consistency and Availability)
 
@@ -102,11 +96,20 @@ In the CA model, the focus is on maintaining both data consistency and system av
 
 It is important to note that in distributed systems, the CA model prioritizes Consistency and Availability, sacrificing Partition Tolerance in the process.
 
-<br>
+
+#### Real-World CAP Classifications
+
+It helps to map these categories to actual databases:
+
+- **AP (Availability + Partition Tolerance):** Cassandra, DynamoDB, CouchDB. These systems favor availability and will continue serving requests during a partition, at the cost of returning potentially stale data.
+- **CP (Consistency + Partition Tolerance):** PostgreSQL with synchronous replication, etcd, ZooKeeper, HBase. These systems favor consistency and will reject requests or become unavailable rather than return inconsistent data during a partition.
+
+Keep in mind that these classifications are not always absolute. Many databases are configurable (for example, Cassandra can be tuned toward stronger consistency by requiring quorum reads and writes), so the CAP category often depends on how the system is set up rather than being a fixed property of the technology itself.
+
 
 #### Choose two out of three, right?
 
-I guess that most people would choose the CA (Consistency and Availability) model, assuming that partitioning events are rare. However, partitioning can and will likely happen eventually, and the chances of it occurring increase over time and with the number of nodes. In such cases, we might not know how to handle it effectively.
+Most people would instinctively choose the CA (Consistency and Availability) model, assuming that partitioning events are rare. However, partitioning can and will likely happen eventually, and the chances of it occurring increase over time and with the number of nodes. In such cases, we might not know how to handle it effectively.
 
 The proper way to understand and think about the CAP theorem is by considering what we want to prioritize when a partition event has already occurred. We need to decide whether to sacrifice consistency to keep the system available or make the system unavailable to preserve consistency. In the end, we would always have a system that is either CP or AP. Of course, CA might still be fulfilled if we don't have network issues, and if there's only a 5% chance of failure and partitioning, then we still have a 95% chance that the system may be CA. However, it's not the same as simply choosing two out of three and forgetting about the third one, the network issues, as that would be a wrong assumption, which also results from [Fallacies of distributed computing](https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing).
 
@@ -118,7 +121,6 @@ On the other hand, think about a software system that may have an impact on huma
 
 It is worth noting that "Consistency" in the CAP theorem means something entirely different from "Consistency" in ACID (the database transaction guarantee). CAP Consistency refers to linearizability -- the guarantee that all nodes in a distributed system see the same data at the same time. ACID Consistency, on the other hand, refers to data integrity constraints -- the guarantee that a transaction brings the database from one valid state to another, honoring all defined rules, foreign keys, and invariants. Conflating these two leads to confusion, especially when evaluating databases that claim to be "consistent."
 
-<br>
 
 #### PACELC Theorem
 
@@ -128,6 +130,13 @@ This captures a practical reality: even when no partition is occurring, enforcin
 
 PACELC provides a more nuanced framework for reasoning about distributed system design than CAP alone.
 
-<br>
 
 In summary, understanding the CAP theorem involves evaluating the trade-offs between consistency, availability, and partition tolerance based on the specific requirements and goals of the system. The choice will depend on the nature of the application and its tolerance for data inconsistency or unavailability during partition events.
+
+### References
+
+* Seth Gilbert and Nancy Lynch, "Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services," ACM SIGACT News 33, no. 2 (2002)
+* Martin Kleppmann, *Designing Data-Intensive Applications* (O'Reilly, 2017)
+* Daniel Abadi, "Consistency Tradeoffs in Modern Distributed Database System Design," IEEE Computer 45, no. 2 (2012)
+
+> **Related posts**: [Availability](/posts/availability/), [Replication And Sharding](/posts/replication-and-sharding/), [SQL vs NoSQL Databases](/posts/sql-vs-no-sql-databases/)

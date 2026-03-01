@@ -171,4 +171,10 @@ The Classic style gives you tests that catch real bugs, survive refactoring, and
 
 The trap to avoid is dogmatic purism in either direction. Mocking everything creates a parallel universe of tests that pass while production breaks. Mocking nothing makes tests slow, brittle to infrastructure changes, and painful to set up. The practical middle ground, guided by heuristics like Pilimon's readability-vs-responsibility distinction, is where I have seen teams write the most effective test suites.
 
+### References
+
+* Martin Fowler, [Mocks Aren't Stubs](https://martinfowler.com/articles/mocksArentStubs.html) (2007)
+* Vladimir Khorikov, *Unit Testing: Principles, Practices, and Patterns* (Manning, 2020)
+* Gerard Meszaros, *xUnit Test Patterns: Refactoring Test Code* (Addison-Wesley, 2007)
+
 > **Related posts**: [Difference between @Mock and @MockBean](/posts/difference-between-mock-and-mock-bean/)

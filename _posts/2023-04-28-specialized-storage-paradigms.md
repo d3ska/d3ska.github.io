@@ -97,8 +97,7 @@ Time-windowed aggregation is a first-class concept in TSDBs. Queries like "avera
 ### Graph Database
 
 Graph databases store data using a graph data model, allowing data entries to have explicitly defined relationships,
-similar to nodes and edges in a graph. They leverage their graph structure to perform complex queries on deeply
-connected data efficiently.
+similar to nodes and edges in a graph. They can traverse millions of relationships in milliseconds because each node physically stores pointers to its adjacent nodes and edges (**index-free adjacency**). This means the cost of a traversal step is constant, regardless of the total size of the graph. By contrast, a relational database must execute JOIN operations for each hop, and each JOIN typically requires an index lookup whose cost grows logarithmically with table size. For multi-hop queries (e.g. "friends of friends of friends"), a graph database performs a fixed number of pointer dereferences per hop, while a relational database compounds JOIN costs at every level, making deep traversals orders of magnitude slower.
 
 Graph databases are often preferred over relational databases when dealing with systems where data points naturally form
 a graph with multiple levels of relationships, such as social networks.
@@ -177,3 +176,5 @@ The `::geography` cast tells PostGIS to treat coordinates as points on a spheric
 | **Spatial Database** | Geographic or geometric data (maps, proximity search, route planning) | Non-spatial data. Workloads that never query by location |
 
 In practice, production systems often combine multiple paradigms. A ride-sharing application, for example, might use a relational database for user accounts and trip records, blob storage for driver documents and receipts, a spatial database for real-time proximity matching, and a TSDB for tracking ride metrics and surge pricing signals.
+
+> **Related posts**: [SQL vs NoSQL Databases](/posts/sql-vs-no-sql-databases/), [Replication And Sharding](/posts/replication-and-sharding/)

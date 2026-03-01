@@ -12,8 +12,6 @@ tags:
 
 Today no one doubts that tests are essential and are first-class citizens of our repositories. I hope so at least. But even though most teams write tests, it is worth stepping back and understanding **why** they matter so much. Let me walk through the key reasons, with code to back them up.
 
-> **Related posts**: For the business and ROI perspective on testing, see [The Economics of Software Testing]({{site.url}}/posts/economy-of-testing/). For practical advice on writing good tests, see [Best Practices for Writing Effective and Reliable Tests]({{site.url}}/posts/best-practices-for-writing-effective-and-reliable-tests/).
-
 ### Tests as a Design Feedback Tool
 
 Tests are the first consumer of your code. If a test is painful to set up, the production code is telling you something. Consider this constructor:
@@ -99,8 +97,8 @@ void shouldRoundUpWhenItemsDontFillLastPage() {
 
 This test would fail, forcing a fix to `(totalItems + itemsPerPage - 1) / itemsPerPage`. This is **shift-left testing** in action: catching the bug at the developer's desk instead of in production, where it might require hours of debugging and a hotfix deployment.
 
-![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/shift-left-testing-light.png){: .light }
-![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/shift-left-testing-dark.png){: .dark }
+![img]({{site.url}}/assets/blog_images/2021-08-09-is-it-worth-to-write-tests/shift-left-testing-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2021-08-09-is-it-worth-to-write-tests/shift-left-testing-dark.png){: .dark }
 
 ### Faster Feedback Loop
 
@@ -133,8 +131,8 @@ This test documents a likely bug: the system applies discounts even for expired 
 
 Test-Driven Development amplifies every benefit listed above. The cycle is simple: write a failing test, write just enough code to make it pass, then refactor.
 
-![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/test-driven-development-light.png){: .light }
-![img]({{site.url}}/assets/blog_images/2021-09-09-is-it-worth-to-writh-tests/test-driven-development-dark.png){: .dark }
+![img]({{site.url}}/assets/blog_images/2021-08-09-is-it-worth-to-write-tests/test-driven-development-light.png){: .light }
+![img]({{site.url}}/assets/blog_images/2021-08-09-is-it-worth-to-write-tests/test-driven-development-dark.png){: .dark }
 
 By writing tests first, I am forced to think about design upfront, which leads to cleaner interfaces. The tests themselves become living documentation of the intended behavior from the very start. Because TDD catches issues the moment they are introduced, it also maximizes the cost savings of shift-left testing. It is a great practice and I highly recommend trying it.
 
@@ -142,4 +140,8 @@ That said, I also believe that once you have internalized the lessons TDD teache
 
 ### Conclusion
 
-Tests are not overhead. They are a design tool, a documentation system, a safety net, and a debugging accelerator all at once. The cost of writing them is paid back many times over in confidence, speed, and maintainability. If you want to explore the financial case for testing, see [The Economics of Software Testing]({{site.url}}/posts/economy-of-testing/). For practical advice on making your tests clean and reliable, see [Best Practices for Writing Effective and Reliable Tests]({{site.url}}/posts/best-practices-for-writing-effective-and-reliable-tests/).
+Tests are not overhead. They are a design tool, a documentation system, a safety net, and a debugging accelerator all at once. The cost of writing them is paid back many times over in confidence, speed, and maintainability.
+
+Over the years, I have noticed that codebases with strong test suites share something in common: developers actually enjoy working in them. There is a compounding effect where tests give you confidence, confidence lets you move faster, and moving faster means you ship more value. The teams I have seen struggle the most are not the ones that write too many tests, they are the ones that wrote too few and now treat every change like walking on thin ice. Investing in tests early is one of the highest-leverage decisions you can make on any project.
+
+> **Related posts**: [The Economics of Software Testing](/posts/economy-of-testing/), [Best Practices for Writing Effective and Reliable Tests](/posts/best-practices-for-writing-effective-and-reliable-tests/), [Key Types of Testing in Software Development](/posts/key-types-of-testing-in-software-development/), [Schools of Unit Tests](/posts/schools-of-unit-tests/), [Custom Assertions with AssertJ](/posts/custom-assertions-with-assertj/)

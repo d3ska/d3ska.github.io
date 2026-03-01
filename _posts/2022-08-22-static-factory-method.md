@@ -40,9 +40,50 @@ It never creates a new `Boolean` object. It always returns one of the two cached
 
 `EnumSet` is a great example: it has no public constructors. Its static factory `EnumSet.of(...)` returns either a `RegularEnumSet` (backed by a single `long`, for enums with 64 or fewer elements) or a `JumboEnumSet` (backed by a `long[]`, for larger enums). The caller just sees `EnumSet` and the JDK is free to change the internal implementations without breaking any code.
 
+Here is a custom example of the same idea. The `Shape.of` method picks the right subclass based on the input:
+
+```java
+public interface Shape {
+    double area();
+
+    static Shape of(String type, double size) {
+        return switch (type.toLowerCase()) {
+            case "circle"    -> new Circle(size);
+            case "square"    -> new Square(size);
+            default          -> throw new IllegalArgumentException("Unknown shape: " + type);
+        };
+    }
+}
+
+class Circle implements Shape {
+    private final double radius;
+
+    Circle(double radius) { this.radius = radius; }
+
+    @Override
+    public double area() { return Math.PI * radius * radius; }
+}
+
+class Square implements Shape {
+    private final double side;
+
+    Square(double side) { this.side = side; }
+
+    @Override
+    public double area() { return side * side; }
+}
+```
+
+```java
+Shape circle = Shape.of("circle", 5.0);
+Shape square = Shape.of("square", 3.0);
+```
+
+The caller never mentions `Circle` or `Square`. If a `Triangle` implementation is added tomorrow, existing client code does not change.
+
 **Encapsulate construction logic.** When object creation involves validation, default values, or derived fields, a static factory keeps that logic out of the constructor. The constructor stays simple (just field assignment), and the factory method handles everything else.
 
-**Decouple from concrete classes.** The class of the returned object need not exist when the class containing the factory method is written. This is the foundation for service-provider frameworks like JDBC. When you call `DriverManager.getConnection(url)`, the actual `Connection` implementation comes from a driver JAR that did not exist when `DriverManager` was compiled.
+**Decouple from concrete classes.** Because the factory method's return type can be an interface, the concrete implementation class does not need to exist at the time the factory is written. New implementations can be added later without changing the factory's API. This is the foundation for service-provider frameworks like JDBC. When you call `DriverManager.getConnection(url)`, the return type is the `Connection` interface. The actual implementation comes from a database driver JAR (MySQL, PostgreSQL, etc.) that was developed entirely independently of `DriverManager`.
 
 ### Cons
 
@@ -131,8 +172,56 @@ Client client = Client.withDefaultCountry("John", "001111111");
 
 The method name `withDefaultCountry` tells the caller exactly what is happening. A second constructor with two `String` parameters would be ambiguous and would not even compile if the three-parameter constructor already existed (both would have overlapping erasure in some cases).
 
+### Factory Methods for Testing
+
+Static factory methods can also make tests easier to write and read. Instead of constructing objects with long parameter lists in every test, you can provide factory methods with sensible defaults:
+
+```java
+public class Order {
+
+    private final String customer;
+    private final String product;
+    private final int quantity;
+    private final String shippingAddress;
+
+    private Order(String customer, String product, int quantity, String shippingAddress) {
+        this.customer = customer;
+        this.product = product;
+        this.quantity = quantity;
+        this.shippingAddress = shippingAddress;
+    }
+
+    public static Order of(String customer, String product, int quantity, String shippingAddress) {
+        return new Order(customer, product, quantity, shippingAddress);
+    }
+
+    /** Creates an Order with sensible defaults for tests. */
+    public static Order createDefault() {
+        return new Order("Test Customer", "Test Product", 1, "123 Test Street");
+    }
+
+    /** Creates a test Order where only the product matters. */
+    public static Order createForTest(String product) {
+        return new Order("Test Customer", product, 1, "123 Test Street");
+    }
+
+    // getters omitted for brevity
+}
+```
+
+```java
+// In production code
+Order order = Order.of("Alice", "Laptop", 2, "456 Main St");
+
+// In tests: focus on what matters, ignore irrelevant details
+Order defaultOrder = Order.createDefault();
+Order laptopOrder  = Order.createForTest("Laptop");
+```
+
+This pattern keeps tests focused. When only one field is relevant to the test, the rest get reasonable defaults and do not clutter the setup.
+
 ### When to Prefer Static Factory Methods
 
 Use static factory methods when the class has multiple ways of being constructed and meaningful names would help the caller, when you want control over instance creation (caching, singletons, returning subtypes), or when construction logic is complex enough that it should not live inside a constructor. For simple value classes with one obvious way to construct them, a plain public constructor is perfectly fine.
 
-> **Related post:** [Builder Design Pattern](/posts/builder-design-pattern/)
+> **Related posts**: [Builder Design Pattern](/posts/builder-design-pattern/), [Singleton Pattern](/posts/singleton-pattern/)

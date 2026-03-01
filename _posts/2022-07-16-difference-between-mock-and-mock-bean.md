@@ -38,8 +38,6 @@ public class OrderService {
 }
 ```
 
-<br>
-
 #### @Mock
 
 The `@Mock` annotation is interchangeable with the `Mockito.mock()` method. I can mock either a class or an interface. To activate the annotation, I put `@ExtendWith(MockitoExtension.class)` above the test class, or invoke `MockitoAnnotations.openMocks(this)` in the setup block. (Note: the older `initMocks()` method has been deprecated since Mockito 2.x; prefer `openMocks()` instead.)
@@ -82,9 +80,7 @@ class OrderServiceTest {
 }
 ```
 
-No Spring context is loaded here. Mockito instantiates `OrderService` directly, injecting the mock `OrderRepository` through the constructor. The test runs in milliseconds.
-
-<br>
+No Spring context is loaded here. Mockito instantiates `OrderService` directly, injecting the mock `OrderRepository` through the constructor. A typical test like this runs in under 50ms.
 
 #### @MockBean
 
@@ -130,9 +126,7 @@ class OrderServiceIntegrationTest {
 
 The test logic looks almost identical, but the execution is very different. Spring boots the entire application context, creates `OrderService` through its normal bean lifecycle, and the `@MockBean` annotation swaps the real `OrderRepository` with a mock inside that context. This means Spring's `@Transactional` boundaries, validation, and any AOP advice around `OrderService` are all active.
 
-Keep in mind that `@MockBean` causes the Spring application context to be reloaded (or a new context to be created) when the set of mocked beans differs between test classes. In large projects, this can noticeably slow down the test suite. Where possible, I try to keep the same `@MockBean` configuration across test classes to maximize context caching.
-
-<br>
+Keep in mind that `@MockBean` causes the Spring application context to be reloaded (or a new context to be created) when the set of mocked beans differs between test classes. Context startup alone typically takes 2 to 5 seconds per unique configuration, and in large projects with many different `@MockBean` combinations this adds up fast. Where possible, I try to keep the same `@MockBean` configuration across test classes to maximize context caching.
 
 #### Side-by-Side Comparison
 
@@ -146,8 +140,6 @@ Keep in mind that `@MockBean` causes the Spring application context to be reload
 | **Wiring** | `@InjectMocks` (constructor injection) | Spring's dependency injection |
 | **AOP / Transactions** | Not active | Active |
 | **Best for** | Unit tests | Integration tests |
-
-<br>
 
 #### When to Use Which
 
@@ -163,12 +155,9 @@ Keep in mind that `@MockBean` causes the Spring application context to be reload
 - I need to replace a specific bean while keeping the rest of the real application wiring
 - I am testing a `@RestController` with `@WebMvcTest` and need to mock a service layer bean
 
-**A common mistake** I have seen is using `@MockBean` in tests that do not actually need the Spring context. This turns what should be a fast unit test into a slow integration test for no benefit. As a rule of thumb: if the test class does not have `@SpringBootTest`, `@WebMvcTest`, `@DataJpaTest`, or a similar Spring test annotation, I use `@Mock`.
+**A common mistake** I have seen is using `@MockBean` in tests that do not actually need the Spring context. This turns what should be a fast unit test into a slow integration test for no benefit. As a rule of thumb: if the test class does not have `@SpringBootTest`, `@WebMvcTest`, `@DataJpaTest`, or a similar Spring test annotation, I use `@Mock`.[^1]
 
-<br>
+[^1]: Both annotations are available in JUnit 5. `@ExtendWith(MockitoExtension.class)` comes from the Mockito library (`mockito-junit-jupiter`), while `@ExtendWith(SpringExtension.class)` comes from the Spring Test module. `@SpringBootTest` already includes `@ExtendWith(SpringExtension.class)` implicitly.
 
-\* Both annotations are available in JUnit 5. `@ExtendWith(MockitoExtension.class)` comes from the Mockito library (`mockito-junit-jupiter`), while `@ExtendWith(SpringExtension.class)` comes from the Spring Test module. `@SpringBootTest` already includes `@ExtendWith(SpringExtension.class)` implicitly.
-
-
-
+> **Related posts**: [Schools of Unit Testing](/posts/schools-of-unit-tests/), [Custom Assertions with AssertJ](/posts/custom-assertions-with-assertj/)
 

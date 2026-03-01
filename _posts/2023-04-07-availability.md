@@ -135,4 +135,10 @@ High availability is not free. Every additional nine comes with costs that must 
 
 The right availability target depends on what your system does, who depends on it, and what downtime actually costs. A payment processing system like Stripe needs near-perfect uptime for its transaction pipeline, but its internal analytics dashboard can tolerate occasional blips. Design for the availability each component actually requires, not the highest number you can think of.
 
+### References
+
+* [AWS Service Level Agreements](https://aws.amazon.com/legal/service-level-agreements/)
+* [Google Cloud Service Level Agreements](https://cloud.google.com/terms/sla)
+* [Summary of the Amazon S3 Service Disruption in the Northern Virginia (US-EAST-1) Region](https://aws.amazon.com/message/41926/) (2017 outage post-mortem)
+
 > **Related posts**: [Load Balancing](/posts/load-balancers/), [Replication And Sharding](/posts/replication-and-sharding/), [Network Protocols](/posts/network-protocols/)

@@ -146,7 +146,91 @@ Today, several modern alternatives handle the same publish-subscribe need:
 
 The Observer pattern fits naturally when the set of interested parties changes at runtime, when consumers are expected to grow over time, or in event-driven architectures where decoupling producers from consumers is a core requirement. If your scenario involves a fixed, small set of consumers that are unlikely to change, direct method calls are simpler and more debuggable.
 
+### Unsubscribing Observers
+
+Registration is only half the contract. Any observer that subscribes should also unsubscribe when it no longer needs updates. This matters in practice because objects that stay registered keep receiving notifications they cannot handle, and (as the next section explains) they cannot be garbage collected.
+
+```java
+Newsletter newsletter = new Newsletter();
+GmailUser gmail = new GmailUser();
+
+newsletter.subscribe(gmail);
+newsletter.setEmails(List.of(new EmailArticle("Welcome")));
+
+// Gmail user no longer interested
+newsletter.unsubscribe(gmail);
+
+// This update is only delivered to observers still registered
+newsletter.setEmails(List.of(new EmailArticle("Weekly Digest")));
+```
+
+A good rule of thumb: if your observer has a defined lifecycle (a UI component that closes, a service that shuts down), always unsubscribe in the cleanup path. In frameworks like Spring, that might be a `@PreDestroy` method. In Android, it is typically `onStop` or `onDestroy`.
+
+### Memory Leaks and Observer Lifecycle
+
+One of the most common pitfalls with the Observer pattern is **memory leaks caused by forgotten subscriptions**. The `EventManager` holds a strong reference to every registered observer. If an observer is no longer used by the rest of the application but is never unsubscribed, it cannot be garbage collected because the manager still points to it. Over time this leads to a growing list of stale observers, wasted memory, and potentially surprising side effects when stale observers still react to events.
+
+This problem is especially dangerous in long-running applications and UI frameworks where components are created and destroyed frequently.
+
+One mitigation is to store observers using **`WeakReference`** instead of strong references. A `WeakReference` allows the garbage collector to reclaim the observer when no other strong reference to it exists:
+
+```java
+public class WeakEventManager<T> {
+
+    private final List<WeakReference<Observer<T>>> observers = new ArrayList<>();
+
+    public void subscribe(Observer<T> observer) {
+        observers.add(new WeakReference<>(observer));
+    }
+
+    public void notifyObservers(T event) {
+        Iterator<WeakReference<Observer<T>>> it = observers.iterator();
+        while (it.hasNext()) {
+            Observer<T> obs = it.next().get();
+            if (obs != null) {
+                obs.update(event);
+            } else {
+                it.remove(); // clean up collected references
+            }
+        }
+    }
+}
+```
+
+Weak references are not a silver bullet. They make the observer's lifecycle less explicit, and the observer can disappear at any garbage collection cycle, which may be surprising. Explicit `unsubscribe` calls remain the clearest and most predictable approach. Use weak references as a safety net when you cannot guarantee that every subscriber will clean up after itself.
+
+### Thread Safety
+
+The basic `EventManager` shown earlier is not thread-safe. If one thread calls `subscribe` or `unsubscribe` while another thread is inside `notifyObservers`, iterating over the list, the result is a **`ConcurrentModificationException`**. This is a common problem in multithreaded applications where registration and notification happen on different threads.
+
+The simplest fix is to replace `ArrayList` with **`CopyOnWriteArrayList`**:
+
+```java
+public class ConcurrentEventManager<T> {
+
+    private final List<Observer<T>> observers = new CopyOnWriteArrayList<>();
+
+    public void subscribe(Observer<T> observer) {
+        observers.add(observer);
+    }
+
+    public void unsubscribe(Observer<T> observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers(T event) {
+        for (Observer<T> observer : observers) {
+            observer.update(event);
+        }
+    }
+}
+```
+
+`CopyOnWriteArrayList` creates a fresh copy of the underlying array on every write (subscribe or unsubscribe), so iteration is always safe and lock-free. The trade-off is that writes become more expensive. This works well when observers change infrequently relative to how often notifications fire, which is the typical case. For high-write scenarios, explicit synchronization or a `ReadWriteLock` may be a better fit.
+
 ### References
 
 * [Observer - Refactoring Guru](https://refactoring.guru/design-patterns/observer)
 * [Observer in Java - Refactoring Guru](https://refactoring.guru/design-patterns/observer/java/example)
+
+> **Related posts**: [Strategy Design Pattern](/posts/strategy-design-pattern/), [Facade Design Pattern](/posts/facade-design-pattern/), [Specification Design Pattern](/posts/specification-design-pattern/)

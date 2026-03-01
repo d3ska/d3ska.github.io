@@ -14,7 +14,7 @@ Where a linked list differs from an array is how it's implemented, or rather how
 
 When we store an array for example [3,0,6,7] we would need 16 back to back memory slots to store that array, assuming that it contains 32-bit integers, and it has to be free space back to back.
 
-A linked list stores elements anywhere in memory and connects them using pointers. Each node occupies two memory slots back to back: one for the value and one for a pointer to the next node, which could be literally anywhere in the memory space. Note that the actual size of each node depends on the data type and the platform; for instance, on a 64-bit system a pointer alone takes 8 bytes. Because of this pointer overhead, linked lists have a higher per-element memory cost than arrays.
+A linked list stores elements anywhere in memory and connects them using pointers. Each node occupies two memory slots back to back: one for the value and one for a pointer to the next node, which could be literally anywhere in the memory space. Note that the actual size of each node depends on the data type and the platform; for instance, on a 64-bit system a pointer alone takes 8 bytes. In practice, the overhead is even larger: in Java, every `Node` object carries an object header of roughly 16 bytes on top of the pointer and value fields. Compare this to an array of `int`, where each element takes exactly 4 bytes with zero per-element overhead because the values are stored contiguously. For a singly linked list of integers on a 64-bit JVM, each element costs roughly 32 bytes (16-byte header + 4-byte value + 8-byte pointer + padding) versus 4 bytes in an array, approximately an 8x difference. Because of this pointer overhead, linked lists have a higher per-element memory cost than arrays.
 
 A simple linked list node in Java looks like this:
 
@@ -36,8 +36,6 @@ Summarizing, array elements are stored back to back in memory, while linked list
 
 **When to prefer a linked list over an array:** Linked lists excel when you need frequent insertions and deletions at known positions (head, tail, or a node you already have a reference to), since these operations are O(1) once you have the reference. Arrays, on the other hand, are the better choice when you need fast random access by index (O(1) vs O(n) for a linked list) or when memory locality matters for cache performance.
 
-<br>
-
 ## Single Linked List
 
 The following are a singly linked list's standard operations and their corresponding time complexities:
@@ -50,11 +48,9 @@ The following are a singly linked list's standard operations and their correspon
 - Inserting / Removing a middle node: O(n) to access + O(1)
 - Searching for a value: O(n)
 
-<br>
-
 ## Doubly Linked List
 
-A doubly linked list maintains a reference to both the head and the tail of the list, and each node holds pointers to both the next and the previous node. This is why accessing the tail is O(1) -- the list always keeps a direct reference to it, so there is no need to traverse from the head.
+A **doubly linked list** is a linked list where each node holds pointers to both the next and the previous node, allowing traversal in both directions. The defining characteristic is the two pointers per node, not how the list itself is managed. That said, most doubly linked list implementations also maintain references to both the head and the tail. Because you can follow the `prev` pointer from the tail, operations at both ends of the list become O(1).
 
 - Accessing the head: O(1)
 - Accessing the tail: O(1)
@@ -64,13 +60,11 @@ A doubly linked list maintains a reference to both the head and the tail of the 
 - Inserting / Removing a middle node: O(n) to access + O(1)
 - Searching for a value: O(n)
 
-<br>
-
 ### Implementing Insertion and Deletion
 
 Now that we know the complexity characteristics, let's look at actual Java implementations using the `Node` class we defined earlier. Each of these methods is a building block you will reach for constantly when working with linked lists.
 
-**insertAtHead** creates a new node and makes it the new head. Because we already have a reference to the head, there is no traversal involved — we simply wire the new node's `next` pointer to the current head and return it. This runs in O(1) time.
+**insertAtHead** creates a new node and makes it the new head. Because we already have a reference to the head, there is no traversal involved, so we simply wire the new node's `next` pointer to the current head and return it. This runs in O(1) time.
 
 ```java
 public static Node insertAtHead(Node head, int value) {
@@ -95,7 +89,7 @@ public static Node insertAtTail(Node head, int value) {
 }
 ```
 
-**deleteByValue** removes the first node that holds a given value. The special case is when the head itself is the target — we just return `head.next`. Otherwise, we traverse until `current.next` holds the value, then bypass it. This is O(n) because of the traversal.
+**deleteByValue** removes the first node that holds a given value. The special case is when the head itself is the target: we just return `head.next`. Otherwise, we traverse until `current.next` holds the value, then bypass it. This is O(n) because of the traversal.
 
 ```java
 public static Node deleteByValue(Node head, int value) {
@@ -112,7 +106,7 @@ public static Node deleteByValue(Node head, int value) {
 }
 ```
 
-**insertAfter** inserts a new node right after a given node reference. Since we already have the reference, no searching is required — we create a new node, point it to `node.next`, and update `node.next` to the new node. O(1) time.
+**insertAfter** inserts a new node right after a given node reference. Since we already have the reference, no searching is required. We create a new node, point it to `node.next`, and update `node.next` to the new node. O(1) time.
 
 ```java
 public static void insertAfter(Node node, int value) {
@@ -125,7 +119,32 @@ public static void insertAfter(Node node, int value) {
 
 These four operations cover the vast majority of linked list manipulation you will encounter. Notice the pattern: any operation where you already have a reference to the target position is O(1), while anything that requires finding a position first is O(n).
 
-<br>
+### Sentinel Nodes
+
+A **sentinel node** (also called a dummy node) is a technique that simplifies insertion and deletion logic by eliminating special-case null checks for the head. Instead of starting with `head = null`, you initialize the list with a dummy node whose value is unused. All real elements hang off `sentinel.next`, so the head of the list is never null and you never need to handle "insert into empty list" as a separate branch.
+
+```java
+// With a sentinel, insertAtHead no longer needs a null check or a return value.
+Node sentinel = new Node(0); // value is never read
+
+public void insertAtHead(int value) {
+    Node newNode = new Node(value);
+    newNode.next = sentinel.next;
+    sentinel.next = newNode;
+}
+
+public void deleteByValue(int value) {
+    Node current = sentinel;
+    while (current.next != null && current.next.value != value) {
+        current = current.next;
+    }
+    if (current.next != null) {
+        current.next = current.next.next;
+    }
+}
+```
+
+Notice how both methods treat every case uniformly. There is no `if (head == null)` and no need to return a new head. This pattern is especially useful inside interview problems where juggling head-pointer edge cases leads to bugs.
 
 ### Circular Linked Lists
 
@@ -164,13 +183,22 @@ public static void traverseCircular(Node head) {
 }
 ```
 
-The key difference from a regular linked list is the termination condition: instead of checking whether the next pointer is `null`, we check whether we have returned to the starting node. Getting this wrong is a classic source of infinite loops, so always be deliberate about your stopping condition when working with circular structures.
+The key difference from a regular linked list is the termination condition: instead of checking whether the next pointer is `null`, we check whether we have returned to the starting node. Getting this wrong is a classic source of infinite loops. Here is what the mistake typically looks like:
 
-<br>
+```java
+// BUG: infinite loop — a circular list has no null, so this never terminates
+Node current = head;
+while (current != null) {
+    System.out.print(current.value + " ");
+    current = current.next;
+}
+```
+
+The correct pattern is to use a `do...while` loop (as shown in `traverseCircular` above) or to save the starting node and stop when you see it again. Always be deliberate about your stopping condition when working with circular structures.
 
 ### Common Linked List Problems
 
-These three problems show up in interviews over and over again. They are worth memorizing not just for their own sake, but because the techniques they use — two pointers, in-place reversal, and fast/slow traversal — are the building blocks for dozens of harder problems.
+These three problems show up in interviews over and over again. They are worth memorizing not just for their own sake, but because the techniques they use (two pointers, in-place reversal, and fast/slow traversal) are the building blocks for dozens of harder problems.
 
 **Floyd's Cycle Detection** (also known as the tortoise and hare algorithm) determines whether a linked list contains a cycle. Two pointers start at the head: `slow` advances one step at a time, while `fast` advances two steps. If a cycle exists, the fast pointer will eventually lap the slow pointer and they will meet. If `fast` reaches `null`, there is no cycle.
 
@@ -186,7 +214,7 @@ public static boolean hasCycle(Node head) {
 }
 ```
 
-This runs in O(n) time and O(1) space — no extra data structures needed.
+This runs in O(n) time and O(1) space, no extra data structures needed.
 
 **Reversing a linked list in place** is the second essential technique. We iterate through the list with three pointers: `prev`, `current`, and `next`. At each step we save the next node, reverse the current node's pointer to point backward, then advance all three pointers forward.
 
@@ -220,8 +248,8 @@ public static Node findMiddle(Node head) {
 }
 ```
 
-O(n) time, O(1) space — one pass through the list is all it takes.
+O(n) time, O(1) space. One pass through the list is all it takes.
 
-These three problems form the core toolkit for linked list interview questions. Variations of them — detecting the start of a cycle, reversing in groups of k, finding the nth node from the end — appear in many more complex problems, and they all build on the same pointer manipulation ideas shown here.
+These three problems form the core toolkit for linked list interview questions. Variations (detecting the start of a cycle, reversing in groups of k, finding the nth node from the end) appear in many more complex problems, and they all build on the same pointer manipulation ideas shown here.
 
-For a comparison of linked lists with their closest alternative, see [Arrays](https://matthewonsoftware.com/blog/arrays/).
+> **Related posts**: [Arrays](/posts/arrays/), [Stacks and Queues](/posts/stacks-and-queues/), [Complexity Analysis](/posts/complexity-analysis/)

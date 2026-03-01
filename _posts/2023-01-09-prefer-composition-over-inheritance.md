@@ -9,8 +9,6 @@ tags:
   - Design Principles
 ---
 
-# Prefer Composition over Inheritance
-
 You've probably heard this statement before. It shows up in design books, code reviews, and conference talks. But it is easy to nod along without thinking about *why* composition wins in most situations, or what a properly composed design actually looks like. I've written an article that explains what composition is [here](/posts/association-composition-aggregation/).
 
 ## Introduction
@@ -97,42 +95,169 @@ If the composition example had used `new GasolineEngine()` directly inside the `
 
 ### Inheritance Example
 
-Now, let's look at an example involving inheritance. Consider a class hierarchy representing different types of vehicles:
+Now consider a notification system where inheritance seems like a natural fit at first. You have a base `Notifier` class, and you want to support different channels:
 
 ```java
-class Vehicle {
-    void start() {
-        // Implementation for starting a generic vehicle
+class Notifier {
+    void send(String message) {
+        // Send via email by default
+        sendEmail(message);
+    }
+
+    private void sendEmail(String message) {
+        // Email-sending logic
     }
 }
 
-class Car extends Vehicle {
-    void drive() {
-        start();
-        // Additional car-specific functionality
+class SmsNotifier extends Notifier {
+    @Override
+    void send(String message) {
+        super.send(message);
+        // Also send via SMS
+        sendSms(message);
     }
-}
 
-class Bicycle extends Vehicle {
-    void pedal() {
-        start();
-        // Additional bicycle-specific functionality
+    private void sendSms(String message) {
+        // SMS-sending logic
     }
 }
 ```
 
-In this example, the Car and Bicycle classes inherit the start method from the Vehicle class. While this demonstrates inheritance, it's essential to note that changes to the start method in the Vehicle class can impact all subclasses, potentially leading to maintenance challenges.
+This works, but the problems surface quickly. What if you also need Slack notifications? You create `SlackNotifier extends Notifier`. Now what about SMS *and* Slack together? You cannot extend both `SmsNotifier` and `SlackNotifier`. You either create yet another subclass (`SmsAndSlackNotifier`) or start duplicating logic. Every new channel doubles the number of possible combinations, and the hierarchy becomes unmanageable.
 
-## Violation of Encapsulation
+With composition, the same problem stays simple. Each channel implements a `NotificationChannel` interface, and the notifier holds a list of channels:
+
+```java
+interface NotificationChannel {
+    void send(String message);
+}
+
+class CompositeNotifier {
+    private final List<NotificationChannel> channels;
+
+    CompositeNotifier(List<NotificationChannel> channels) {
+        this.channels = channels;
+    }
+
+    void send(String message) {
+        channels.forEach(ch -> ch.send(message));
+    }
+}
+```
+
+Adding a new channel means writing one small class. Combining channels means passing a different list to the constructor. No combinatorial explosion, no deep hierarchies.
+
+### Violation of Encapsulation
 
 Subclasses rely on the implementation details of their superclasses for correct operation. The implementation within a superclass may vary across different releases, potentially leading to a breakdown in the subclass, despite no changes to its own code.
 Consequently, a subclass necessitates co-evolution with its superclass, unless the superclass has been clearly designed and documented by its authors for the purpose of extension.
+
+The classic example (from Joshua Bloch's *Effective Java*) is an `InstrumentedHashSet` that tries to count how many elements have been added:
+
+```java
+class InstrumentedHashSet<E> extends HashSet<E> {
+    private int addCount = 0;
+
+    @Override
+    public boolean add(E e) {
+        addCount++;
+        return super.add(e);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        addCount += c.size();
+        return super.addAll(c);
+    }
+
+    public int getAddCount() {
+        return addCount;
+    }
+}
+```
+
+This looks correct, but it is broken. `HashSet.addAll()` internally delegates to `add()` for each element. When you call `addAll(List.of("a", "b", "c"))`, the count goes up by 3 inside your `addAll` override, and then by 3 *again* as `super.addAll()` calls your overridden `add()` for each element. The result is 6, not 3.
+
+The subclass did nothing wrong. It simply could not know how `HashSet` implements `addAll()` internally, because that is an implementation detail the superclass never promised to keep stable. This is exactly what "violation of encapsulation" means in practice: your subclass depends on internal behavior that can change without warning.
+
+A composition-based wrapper avoids this entirely:
+
+```java
+class InstrumentedSet<E> implements Set<E> {
+    private final Set<E> delegate;
+    private int addCount = 0;
+
+    InstrumentedSet(Set<E> delegate) {
+        this.delegate = delegate;
+    }
+
+    @Override
+    public boolean add(E e) {
+        addCount++;
+        return delegate.add(e);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        addCount += c.size();
+        return delegate.addAll(c);
+    }
+
+    public int getAddCount() {
+        return addCount;
+    }
+
+    // Remaining Set methods delegate to 'delegate'
+    // ...
+}
+```
+
+Now `delegate.addAll()` calls `delegate.add()` internally, not your `add()`. The count stays accurate regardless of how the underlying `Set` implementation works.
 
 ## When to Use Each
 
 Composition is the safer default. It keeps your classes small, loosely coupled, and easy to test. When you depend on interfaces and inject collaborators through constructors, you get flexibility that inheritance simply cannot match.
 
-That said, inheritance is not evil. It works well when there is a genuine "is-a" relationship and the superclass is explicitly designed for extension (think `AbstractList` in the JDK). The problems start when inheritance is used for code reuse alone, without a real type hierarchy behind it.
+That said, inheritance is not evil. It works well when there is a genuine "is-a" relationship and the superclass is explicitly designed for extension. The problems start when inheritance is used for code reuse alone, without a real type hierarchy behind it.
+
+### When Inheritance Is the Right Choice
+
+The **template method pattern** is one place where inheritance shines. The superclass defines the skeleton of an algorithm, leaving specific steps for subclasses to fill in. The JDK's `AbstractList` is a good example: it implements almost all of the `List` interface for you, requiring only that you override `get(int index)` and `size()`:
+
+```java
+class ReadOnlyNumberList extends AbstractList<Integer> {
+    private final int[] data;
+
+    ReadOnlyNumberList(int[] data) {
+        this.data = data.clone();
+    }
+
+    @Override
+    public Integer get(int index) {
+        return data[index];
+    }
+
+    @Override
+    public int size() {
+        return data.length;
+    }
+}
+```
+
+This is inheritance used well. `AbstractList` was explicitly designed for extension, its documentation tells you exactly which methods to override, and the "is-a" relationship is genuine: your class truly *is* a `List`.
+
+Other cases where inheritance makes sense:
+
+- **Framework hook points** designed for subclassing, like `HttpServlet` where you override `doGet()` or `doPost()`
+- **Sealed hierarchies** where you control both the superclass and all subclasses (e.g., an AST node type with a fixed set of variants)
+- **Shared identity**, not just shared behavior. If external code needs to treat your class as an instance of the parent type, and that relationship is stable, inheritance is natural
 
 A practical rule of thumb: if you catch yourself extending a class just to borrow a few methods, stop and compose instead. Create an interface, inject the dependency, and keep your options open.
+
+### References
+
+* Erich Gamma et al., *Design Patterns: Elements of Reusable Object-Oriented Software* (Addison-Wesley, 1994)
+* Joshua Bloch, *Effective Java* (Addison-Wesley, 3rd edition, 2018), Item 18: "Favor composition over inheritance"
+
+> **Related posts**: [Core concepts behind OOP](/posts/core-concepts-behind-oop/), [SOLID: The First 5 Principles of Object Oriented Design](/posts/solid-the-first-5-principles-of-object-oriented-design/), [Composition, Aggregation and Association](/posts/association-composition-aggregation/)
 

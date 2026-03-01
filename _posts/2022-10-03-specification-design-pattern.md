@@ -268,8 +268,30 @@ class FieldSpecification implements Specification<ShipmentDetails> {
         return evaluate(operator, fieldValue, values);
     }
 
-    // resolveField maps "status" -> candidate.getStatus().name(), etc.
-    // evaluate applies the operator (IN, NONE_MATCH, EQUALS) to the resolved value
+    private Object resolveField(ShipmentDetails candidate, String field) {
+        return switch (field) {
+            case "status" -> candidate.getStatus().name();
+            case "historyActions" -> candidate.getHistory().stream()
+                    .map(h -> h.getAction().name())
+                    .collect(Collectors.toSet());
+            default -> throw new IllegalArgumentException("Unknown field: " + field);
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean evaluate(String operator, Object fieldValue, Set<String> values) {
+        return switch (operator) {
+            case "IN" -> values.contains((String) fieldValue);
+            case "EQUALS" -> values.stream().findFirst()
+                    .map(v -> v.equals(fieldValue))
+                    .orElse(false);
+            case "NONE_MATCH" -> {
+                Set<String> actual = (Set<String>) fieldValue;
+                yield actual.stream().noneMatch(values::contains);
+            }
+            default -> throw new IllegalArgumentException("Unknown operator: " + operator);
+        };
+    }
 }
 ```
 
@@ -284,3 +306,5 @@ The Specification pattern earns its place when business rules are a first-class 
 ### When to Keep It Simple
 
 Not every conditional deserves the Specification treatment. If your business logic has a small, stable set of conditions that are unlikely to change or be reused elsewhere, a straightforward if statement is clearer and more maintainable. The pattern introduces indirection (interfaces, composite classes, separate specification objects) and that indirection is only justified when it buys you genuine flexibility. When in doubt, start with the simple approach and refactor toward Specification if and when the conditional logic starts to multiply.
+
+> **Related posts**: [Strategy Design Pattern](/posts/strategy-design-pattern/), [Aggregate Pattern](/posts/aggregate-pattern/)

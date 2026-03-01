@@ -43,14 +43,19 @@ BigDecimal one  = BigDecimal.ONE;
 BigDecimal ten  = BigDecimal.TEN;
 ```
 
-Always prefer `new BigDecimal(String)` or `BigDecimal.valueOf(double)` over `new BigDecimal(double)`. The `double` constructor captures the imprecision inherent in binary floating point:
+Always prefer `new BigDecimal(String)` or `BigDecimal.valueOf(double)` over `new BigDecimal(double)`. The difference is subtle but important: `new BigDecimal(0.1)` creates a BigDecimal with the exact IEEE 754 binary representation of 0.1, which is not exactly 0.1. `BigDecimal.valueOf(0.1)` first converts 0.1 to a String via `Double.toString()` and then creates the BigDecimal, giving the expected `0.1`. The safest approach is `new BigDecimal("0.1")`, because you control the exact value from the start:
 
 ```java
-BigDecimal fromDouble = new BigDecimal(0.1);
+BigDecimal fromDouble  = new BigDecimal(0.1);
+BigDecimal fromValueOf = BigDecimal.valueOf(0.1);
+BigDecimal fromString  = new BigDecimal("0.1");
+
 System.out.println(fromDouble);
 // 0.1000000000000000055511151231257827021181583404541015625
 
-BigDecimal fromString = new BigDecimal("0.1");
+System.out.println(fromValueOf);
+// 0.1
+
 System.out.println(fromString);
 // 0.1
 ```
@@ -133,6 +138,8 @@ BigInteger biFromByteArray = new BigInteger(new byte[] { 64, 64, 64, 64, 64, 64 
 
 BigInteger provides operations analogous to Java's primitive integer operators: `add`, `subtract`, `multiply`, `divide`, `mod`, `pow`, `abs`, `min`, `max`, and `signum`. It also supports bitwise operations (`and`, `or`, `xor`, `not`, `shiftLeft`, `shiftRight`), modular arithmetic (`modPow`, `modInverse`), and primality testing (`isProbablePrime`, `probablePrime`).
 
+The **`isProbablePrime(int certainty)`** method is worth noting. It uses the Miller-Rabin algorithm to test whether a number is probably prime, with the `certainty` parameter controlling the probability of a false positive (the probability of a composite being reported as prime is at most 1 in 2^certainty). This is exactly how RSA key generation works in practice: generate a large random number, test it with `isProbablePrime`, and repeat until a probable prime is found. Deterministic primality tests exist but are far too slow for numbers with hundreds of digits.
+
 ```java
 BigInteger a = new BigInteger("50");
 BigInteger b = new BigInteger("18");
@@ -152,3 +159,5 @@ Use **BigDecimal** when you need exact decimal arithmetic: monetary values, tax 
 Use **BigInteger** when you need integers larger than `long` can hold: cryptographic calculations, combinatorics, or any domain with very large whole numbers.
 
 For everything else, `int`, `long`, and `double` are simpler and faster.
+
+> **Related posts**: [Comparable and Comparator Interfaces](/posts/comparable-and-comparator-interfaces/), [Strings](/posts/strings/)

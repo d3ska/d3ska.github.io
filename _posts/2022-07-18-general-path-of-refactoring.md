@@ -57,53 +57,65 @@ Time needed to understand the code after refactoring: **~10 min**
 
 Saved time on average: **~20 min**
 
-When we analyze it in this manner, we can see that our 'investment' **starts to pay off after 60 weeks...**
-In this case, one might argue that it was a rather poor investment. However, it was certainly satisfying from a purist's point of view, which most of us are, to some extent.
+When we analyze it in this manner, we can see that our 'investment' **starts to pay off after 60 weeks** for a single developer.
+
+Now consider the team dimension: if 10 developers each visit that code twice a week and save 20 minutes per visit, the savings compound to 400 minutes (almost 7 hours) per week, or roughly **350 hours per year**. That changes the payback period dramatically. The lesson is not that ROI math is pointless, but that you need to factor in team size and visit frequency before deciding whether a refactoring is "worth it."
+
+In the single-developer scenario, one might argue that it was a rather poor investment. However, it was certainly satisfying from a purist's point of view, which most of us are, to some extent.
 
 
 ### How to approach refactoring to make it less intimidating:
 
 We've made a conscious decision to refactor our system. What's next? I suggest answering the following questions and taking these steps, which I personally find helpful.
 
-1. **What problem are we trying to solve? Name it.**<br>
-We can't proceed with refactoring if we don't know our driving force. We need to identify what we want to improve or eliminate. Is it higher testability, readability, better latency, or speeding up the time required to introduce new features by reducing coupling and making teams more autonomous, among other things? So, once again, name the problem you're trying to solve.
+1. **What problem are we trying to solve? Name it.**
+
+   We can't proceed with refactoring if we don't know our driving force. We need to identify what we want to improve or eliminate. Is it higher testability, readability, better latency, or speeding up the time required to introduce new features by reducing coupling and making teams more autonomous, among other things? So, once again, name the problem you're trying to solve.
 
 
-2. **Choose the appropriate solution.** <br>
-There are likely several solutions or ways to achieve our goal. In such cases, consider the different possibilities for addressing the problem and select the one that best suits your driver and context. What are the pros and cons of each, and what are the trade-offs?
+2. **Choose the appropriate solution.**
+
+   There are likely several solutions or ways to achieve our goal. In such cases, consider the different possibilities for addressing the problem and select the one that best suits your driver and context. What are the pros and cons of each, and what are the trade-offs?
 
 
-3. **Plan the changes.** <br>
-Identify what needs to be changed and where. Will it affect other parts of the system? Determine where to start and finish the refactoring. Be aware of the 'reaction chain' in the context of refactoring. It is essential to begin with the most challenging part of the refactoring plan, also known as the “fail fast” approach. This way, we'll discover sooner if we can complete what we've planned. If our refactoring turns out to be impossible for some reason, we'll likely find out early rather than at the end.<br>
-Answer the following questions to help guide your approach:
+3. **Plan the changes.**
+
+   Identify what needs to be changed and where. Will it affect other parts of the system? Determine where to start and finish the refactoring. Be aware of the 'reaction chain' in the context of refactoring. It is essential to begin with the most challenging part of the refactoring plan, also known as the "fail fast" approach. This way, we'll discover sooner if we can complete what we've planned. If our refactoring turns out to be impossible for some reason, we'll likely find out early rather than at the end.
+
+   Answer the following questions to help guide your approach:
    * Where should the change be made?
    * What is the impact of the change?
    * What are the observable behaviors of the change?
 
 
-4. **Ensure the safety of the change.** <br>
-Refactoring involves changing the code's structure without altering its observable behavior. To make sure the observable behavior doesn't change, confirm that proper tests covering the behavior exist; if not, write them. The more legacy and coupled a system is, the more likely it is that the only sensible solution is to write tests at higher layers, like controllers.
+4. **Ensure the safety of the change.**
+
+   Refactoring involves changing the code's structure without altering its observable behavior. To make sure the observable behavior doesn't change, confirm that proper tests covering the behavior exist; if not, write them. The more legacy and coupled a system is, the more likely it is that the only sensible solution is to write tests at higher layers, like controllers.
 
 
-5. **Perform the refactoring.** <br>
-After ensuring the safety of the change by creating tests for observable behaviors, proceed with the refactoring, running tests periodically to ensure nothing breaks and that you're moving in the right direction.
+5. **Perform the refactoring.**
+
+   After ensuring the safety of the change by creating tests for observable behaviors, proceed with the refactoring, running tests periodically to ensure nothing breaks and that you're moving in the right direction.
 
 
-6. **Observe the effect.** <br>
-After completing the planned changes, step back and evaluate the process from a broader perspective. Answering the following questions may be helpful:
+6. **Observe the effect.**
+
+   After completing the planned changes, step back and evaluate the process from a broader perspective. Answering the following questions may be helpful:
    * What has changed?
    * Will this change make future features easier or harder to implement?
    * Were there any trade-offs?
    * What is the ROI?
 
-Keep in mind that as you refactor, you might need to take one step back, which may initially make your code seem "worse." However, such temporary changes are sometimes necessary and will enable you to complete the entire refactor later, ultimately resulting in progress. As Martin Fowler said, “For each desired change, make the change easy (warning: this may be hard), then make the easy change.”
+Keep in mind that as you refactor, you might need to take one step back, which may initially make your code seem "worse." However, such temporary changes are sometimes necessary and will enable you to complete the entire refactor later, ultimately resulting in progress. As Martin Fowler said, "For each desired change, make the change easy (warning: this may be hard), then make the easy change."
+
+A complementary practice worth mentioning is the **Boy Scout Rule**: "always leave the code better than you found it." Not every improvement needs a dedicated refactoring effort. Small, opportunistic cleanups made while working on a feature or a bug fix accumulate over time and can prevent the need for large-scale refactoring later.
 
 
 ### Example
 
 Quick note at the beginning: The code is not 'clean' and has been simplified on purpose for the sake of an example.
 
-In almost every system, there is a concept of money or some form of payments and costs. After all, most businesses aim to earn revenue 😅. Let's assume that our application is a 'taxi app,' and the current implementation uses a Double to represent the concept of money. So far, it has been working well, but a new requirement is on the horizon, stating that our system will be released in different markets and countries. As you can imagine, in countries with different currencies and varying decimal places (e.g., 0 in yen or 3 like in dinar in many countries), there will be a need for money conversion, awareness of currency types, and so on. The current implementation is not equipped to handle these requirements.
+In almost every system, there is a concept of money or some form of payments and costs. After all, most businesses aim to earn revenue. Let's assume that our application is a 'taxi app,' and the current implementation uses a Double to represent the concept of money. So far, it has been working well, but a new requirement is on the horizon, stating that our system will be released in different markets and countries. As you can imagine, in countries with different currencies and varying decimal places (e.g., 0 in yen or 3 like in dinar in many countries), there will be a need for money conversion, awareness of currency types, and so on. The current implementation is not equipped to handle these requirements.
 
 **First, we need to identify the problem we are solving.** In this case, it is the variable representation of the business concept, which is money. **What solution would be most suitable?**
 
@@ -127,6 +139,10 @@ public class Money {
 
    public Money subtract(Money other) {
       return new Money(value - other.value);
+   }
+
+   public Money percentage(Double percent) {
+      return new Money(value * percent / 100);
    }
 
    public Double asDouble() {
@@ -155,6 +171,8 @@ public Double calculateDriverFee(Long journeyId) {
 ```
 
 **Ensure the safety of the change:** Unfortunately, we didn't find any tests for that function in our system. Therefore, we need to create new ones to ensure the safety of the change.
+
+The `testDataProvider` used below is an instance of a helper class that contains static factory methods for creating test fixtures (drivers, journeys, fees, etc.). This keeps the test body focused on the scenario rather than object construction boilerplate.
 
 ```java
 @Test
@@ -209,8 +227,6 @@ void shouldCalculateDriversFlatFee() {
 }
 ```
 
-<br>
-
 **Tests are green, and our new concept has been successfully connected!** 
 
 Remember, we only refactored some parts of our system, not everything. So, what will we do with clients and different parts of the system where a Double is still used to represent money? You may have noticed the 'asDouble' method, which simply returns the inner value of Money. This simple method allows us to decide where we want to stop our refactoring while maintaining backward compatibility.
@@ -222,7 +238,7 @@ Imagine that clients of the calculateDriverFee function, who further process the
 
 We changed the concept of money from Double to the Money object, and now Double is just an implementation detail. As a result, we can easily change the inner implementation to BigDecimal or any other type we want, since it's hidden behind a stable API and doesn't share its inner implementation. This approach would require modifications more or less in just one place - our Money class (besides the parts where we decided to cut off our changes, if there are any).
 
-Now, introducing the concept of currencies, decimal places, and so on becomes much easier, safer, and more pleasant 🙂. By using the Money object, we have established a more robust foundation for handling different monetary scenarios and adapting to new requirements. This refactoring not only improves the overall quality of the code but also increases the maintainability and flexibility of the system in the long run.
+Now, introducing the concept of currencies, decimal places, and so on becomes much easier, safer, and more pleasant. By using the Money object, we have established a more robust foundation for handling different monetary scenarios and adapting to new requirements. This refactoring not only improves the overall quality of the code but also increases the maintainability and flexibility of the system in the long run.
 
 
 ### A note on large-scale refactoring: the Mikado Method
@@ -232,3 +248,5 @@ When a refactoring effort spans many modules and the dependency chain becomes de
 The idea is simple: you attempt the change you want, and when it breaks something, you write down the prerequisite that must be satisfied first. Then you revert your change, go solve that prerequisite, and repeat. Over time you build a directed graph of prerequisites -- a "Mikado graph" -- that naturally reveals the correct bottom-up order of changes. Each individual step is small, safe, and independently commitable.
 
 This technique is especially powerful for legacy systems where the full scope of a refactoring is hard to predict upfront. Instead of planning everything in advance, you let the codebase tell you what needs to happen first.
+
+> **Related posts**: [Why the Business Is Not Eager for Refactoring](/posts/why-business-sometimes-doesnt-allow-for-refactoring/), [Why Are Tests Essential?](/posts/why-are-tests-essential/)

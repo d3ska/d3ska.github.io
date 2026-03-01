@@ -1,5 +1,5 @@
 ---
-title: "Why business is not eager for refactoring?"
+title: "Why the Business Is Not Eager for Refactoring"
 categories:
   - Software Design
 tags:
@@ -39,4 +39,46 @@ To make this tangible, here are metrics I have found effective when presenting a
 
 These metrics come from the well-known DORA (DevOps Research and Assessment) framework, and they bridge the gap between engineering concerns and business outcomes.
 
+#### A before/after example
+
+To make this more concrete, consider a team I worked with that maintained an order processing service. The codebase had grown organically over three years with no significant cleanup.
+
+**Before refactoring:**
+- Deployment frequency: once every 3 weeks
+- Lead time for changes: 14 days on average
+- Change failure rate: 30%
+- Time to restore service after an incident: 4 hours
+
+The team proposed a two-sprint investment to extract a tangled pricing engine into a clean, well-tested module. They presented these numbers to their product owner alongside the projected improvements.
+
+**After refactoring:**
+- Deployment frequency: twice per week
+- Lead time for changes: 3 days on average
+- Change failure rate: 8%
+- Time to restore service: 45 minutes
+
+The improvement in deployment frequency alone meant the business could ship features to customers roughly six times faster. The reduction in change failure rate translated to fewer weekend incidents and lower support costs. Numbers like these are difficult for any stakeholder to argue against.
+
+### When the business still says no
+
+Sometimes you present the data, make a solid case, and the answer is still no. This happens. Budgets are tight, deadlines are real, and not every organization is ready to invest in long-term code health. That does not mean you are powerless.
+
+**The Boy Scout Rule** is the most practical tool here: leave the code a little better than you found it. You don't need permission to rename a confusing variable, extract a small method, or add a missing test while you are already working in that area. These micro-improvements add up over time without requiring a dedicated refactoring sprint.
+
+**Refactor as part of feature work.** When you pick up a new feature, include the necessary cleanup in your estimate. If a feature touches a messy module, cleaning that module is part of delivering the feature well. You are not asking for extra time; you are being honest about what good delivery looks like.
+
+**Build trust through small wins.** Start with a low-risk, high-visibility improvement. Maybe it is a flaky test suite that wastes 30 minutes of everyone's day, or a slow build pipeline. Fix it, measure the improvement, and share it. Once the business sees that your technical proposals deliver real results, they become more willing to fund larger efforts.
+
+### Prevention is better than cure
+
+The best refactoring is the one you never have to do. Large-scale refactoring efforts are usually a symptom of quality degradation that happened gradually over months or years. A few continuous practices can prevent this:
+
+- **Test-Driven Development (TDD)** keeps design pressure constant. Writing tests first forces you to think about interfaces and responsibilities before implementation, which naturally leads to cleaner code.
+- **Pair programming** catches design problems in real time. Two people are far less likely to take shortcuts that create future technical debt.
+- **Code review** acts as a quality gate. A good review process catches not just bugs but structural issues before they become entrenched in the codebase.
+
+None of these practices eliminate the need for refactoring entirely, but they keep the codebase healthy enough that refactoring stays small and routine rather than becoming a large, scary project that needs executive approval.
+
 So, to summarize, you need to "map" programming language to business language and present the benefits that will result from refactoring. You don't even need to use the word "refactoring." By clearly communicating the advantages of refactoring in terms that resonate with business stakeholders, you can gain their support and make the process more widely accepted.
+
+> **Related posts**: [How to Think and Approach Refactoring?](/posts/general-path-of-refactoring/), [Why Are Tests Essential?](/posts/why-are-tests-essential/), [The Economics of Software Testing](/posts/economy-of-testing/)

@@ -40,13 +40,70 @@ Common architecture characteristics include:
 - Performance
 - Deployability
 
+Several of these characteristics sound similar but differ in important ways:
+
+| Characteristic pair | Distinction |
+|---|---|
+| **Reliability** vs **Availability** | Reliability means the system produces correct results consistently. Availability means the system is reachable and responsive. A system can be highly available yet unreliable (it responds quickly but sometimes returns wrong data), or reliable but not always available (when it does respond, the answer is correct). |
+| **Scalability** vs **Elasticity** | Scalability is the system's ability to handle increased load by adding resources (planned growth). Elasticity is the system's ability to automatically scale resources up and down in response to real-time demand (dynamic, often cloud-based). A system can be scalable without being elastic if scaling requires manual intervention. |
+| **Fault Tolerance** vs **Reliability** | Fault tolerance is the system's ability to continue operating when individual components fail. Reliability is broader: the system consistently behaves as expected over time. Fault tolerance is one strategy for achieving reliability, but reliability also depends on correctness, data integrity, and consistent behavior. |
+
 Not every characteristic matters equally for every system. Part of the architect's job is identifying which characteristics are critical and which are acceptable to trade off.
+
+### Architecture Trade-offs
+
+No system can optimize every characteristic simultaneously. Improving one quality attribute almost always comes at the expense of another. This is one of the fundamental realities of software architecture, and recognizing it early saves teams from chasing impossible goals.
+
+A few common trade-offs:
+
+- **Performance vs Maintainability.** Highly optimized code (custom memory management, hand-tuned queries, denormalized data) is faster but harder to understand, modify, and test. A clean, well-abstracted design is easier to maintain but may introduce overhead through additional layers of indirection.
+- **Security vs Performance.** Encrypting all data in transit and at rest, validating every input, and running authorization checks on each request all add latency. Loosening security checks improves response times but widens the attack surface.
+- **Availability vs Consistency.** The CAP theorem formalizes this for distributed systems: during a network partition, you must choose between returning a potentially stale response (availability) or rejecting the request until nodes agree (consistency).
+- **Scalability vs Simplicity.** A system designed for massive scale (event-driven, eventually consistent, heavily partitioned) is more complex to build, debug, and reason about than a straightforward monolith with a single relational database.
+
+The architect's role is not to eliminate trade-offs but to make them visible and intentional. Every decision should be traceable to a conscious choice about which characteristics matter most for the system at hand.
 
 ### Architecture Decisions
 
 Architecture decisions establish the rules and constraints for how a system is built. An architect might decide that only the service layer can access the database directly, or that all inter-service communication must use asynchronous messaging, or that a specific data format is required at system boundaries. These decisions guide development teams on what is permissible and what is not.
 
 When a particular decision cannot be followed in some part of the system due to practical constraints, a **variance** is granted: a documented exception with a clear rationale.
+
+To make this concrete, consider a common decision: should two services communicate synchronously (HTTP/REST) or asynchronously (message queue)?
+
+```java
+// Synchronous: Order service calls Inventory service directly
+public class OrderService {
+
+    private final InventoryClient inventoryClient;
+
+    public OrderResult placeOrder(Order order) {
+        // Blocks until Inventory responds. Simple, but if Inventory
+        // is down, Order fails too (tight coupling, lower fault tolerance).
+        InventoryResponse response = inventoryClient.reserve(order.getItems());
+        if (!response.isSuccess()) {
+            return OrderResult.rejected("Items not available");
+        }
+        return OrderResult.confirmed(order);
+    }
+}
+
+// Asynchronous: Order service publishes an event
+public class OrderService {
+
+    private final EventPublisher eventPublisher;
+
+    public OrderResult placeOrder(Order order) {
+        // Returns immediately. Inventory service picks up the event
+        // independently. More resilient, but the caller does not get
+        // an immediate confirmation of inventory availability.
+        eventPublisher.publish(new OrderPlacedEvent(order));
+        return OrderResult.accepted(order);
+    }
+}
+```
+
+Choosing synchronous communication favors simplicity and immediate consistency. Choosing asynchronous communication favors fault tolerance and scalability, at the cost of eventual consistency and added complexity. Neither is universally better. The right choice depends on which architecture characteristics the system prioritizes.
 
 A proven way to capture and communicate these decisions is through **Architecture Decision Records (ADRs)**. An ADR is a short document that records a single decision: the context, the decision itself, the alternatives considered, and the consequences. Over time, ADRs form a decision log that gives any team member (current or future) a clear trail of *why* the architecture looks the way it does. Tools like [adr-tools](https://github.com/npryce/adr-tools) or simply a folder of Markdown files in the repository make ADRs lightweight to maintain.
 
@@ -63,7 +120,33 @@ Defining characteristics and decisions is only half the battle. Enforcing them o
 - **Static analysis rules** that flag cyclic dependencies between modules
 - **Deployment pipeline gates** that enforce code coverage or security scan results
 
+Here is a practical example using **ArchUnit** to enforce a layering rule. This test ensures that domain classes never depend on infrastructure classes, protecting the core of your system from leaking implementation details:
+
+```java
+@AnalyzeClasses(packages = "com.example.myapp")
+class ArchitectureRulesTest {
+
+    @ArchTest
+    static final ArchRule domain_should_not_depend_on_infrastructure =
+        noClasses()
+            .that().resideInAPackage("..domain..")
+            .should().dependOnClassesThat()
+            .resideInAPackage("..infrastructure..");
+
+    @ArchTest
+    static final ArchRule controllers_should_not_access_repositories_directly =
+        noClasses()
+            .that().resideInAPackage("..controller..")
+            .should().dependOnClassesThat()
+            .resideInAPackage("..repository..");
+}
+```
+
+These tests run as part of your normal test suite. If someone introduces a dependency that violates the rule, the build fails immediately rather than letting the violation slip through unnoticed.
+
 By embedding fitness functions in your CI/CD pipeline, you turn architecture decisions from documentation into enforceable constraints. Architecture drift, where the implemented system gradually diverges from the intended design, becomes detectable and preventable.
+
+> **Related posts**: [Microservices vs Monolith vs Modular Monolith architecture](/posts/microservices-vs-monolith/), [Cohesion: Measuring Module Design Quality](/posts/cohesion/), [What is coupling?](/posts/what-is-coupling/)
 
 ### References
 

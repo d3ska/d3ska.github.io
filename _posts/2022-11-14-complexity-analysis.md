@@ -137,4 +137,9 @@ A common rule of thumb: modern hardware can handle roughly **10^8 simple operati
 
 To put it in more concrete terms: I have seen teams spend days debugging "slow" endpoints that turned out to be nothing more than an O(n^2) loop hidden inside what looked like innocent business logic. Knowing these thresholds helps you catch scaling problems at design time rather than in a post-mortem.
 
+### References
+
+* Thomas H. Cormen et al., *Introduction to Algorithms* (MIT Press, 4th edition, 2022)
+* Robert Sedgewick and Kevin Wayne, *Algorithms* (Addison-Wesley, 4th edition, 2011)
+
 > **Related posts**: [Big O Notation](/posts/big-o-notation/), [Logarithms in Algorithm Complexity](/posts/logarithm/)
