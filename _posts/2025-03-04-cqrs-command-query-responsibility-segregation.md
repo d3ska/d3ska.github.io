@@ -225,4 +225,4 @@ Do not rewrite everything. Identify one bottleneck. That slow report. That heavy
 
 The pattern is simple. Separate reads from writes. Start with the simplest implementation that solves your problem. Add complexity only when the benefits clearly outweigh the costs.
 
-> **Related posts**: [Message Queues](/posts/message-queues/), [Latency and Throughput](/posts/latency-and-throughput/)
+> **Related posts**: [Apache Kafka](/posts/apache-kafka/), [Latency and Throughput](/posts/latency-and-throughput/)
