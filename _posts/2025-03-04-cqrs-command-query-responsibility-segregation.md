@@ -13,8 +13,8 @@ You open the admin dashboard to check yesterday's sales. You click "Top Selling 
 
 The problem is not the database or the query optimizer. The problem is that your Order model is trying to serve two masters. On the write side, it enforces business rules, maintains consistency, and locks resources during transactions. On the read side, it joins eight tables (orders, order_items, products, categories, users, payments, inventory, reviews) to build that sales report. One model doing everything means it does nothing well.
 
-![Unified model problem](assets/blog_images/2025-03-04-cqrs/unified-model-problem-light.png){: .light}
-![Unified model problem](assets/blog_images/2025-03-04-cqrs/unified-model-problem-dark.png){: .dark}
+![Unified model problem]({{site.url}}/assets/blog_images/2025-03-04-cqrs/unified-model-problem-light.png){: .light}
+![Unified model problem]({{site.url}}/assets/blog_images/2025-03-04-cqrs/unified-model-problem-dark.png){: .dark}
 
 ### The Core Idea
 
@@ -22,8 +22,8 @@ CQRS (Command Query Responsibility Segregation) splits this model in two. The wr
 
 Bertrand Meyer said it best: "Asking a question should not change the answer." Commands change state. Queries return data. They have fundamentally different concerns, so they should have different models.
 
-![CQRS separation](assets/blog_images/2025-03-04-cqrs/cqrs-separation-light.png){: .light}
-![CQRS separation](assets/blog_images/2025-03-04-cqrs/cqrs-separation-dark.png){: .dark}
+![CQRS separation]({{site.url}}/assets/blog_images/2025-03-04-cqrs/cqrs-separation-light.png){: .light}
+![CQRS separation]({{site.url}}/assets/blog_images/2025-03-04-cqrs/cqrs-separation-dark.png){: .dark}
 
 ### From CQS to CQRS
 
@@ -45,8 +45,8 @@ Your write model is complex. It guards invariants, enforces business rules, and 
 
 Read models can be tailored to specific needs. When a user cancels an order, three different systems care about different aspects of that event. The user's order history shows "Cancelled" status. The analytics dashboard increments daily cancellations by one. The warehouse dashboard updates "items returned to inventory." Same event, three different projections.
 
-![Order projections example](assets/blog_images/2025-03-04-cqrs/order-projections-example-light.png){: .light}
-![Order projections example](assets/blog_images/2025-03-04-cqrs/order-projections-example-dark.png){: .dark}
+![Order projections example]({{site.url}}/assets/blog_images/2025-03-04-cqrs/order-projections-example-light.png){: .light}
+![Order projections example]({{site.url}}/assets/blog_images/2025-03-04-cqrs/order-projections-example-dark.png){: .dark}
 
 #### Performance
 
@@ -58,8 +58,8 @@ Before CQRS, that dashboard query joins eight tables and takes 45 seconds. After
 
 You do not need to jump straight to distributed systems and eventual consistency. Start simple and add complexity only when needed.
 
-![Four levels progression](assets/blog_images/2025-03-04-cqrs/four-levels-progression-light.png){: .light}
-![Four levels progression](assets/blog_images/2025-03-04-cqrs/four-levels-progression-dark.png){: .dark}
+![Four levels progression]({{site.url}}/assets/blog_images/2025-03-04-cqrs/four-levels-progression-light.png){: .light}
+![Four levels progression]({{site.url}}/assets/blog_images/2025-03-04-cqrs/four-levels-progression-dark.png){: .dark}
 
 #### Level 1: Separate Read Models, Same Database
 
@@ -92,8 +92,8 @@ You gain optimal technology per use case and independent scaling. You pay with e
 
 Here is an order management system. The write model enforces business rules. The read model optimizes for display.
 
-![Write vs read model](assets/blog_images/2025-03-04-cqrs/write-vs-read-model-light.png){: .light}
-![Write vs read model](assets/blog_images/2025-03-04-cqrs/write-vs-read-model-dark.png){: .dark}
+![Write vs read model]({{site.url}}/assets/blog_images/2025-03-04-cqrs/write-vs-read-model-light.png){: .light}
+![Write vs read model]({{site.url}}/assets/blog_images/2025-03-04-cqrs/write-vs-read-model-dark.png){: .dark}
 
 **Write Model:**
 
